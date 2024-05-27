@@ -6,14 +6,19 @@ use actix_web::{App, HttpServer, main};
 use actix_web::http::header;
 use actix_web::web::Data;
 use dotenv::dotenv;
+use sqlx::{MySql, Pool};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 use crate::configs::api_doc;
-use crate::db::{BreedService, DbContextMySql, FeedingLogsService, FeedService, FeedSupplyService, ShearingLogsService, SheepService, ShepherdService, StorekeeperService, TemperatureScannerService};
-use crate::db::traits::Service;
+use db::traits::Service;
+use crate::db::db_context::DbContextMySql;
+use crate::db::services::{BreedService, FeedingLogService, FeedService, FeedSupplyService, ShearingLogService, SheepService, ShepherdService, StorekeeperService, TemperatureScannerService};
+use crate::db::traits::Context;
 
 mod configs;
 mod db;
+mod models;
+
 
 #[main]
 async fn main() -> std::io::Result<()>{
@@ -28,18 +33,19 @@ async fn main() -> std::io::Result<()>{
     let app_ip: Ipv4Addr = Ipv4Addr::new(app_ip_bytes[0], app_ip_bytes[1], app_ip_bytes[2], app_ip_bytes[3]);
     let app_port: u16 = env::var("APP_PORT").unwrap_or_else(|_| "".to_string())
         .parse().expect("Invalid app port number");
-    let db_string = env::var("DB_STRING").unwrap_or_else(|_| "".to_string());
-    let db_context = DbContextMySql::new(db_string).await;
 
-    let breed_service: Arc<BreedService> = Arc::new(BreedService::new(db_context.get_pool()));
-    let feed_service: Arc<FeedService> = Arc::new(FeedService::new(db_context.get_pool()));
-    let feed_supply_service: Arc<FeedSupplyService> = Arc::new(FeedSupplyService::new(db_context.get_pool()));
-    let feeding_logs_service: Arc<FeedingLogsService> = Arc::new(FeedingLogsService::new(db_context.get_pool()));
-    let shearing_logs_service: Arc<ShearingLogsService> = Arc::new(ShearingLogsService::new(db_context.get_pool()));
-    let sheep_service: Arc<SheepService> = Arc::new(SheepService::new(db_context.get_pool()));
-    let shepherd_service: Arc<ShepherdService> = Arc::new(ShepherdService::new(db_context.get_pool()));
-    let storekeeper_service: Arc<StorekeeperService> = Arc::new(StorekeeperService::new(db_context.get_pool()));
-    let temperature_service: Arc<TemperatureScannerService> = Arc::new(TemperatureScannerService::new(db_context.get_pool()));
+    let db_string = env::var("DB_STRING").unwrap_or_else(|_| "".to_string());
+    let db_context: DbContextMySql<Pool<MySql>> = DbContextMySql::new(db_string).await;
+
+    let breed_service: Arc<BreedService<Pool<MySql>>> = Arc::new(BreedService::new(db_context.get_pool()));
+    let feed_service: Arc<FeedService<Pool<MySql>>> = Arc::new(FeedService::new(db_context.get_pool()));
+    let feed_supply_service: Arc<FeedSupplyService<Pool<MySql>>> = Arc::new(FeedSupplyService::new(db_context.get_pool()));
+    let feeding_log_service: Arc<FeedingLogService<Pool<MySql>>> = Arc::new(FeedingLogService::new(db_context.get_pool()));
+    let shearing_log_service: Arc<ShearingLogService<Pool<MySql>>> = Arc::new(ShearingLogService::new(db_context.get_pool()));
+    let sheep_service: Arc<SheepService<Pool<MySql>>> = Arc::new(SheepService::new(db_context.get_pool()));
+    let shepherd_service: Arc<ShepherdService<Pool<MySql>>> = Arc::new(ShepherdService::new(db_context.get_pool()));
+    let storekeeper_service: Arc<StorekeeperService<Pool<MySql>>> = Arc::new(StorekeeperService::new(db_context.get_pool()));
+    let temperature_service: Arc<TemperatureScannerService<Pool<MySql>>> = Arc::new(TemperatureScannerService::new(db_context.get_pool()));
 
     let openapi = api_doc::ApiDoc::openapi();
 
@@ -48,8 +54,8 @@ async fn main() -> std::io::Result<()>{
             .app_data(Data::new(breed_service.clone()))
             .app_data(Data::new(feed_service.clone()))
             .app_data(Data::new(feed_supply_service.clone()))
-            .app_data(Data::new(feeding_logs_service.clone()))
-            .app_data(Data::new(shearing_logs_service.clone()))
+            .app_data(Data::new(feeding_log_service.clone()))
+            .app_data(Data::new(shearing_log_service.clone()))
             .app_data(Data::new(sheep_service.clone()))
             .app_data(Data::new(shepherd_service.clone()))
             .app_data(Data::new(storekeeper_service.clone()))

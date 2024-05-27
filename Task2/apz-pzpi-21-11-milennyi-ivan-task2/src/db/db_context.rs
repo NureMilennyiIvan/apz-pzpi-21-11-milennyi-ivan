@@ -1,18 +1,20 @@
 use std::sync::Arc;
+use async_trait::async_trait;
 use sqlx::{MySql, MySqlPool, Pool};
+use crate::db::traits::Context;
 
-#[derive(Clone)]
-pub(crate) struct DbContextMySql{
-    pool: Arc<Pool<MySql>>
+pub(crate) struct DbContextMySql<T>{
+    pool: Arc<T>
 }
-impl DbContextMySql{
-    pub(crate) async fn new(db_string: String) -> DbContextMySql{
-        let db_pool = MySqlPool::connect(&db_string).await.expect("Failed to connect to the database");
+#[async_trait]
+impl Context<Pool<MySql>, String> for DbContextMySql<Pool<MySql>>{
+    async fn new(connection: String) -> Self{
+        let db_pool = MySqlPool::connect(&connection).await.expect("Failed to connect to the database");
         DbContextMySql{
             pool: Arc::new(db_pool)
         }
     }
-    pub(crate) fn get_pool(&self) -> Arc<Pool<MySql>> {
+    fn get_pool(&self) -> Arc<Pool<MySql>> {
         Arc::clone(&self.pool)
     }
 }
