@@ -18,6 +18,9 @@ use crate::db::traits::Context;
 mod configs;
 mod db;
 mod models;
+mod view_models;
+mod endpoints;
+mod json_structs;
 
 
 #[main]
