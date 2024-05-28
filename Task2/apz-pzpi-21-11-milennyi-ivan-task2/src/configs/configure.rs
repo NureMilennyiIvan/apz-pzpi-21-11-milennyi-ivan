@@ -3,18 +3,51 @@ use crate::endpoints::*;
 
 pub(crate) fn breed_configure(cfg: &mut ServiceConfig){
     use breed_endpoints::*;
+
+    cfg.service(breed_create)
+        .service(breed_delete)
+        .service(breed_update)
+        .service(breed_get_all)
+        .service(breed_get_all_vms)
+        .service(breed_get_by_id);
 }
 pub(crate) fn feed_configure(cfg: &mut ServiceConfig){
     use feed_endpoints::*;
+
+    cfg.service(feed_create)
+        .service(feed_delete)
+        .service(feed_update)
+        .service(feed_get_all)
+        .service(feed_get_all_vms)
+        .service(feed_get_by_id);
 }
 pub(crate) fn feed_supply_configure(cfg: &mut ServiceConfig){
     use feed_supply_endpoints::*;
+
+    cfg.service(feed_supply_create)
+        .service(feed_supply_delete)
+        .service(feed_supply_get_all)
+        .service(feed_supply_get_all_vms)
+        .service(feed_supply_get_by_id);
 }
 pub(crate) fn feeding_log_configure(cfg: &mut ServiceConfig){
     use feeding_log_endpoints::*;
+
+    cfg.service(feeding_log_create)
+        .service(feeding_log_delete)
+        .service(feeding_log_get_all)
+        .service(feeding_log_get_by_id)
+        .service(feeding_log_get_all_vms_by_feed_id)
+        .service(feeding_log_get_all_vms_by_sheep_id);
 }
 pub(crate) fn shearing_log_configure(cfg: &mut ServiceConfig){
     use shearing_log_endpoints::*;
+
+    cfg.service(shearing_log_create)
+        .service(shearing_log_delete)
+        .service(shearing_log_get_all)
+        .service(shearing_log_get_by_id)
+        .service(shearing_log_get_all_vms_by_sheep_id);
 }
 pub(crate) fn sheep_configure(cfg: &mut ServiceConfig) {
     use sheep_endpoints::*;
@@ -24,7 +57,7 @@ pub(crate) fn sheep_configure(cfg: &mut ServiceConfig) {
         .service(sheep_update)
         .service(sheep_change_shepherd)
         .service(sheep_get_all)
-        .service(sheep_get_all_vms)
+        .service(sheep_get_all_vms_by_shepherd_id)
         .service(sheep_get_by_id)
         .service(sheep_get_details_by_id);
 }

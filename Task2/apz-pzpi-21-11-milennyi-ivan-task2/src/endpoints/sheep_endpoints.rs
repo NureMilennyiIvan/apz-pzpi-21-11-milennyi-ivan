@@ -53,12 +53,12 @@ async fn sheep_get_details_by_id(sheep_service: Data<Arc<SheepService<Pool<MySql
 
 
 #[utoipa::path(params(PathId), responses(
-    (status = 200, description = "Sheep get all vms"),
+    (status = 200, description = "Sheep get all vms by shepherd id"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
 #[get("/sheep/shepherd/{id}")]
-async fn sheep_get_all_vms(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
+async fn sheep_get_all_vms_by_shepherd_id(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
     match sheep_service.get_all_vms_by_shepherd_id(params.id).await {
         Ok(sheep) => HttpResponse::Ok().json(sheep),

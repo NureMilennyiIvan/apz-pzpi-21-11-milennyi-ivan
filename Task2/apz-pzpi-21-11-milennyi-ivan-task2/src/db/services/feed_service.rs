@@ -40,7 +40,7 @@ impl Service<Pool<MySql>> for FeedService<Pool<MySql>> {
 }
 #[async_trait]
 impl FeedManage<Pool<MySql>> for FeedService<Pool<MySql>>{
-    async fn get_all_vms(&self, id: u64) -> Result<Option<Vec<Self::ViewModel>>, Self::Error> {
+    async fn get_all_vms(&self) -> Result<Option<Vec<Self::ViewModel>>, Self::Error> {
         todo!()
     }
 }

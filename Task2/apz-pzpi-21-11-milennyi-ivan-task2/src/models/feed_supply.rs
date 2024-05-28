@@ -6,7 +6,7 @@ use validator::Validate;
 #[derive(Debug, Validate, Deserialize, Serialize, FromRow, ToSchema)]
 pub(crate) struct FeedSupply{
     id: Option<u64>,
-    storekeeper_id: u64,
+    storekeeper_id: Option<u64>,
     #[validate(range(min = 1))]
     amount: u64,
     feed_id: u64

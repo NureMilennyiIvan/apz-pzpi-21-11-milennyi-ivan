@@ -1,3 +1,3 @@
 pub(super) mod api_doc;
-mod endpoints;
-pub(super) use endpoints::*;
+mod configure;
+pub(super) use configure::*;

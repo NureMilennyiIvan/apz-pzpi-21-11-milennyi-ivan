@@ -41,7 +41,7 @@ impl Service<Pool<MySql>> for BreedService<Pool<MySql>> {
 }
 #[async_trait]
 impl BreedManage<Pool<MySql>> for BreedService<Pool<MySql>>{
-    async fn get_all_vms(&self, id: u64) -> Result<Option<Vec<Self::ViewModel>>, Self::Error> {
+    async fn get_all_vms(&self) -> Result<Option<Vec<Self::ViewModel>>, Self::Error> {
         todo!()
     }
 }
