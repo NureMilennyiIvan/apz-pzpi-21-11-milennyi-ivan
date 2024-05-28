@@ -66,6 +66,7 @@ pub(crate) fn shepherd_configure(cfg: &mut ServiceConfig) {
     cfg.service(shepherd_create)
         .service(shepherd_delete)
         .service(shepherd_update)
+        .service(shepherd_authorize)
         .service(shepherd_get_all)
         .service(shepherd_get_by_id);
 }
@@ -75,6 +76,7 @@ pub(crate) fn storekeeper_configure(cfg: &mut ServiceConfig) {
     cfg.service(storekeeper_create)
         .service(storekeeper_delete)
         .service(storekeeper_update)
+        .service(storekeeper_authorize)
         .service(storekeeper_get_all)
         .service(storekeeper_get_by_id);
 }

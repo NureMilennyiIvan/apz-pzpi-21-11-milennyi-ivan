@@ -6,7 +6,7 @@ use validator::Validate;
 use crate::db::service_error::ServiceError;
 use crate::db::services::ShepherdService;
 use crate::db::traits::{AuthService, Service};
-use crate::json_structs::PathId;
+use crate::json_structs::{AuthorizeJson, PathId};
 use crate::models::Shepherd;
 
 #[utoipa::path(responses(
@@ -32,6 +32,25 @@ async fn shepherd_get_all(shepherd_service: Data<Arc<ShepherdService<Pool<MySql>
 async fn shepherd_get_by_id(shepherd_service: Data<Arc<ShepherdService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
     match shepherd_service.get_by_id(params.id).await {
+        Ok(shepherd) => HttpResponse::Ok().json(shepherd),
+        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
+    }
+}
+
+
+
+#[utoipa::path(responses(
+    (status = 200, description = "Shepherd authorize"),
+    (status = 400, description = "Validation error or bad request"),
+    (status = 500, description = "Internal server error")
+))]
+#[post("/shepherd/authorize")]
+async fn shepherd_authorize(shepherd_service: Data<Arc<ShepherdService<Pool<MySql>>>>, authorize_json: Json<AuthorizeJson>) -> impl Responder{
+    let authorize = match authorize_json.validate() {
+        Ok(_) => authorize_json.into_inner(),
+        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    };
+    match shepherd_service.authorize(authorize.username, authorize.password_hash).await {
         Ok(shepherd) => HttpResponse::Ok().json(shepherd),
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }

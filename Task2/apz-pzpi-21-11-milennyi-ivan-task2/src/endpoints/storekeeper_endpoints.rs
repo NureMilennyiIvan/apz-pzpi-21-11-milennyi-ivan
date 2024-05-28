@@ -6,7 +6,7 @@ use validator::Validate;
 use crate::db::service_error::ServiceError;
 use crate::db::services::StorekeeperService;
 use crate::db::traits::{Service, AuthService};
-use crate::json_structs::PathId;
+use crate::json_structs::{AuthorizeJson, PathId};
 use crate::models::Storekeeper;
 
 #[utoipa::path(responses(
@@ -32,6 +32,24 @@ async fn storekeeper_get_all(storekeeper_service: Data<Arc<StorekeeperService<Po
 async fn storekeeper_get_by_id(storekeeper_service: Data<Arc<StorekeeperService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
     match storekeeper_service.get_by_id(params.id).await {
+        Ok(storekeeper) => HttpResponse::Ok().json(storekeeper),
+        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
+    }
+}
+
+
+#[utoipa::path(responses(
+    (status = 200, description = "Storekeeper authorize"),
+    (status = 400, description = "Validation error or bad request"),
+    (status = 500, description = "Internal server error")
+))]
+#[post("/storekeeper/authorize")]
+async fn storekeeper_authorize(storekeeper_service: Data<Arc<StorekeeperService<Pool<MySql>>>>, authorize_json: Json<AuthorizeJson>) -> impl Responder{
+    let authorize = match authorize_json.validate() {
+        Ok(_) => authorize_json.into_inner(),
+        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    };
+    match storekeeper_service.authorize(authorize.username, authorize.password_hash).await {
         Ok(storekeeper) => HttpResponse::Ok().json(storekeeper),
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
