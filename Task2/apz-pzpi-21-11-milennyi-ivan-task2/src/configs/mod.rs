@@ -1,1 +1,1 @@
-pub mod api_doc;
+pub(super) mod api_doc;

@@ -4,6 +4,7 @@ use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
 use crate::db::traits::{Service, TemperatureScannerManage};
 use crate::models::TemperatureScanner;
+use crate::view_models::TemperatureScannerVM;
 
 pub(crate) struct TemperatureScannerService<T>{
     pool: Arc<T>,
@@ -12,6 +13,7 @@ pub(crate) struct TemperatureScannerService<T>{
 impl Service<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
     type Model = TemperatureScanner;
     type Error = ServiceError;
+    type ViewModel = TemperatureScannerVM;
     fn new(pool: Arc<Pool<MySql>>) -> Self {
         TemperatureScannerService { pool }
     }

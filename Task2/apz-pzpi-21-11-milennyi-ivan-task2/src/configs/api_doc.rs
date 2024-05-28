@@ -14,4 +14,4 @@ use utoipa::OpenApi;
         (name = "Server", description = "API view")
     )
 )]
-pub struct ApiDoc;
+pub(crate) struct ApiDoc;

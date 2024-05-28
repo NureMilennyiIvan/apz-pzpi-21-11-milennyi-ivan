@@ -2,9 +2,9 @@ use std::sync::Arc;
 use async_trait::async_trait;
 use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
-use crate::db::services::BreedService;
-use crate::db::traits::{BreedManage, FeedManage, Service};
+use crate::db::traits::{FeedManage, Service};
 use crate::models::Feed;
+use crate::view_models::FeedVM;
 
 pub(crate) struct FeedService<T>{
     pool: Arc<T>,
@@ -13,6 +13,7 @@ pub(crate) struct FeedService<T>{
 impl Service<Pool<MySql>> for FeedService<Pool<MySql>> {
     type Model = Feed;
     type Error = ServiceError;
+    type ViewModel = FeedVM;
     fn new(pool: Arc<Pool<MySql>>) -> Self {
         FeedService { pool }
     }
@@ -36,4 +37,7 @@ impl Service<Pool<MySql>> for FeedService<Pool<MySql>> {
 #[async_trait]
 impl FeedManage<Pool<MySql>> for FeedService<Pool<MySql>>{
 
+    async fn get_all_vms(&self, id: u64) -> Result<Vec<Self::ViewModel>, Self::Error> {
+        todo!()
+    }
 }

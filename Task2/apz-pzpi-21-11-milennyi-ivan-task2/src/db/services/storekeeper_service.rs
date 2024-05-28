@@ -4,6 +4,7 @@ use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
 use crate::db::traits::{Service, StorekeeperManage};
 use crate::models::Storekeeper;
+use crate::view_models::StorekeeperVM;
 
 pub(crate) struct StorekeeperService<T>{
     pool: Arc<T>,
@@ -12,6 +13,7 @@ pub(crate) struct StorekeeperService<T>{
 impl Service<Pool<MySql>> for StorekeeperService<Pool<MySql>> {
     type Model = Storekeeper;
     type Error = ServiceError;
+    type ViewModel = StorekeeperVM;
 
     fn new(pool: Arc<Pool<MySql>>) -> Self {
         StorekeeperService { pool }

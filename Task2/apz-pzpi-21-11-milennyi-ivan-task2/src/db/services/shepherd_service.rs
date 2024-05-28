@@ -4,6 +4,7 @@ use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
 use crate::db::traits::{Service, ShepherdManage};
 use crate::models::Shepherd;
+use crate::view_models::ShepherdVM;
 
 pub(crate) struct ShepherdService<T>{
     pool: Arc<T>,
@@ -12,6 +13,7 @@ pub(crate) struct ShepherdService<T>{
 impl Service<Pool<MySql>> for ShepherdService<Pool<MySql>> {
     type Model = Shepherd;
     type Error = ServiceError;
+    type ViewModel = ShepherdVM;
     fn new(pool: Arc<Pool<MySql>>) -> Self {
         ShepherdService { pool }
     }

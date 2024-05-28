@@ -4,6 +4,7 @@ use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
 use crate::db::traits::{BreedManage, Service};
 use crate::models::Breed;
+use crate::view_models::BreedVM;
 
 pub(crate) struct BreedService<T>{
     pool: Arc<T>,
@@ -12,6 +13,8 @@ pub(crate) struct BreedService<T>{
 impl Service<Pool<MySql>> for BreedService<Pool<MySql>> {
     type Model = Breed;
     type Error = ServiceError;
+    type ViewModel = BreedVM;
+
     fn new(pool: Arc<Pool<MySql>>) -> Self {
         BreedService { pool }
     }
@@ -34,5 +37,7 @@ impl Service<Pool<MySql>> for BreedService<Pool<MySql>> {
 }
 #[async_trait]
 impl BreedManage<Pool<MySql>> for BreedService<Pool<MySql>>{
-
+    async fn get_all_vms(&self, id: u64) -> Result<Vec<Self::ViewModel>, Self::Error> {
+        todo!()
+    }
 }

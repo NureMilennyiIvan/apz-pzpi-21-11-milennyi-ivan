@@ -4,6 +4,7 @@ use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
 use crate::db::traits::{Service, ShearingLogManage};
 use crate::models::ShearingLog;
+use crate::view_models::ShearingLogVM;
 
 pub(crate) struct ShearingLogService<T> {
     pool: Arc<T>,
@@ -12,11 +13,13 @@ pub(crate) struct ShearingLogService<T> {
 impl Service<Pool<MySql>> for ShearingLogService<Pool<MySql>> {
     type Model = ShearingLog;
     type Error = ServiceError;
+    type ViewModel = ShearingLogVM;
     fn new(pool: Arc<Pool<MySql>>) -> Self {
         ShearingLogService { pool }
     }
 
     async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+        // also edit sheep's last shearing timestamp
         todo!()
     }
 
@@ -35,4 +38,7 @@ impl Service<Pool<MySql>> for ShearingLogService<Pool<MySql>> {
 #[async_trait]
 impl ShearingLogManage<Pool<MySql>> for ShearingLogService<Pool<MySql>>{
 
+    async fn get_all_vms_by_sheep_id(&self, id: u64) -> Result<Vec<Self::ViewModel>, Self::Error> {
+        todo!()
+    }
 }

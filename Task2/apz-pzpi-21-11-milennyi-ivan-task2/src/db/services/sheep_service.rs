@@ -4,6 +4,7 @@ use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
 use crate::db::traits::{Service, SheepManage};
 use crate::models::Sheep;
+use crate::view_models::{extra_view_models::SheepDetailsVM, SheepVM};
 
 pub(crate) struct SheepService<T>{
     pool: Arc<T>,
@@ -12,6 +13,7 @@ pub(crate) struct SheepService<T>{
 impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
     type Model = Sheep;
     type Error = ServiceError;
+    type ViewModel = SheepVM;
     fn new(pool: Arc<Pool<MySql>>) -> Self {
         SheepService { pool }
     }
@@ -34,5 +36,18 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
 }
 #[async_trait]
 impl SheepManage<Pool<MySql>> for SheepService<Pool<MySql>>{
+    type SheepDetails = SheepDetailsVM;
 
+    async fn get_all_vms_by_shepherd_id(&self, id: u64) -> Result<Vec<Self::ViewModel>, Self::Error> {
+        todo!()
+    }
+
+    async fn get_detailed_vm_by_id(&self, id: u64) -> Result<Self::SheepDetails, Self::Error> {
+        // calculate feed amount
+        todo!()
+    }
+
+    async fn change_shepherd(&self, sheep_id: u64, shepherd_id: u64) -> Result<(), Self::Error> {
+        todo!()
+    }
 }

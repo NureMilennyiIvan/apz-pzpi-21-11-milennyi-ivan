@@ -1,5 +1,6 @@
 pub(crate) struct Breed{
     id: Option<u64>,
     name: String,
-    feed_id: u64
+    feed_id: u64,
+    info: String
 }

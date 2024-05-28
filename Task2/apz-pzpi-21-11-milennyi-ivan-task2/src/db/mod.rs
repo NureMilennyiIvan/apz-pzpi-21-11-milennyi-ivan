@@ -1,6 +1,6 @@
 
-pub(crate) mod traits;
-pub(crate) mod db_context;
-pub(crate) mod services;
-pub(crate) mod service_error;
+pub(super) mod traits;
+pub(super) mod db_context;
+pub(super) mod services;
+pub(super) mod service_error;
 
