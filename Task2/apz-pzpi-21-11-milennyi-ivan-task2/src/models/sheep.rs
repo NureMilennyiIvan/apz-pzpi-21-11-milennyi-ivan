@@ -3,7 +3,5 @@ pub(crate) struct Sheep{
     birth_date: u64,
     breed_id: u64,
     sex: bool,
-    shepherd_id: Option<u64>,
-    last_feeding_timestamp: u64,
-    last_shearing_timestamp: u64
+    shepherd_id: Option<u64>
 }

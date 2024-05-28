@@ -9,6 +9,7 @@ mod sheep_manage;
 mod shepherd_manage;
 mod storekeeper_manage;
 mod temperature_scanner_manage;
+mod auth_service;
 
 pub(crate) use service::Service;
 pub(crate) use context::Context;
@@ -21,3 +22,4 @@ pub(crate) use sheep_manage::SheepManage;
 pub(crate) use shepherd_manage::ShepherdManage;
 pub(crate) use storekeeper_manage::StorekeeperManage;
 pub(crate) use temperature_scanner_manage::TemperatureScannerManage;
+pub(crate) use auth_service::AuthService;

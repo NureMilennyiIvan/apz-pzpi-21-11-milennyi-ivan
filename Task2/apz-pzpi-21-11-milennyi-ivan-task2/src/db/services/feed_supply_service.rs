@@ -28,6 +28,10 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
         todo!()
     }
 
+    async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+        todo!()
+    }
+
     async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
         todo!()
     }
