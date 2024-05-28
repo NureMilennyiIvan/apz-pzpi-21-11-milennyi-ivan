@@ -18,7 +18,7 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
         SheepService { pool }
     }
 
-    async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+    async fn create(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
         todo!()
     }
 
@@ -26,15 +26,15 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
         todo!()
     }
 
-    async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+    async fn update(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
         todo!()
     }
 
-    async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
+    async fn get_all(&self) -> Result<Option<Vec<Self::Model>>, Self::Error> {
         todo!()
     }
 
-    async fn get_by_id(&self, id: u64) -> Result<Self::Model, Self::Error> {
+    async fn get_by_id(&self, id: u64) -> Result<Option<Self::Model>, Self::Error> {
         todo!()
     }
 }
@@ -42,12 +42,11 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
 impl SheepManage<Pool<MySql>> for SheepService<Pool<MySql>>{
     type SheepDetails = SheepDetailsVM;
 
-    async fn get_all_vms_by_shepherd_id(&self, id: u64) -> Result<Vec<Self::ViewModel>, Self::Error> {
+    async fn get_all_vms_by_shepherd_id(&self, id: u64) -> Result<Option<Vec<Self::ViewModel>>, Self::Error> {
         todo!()
     }
 
-    async fn get_detailed_vm_by_id(&self, id: u64) -> Result<Self::SheepDetails, Self::Error> {
-        // calculate feed amount
+    async fn get_details_by_id(&self, id: u64) -> Result<Option<Self::SheepDetails>, Self::Error> {
         todo!()
     }
 

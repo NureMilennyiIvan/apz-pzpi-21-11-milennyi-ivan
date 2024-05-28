@@ -19,7 +19,7 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
         FeedSupplyService { pool }
     }
 
-    async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+    async fn create(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
         // update feed amount
         todo!()
     }
@@ -28,22 +28,21 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
         todo!()
     }
 
-    async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+    async fn update(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
         todo!()
     }
 
-    async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
+    async fn get_all(&self) -> Result<Option<Vec<Self::Model>>, Self::Error> {
         todo!()
     }
 
-    async fn get_by_id(&self, id: u64) -> Result<Self::Model, Self::Error> {
+    async fn get_by_id(&self, id: u64) -> Result<Option<Self::Model>, Self::Error> {
         todo!()
     }
 }
 #[async_trait]
 impl FeedSupplyManage<Pool<MySql>> for FeedSupplyService<Pool<MySql>>{
-
-    async fn get_all_vms(&self) -> Result<Vec<Self::ViewModel>, Self::Error> {
+    async fn get_all_vms(&self) -> Result<Option<Vec<Self::ViewModel>>, Self::Error> {
         todo!()
     }
 }

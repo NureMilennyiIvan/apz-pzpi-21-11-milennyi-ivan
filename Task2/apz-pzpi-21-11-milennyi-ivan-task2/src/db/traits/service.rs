@@ -7,9 +7,9 @@ pub(crate) trait Service<T>{
     type Error;
     type ViewModel;
     fn new(pool: Arc<T>) -> Self;
-    async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error>;
+    async fn create(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error>;
     async fn delete(&self, item_id: u64) -> Result<(), Self::Error>;
-    async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error>;
-    async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error>;
-    async fn get_by_id(&self, id: u64) -> Result<Self::Model, Self::Error>;
+    async fn update(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error>;
+    async fn get_all(&self) -> Result<Option<Vec<Self::Model>>, Self::Error>;
+    async fn get_by_id(&self, id: u64) -> Result<Option<Self::Model>, Self::Error>;
 }

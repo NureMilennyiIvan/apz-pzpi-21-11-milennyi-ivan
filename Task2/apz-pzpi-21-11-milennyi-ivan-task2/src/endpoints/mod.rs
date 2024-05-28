@@ -1,0 +1,9 @@
+mod breed_endpoints;
+mod feed_endpoints;
+mod feed_supply_endpoints;
+mod feeding_log_endpoints;
+mod shearing_log_endpoints;
+mod sheep_endpoints;
+mod shepherd_endpoints;
+mod storekeeper_endpoints;
+mod temperature_scanner_endpoints;

@@ -19,7 +19,7 @@ impl Service<Pool<MySql>> for StorekeeperService<Pool<MySql>> {
         StorekeeperService { pool }
     }
 
-    async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+    async fn create(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
         todo!()
     }
 
@@ -27,15 +27,15 @@ impl Service<Pool<MySql>> for StorekeeperService<Pool<MySql>> {
         todo!()
     }
 
-    async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+    async fn update(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
         todo!()
     }
 
-    async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
+    async fn get_all(&self) -> Result<Option<Vec<Self::Model>>, Self::Error> {
         todo!()
     }
 
-    async fn get_by_id(&self, id: u64) -> Result<Self::Model, Self::Error> {
+    async fn get_by_id(&self, id: u64) -> Result<Option<Self::Model>, Self::Error> {
         todo!()
     }
 }
@@ -45,7 +45,7 @@ impl AuthService<Pool<MySql>> for StorekeeperService<Pool<MySql>> {
         todo!()
     }
 
-    async fn authorize(&self, username: String, password_hash: String) -> Result<Self::ViewModel, Self::Error> {
+    async fn authorize(&self, username: String, password_hash: String) -> Result<Option<Self::ViewModel>, Self::Error> {
         todo!()
     }
 }
