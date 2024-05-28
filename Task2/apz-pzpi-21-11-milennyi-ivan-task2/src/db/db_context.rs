@@ -10,6 +10,7 @@ pub(crate) struct DbContextMySql<T>{
 impl Context<Pool<MySql>, String> for DbContextMySql<Pool<MySql>>{
     async fn new(connection: String) -> Self{
         let db_pool = MySqlPool::connect(&connection).await.expect("Failed to connect to the database");
+        println!("Database connection established");
         DbContextMySql{
             pool: Arc::new(db_pool)
         }

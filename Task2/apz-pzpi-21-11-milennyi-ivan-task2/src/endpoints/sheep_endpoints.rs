@@ -12,8 +12,7 @@ use crate::models::Sheep;
     (status = 200, description = "Sheep get all"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
-)
-)]
+))]
 #[get("/sheep")]
 async fn sheep_get_all(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>) -> impl Responder{
     match sheep_service.get_all().await {
@@ -21,12 +20,13 @@ async fn sheep_get_all(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>) -> i
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
 }
-#[utoipa::path(responses(
+
+
+#[utoipa::path(params(PathId), responses(
     (status = 200, description = "Sheep get by id"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
-)
-)]
+))]
 #[get("/sheep/{id}")]
 async fn sheep_get_by_id(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
@@ -35,12 +35,13 @@ async fn sheep_get_by_id(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, pa
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
 }
-#[utoipa::path(responses(
+
+
+#[utoipa::path(params(PathId), responses(
     (status = 200, description = "Sheep get details by id"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
-)
-)]
+))]
 #[get("/sheep/details/{id}")]
 async fn sheep_get_details_by_id(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
@@ -49,12 +50,13 @@ async fn sheep_get_details_by_id(sheep_service: Data<Arc<SheepService<Pool<MySql
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
 }
-#[utoipa::path(responses(
+
+
+#[utoipa::path(params(PathId), responses(
     (status = 200, description = "Sheep get all vms"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
-)
-)]
+))]
 #[get("/sheep/shepherd/{id}")]
 async fn sheep_get_all_vms(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
@@ -63,12 +65,13 @@ async fn sheep_get_all_vms(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, 
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
 }
+
+
 #[utoipa::path(responses(
-        (status = 200, description = "Sheep created"),
-        (status = 400, description = "Validation error or bad request"),
-        (status = 500, description = "Internal server error")
-    )
-)]
+    (status = 200, description = "Sheep created"),
+    (status = 400, description = "Validation error or bad request"),
+    (status = 500, description = "Internal server error")
+))]
 #[post("/sheep/create")]
 async fn sheep_create(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep_json: Json<Sheep>) -> impl Responder{
     let sheep = match sheep_json.validate() {
@@ -80,12 +83,13 @@ async fn sheep_create(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
 }
+
+
 #[utoipa::path(responses(
     (status = 200, description = "Sheep updated"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
-)
-)]
+))]
 #[patch("/sheep/update")]
 async fn sheep_update(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep_json: Json<Sheep>) -> impl Responder{
     let sheep = match sheep_json.validate() {
@@ -97,12 +101,13 @@ async fn sheep_update(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
 }
+
+
 #[utoipa::path(responses(
     (status = 200, description = "Sheep's shepherd changed"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
-)
-)]
+))]
 #[patch("/sheep/change-shepherd")]
 async fn sheep_change_shepherd(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, change_shepherd_json: Json<ChangeShepherdJson>) -> impl Responder{
     let change_shepherd = change_shepherd_json.into_inner();
@@ -111,12 +116,13 @@ async fn sheep_change_shepherd(sheep_service: Data<Arc<SheepService<Pool<MySql>>
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
 }
-#[utoipa::path(responses(
+
+
+#[utoipa::path(params(PathId), responses(
     (status = 200, description = "Sheep deleted"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
-)
-)]
+))]
 #[delete("/sheep/delete/{id}")]
 async fn sheep_delete(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();

@@ -9,7 +9,7 @@ use dotenv::dotenv;
 use sqlx::{MySql, Pool};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
-use crate::configs::api_doc;
+use crate::configs::{api_doc, breed_configure, feed_configure, feed_supply_configure, feeding_log_configure, shearing_log_configure, sheep_configure, shepherd_configure, storekeeper_configure, temperature_scanner_configure};
 use db::traits::Service;
 use crate::db::db_context::DbContextMySql;
 use crate::db::services::{BreedService, FeedingLogService, FeedService, FeedSupplyService, ShearingLogService, SheepService, ShepherdService, StorekeeperService, TemperatureScannerService};
@@ -69,11 +69,16 @@ async fn main() -> std::io::Result<()>{
                     .allowed_methods(vec!["GET", "POST"])
                     .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT, header::ACCESS_CONTROL_REQUEST_METHOD, header::ACCESS_CONTROL_REQUEST_HEADERS, header::ORIGIN])
                     .allowed_header(header::CONTENT_TYPE)
-            )/*
-            .configure(buy_config::configure)
-            .configure(rent_config::configure)
-            .configure(buy_info_config::configure)
-            .configure(rent_info_config::configure)*/
+            )
+            .configure(breed_configure)
+            .configure(feed_configure)
+            .configure(feed_supply_configure)
+            .configure(feeding_log_configure)
+            .configure(shearing_log_configure)
+            .configure(sheep_configure)
+            .configure(shepherd_configure)
+            .configure(storekeeper_configure)
+            .configure(temperature_scanner_configure)
             .service(
                 SwaggerUi::new("/swagger-ui/{_:.*}").url("/api-docs/openapi.json", openapi.clone()),
             )
