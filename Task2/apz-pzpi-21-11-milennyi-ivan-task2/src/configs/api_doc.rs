@@ -19,20 +19,20 @@ use crate::endpoints::{
      // Paths corresponding to various service methods across different modules are included here
     paths(
         breed_get_all,
-        breed_by_id,
-        breed_all_vms,
+        breed_get_by_id,
+        breed_get_all_vms,
         breed_create,
         breed_update,
         breed_delete,
         feed_get_all,
-        feed_by_id,
-        feed_all_vms,
+        feed_get_by_id,
+        feed_get_all_vms,
         feed_create,
         feed_update,
         feed_delete,
         feed_supply_get_all,
-        feed_supply_by_id,
-        feed_supply_all_vms,
+        feed_supply_get_by_id,
+        feed_supply_get_all_vms,
         feed_supply_create,
         feed_supply_delete,
         feeding_log_create,
@@ -54,13 +54,25 @@ use crate::endpoints::{
         sheep_update,
         sheep_change_shepherd,
         sheep_delete,
+        shepherd_create,
+        shepherd_update,
+        shepherd_delete,
+        shepherd_get_all,
+        shepherd_get_by_id,
+        storekeeper_create,
+        storekeeper_update,
+        storekeeper_delete,
+        storekeeper_get_all,
+        storekeeper_get_by_id,
     ),
      // Components such as schemas used in API documentation are defined here
     components(
         schemas(
             Breed, Feed, FeedSupply, FeedingLog, ShearingLog, Sheep, Shepherd, Storekeeper, TemperatureScanner,
             BreedVM, FeedVM, FeedSupplyVM, FeedingLogVM, ShearingLogVM, SheepVM, ShepherdVM, StorekeeperVM, TemperatureScannerVM,
-            SheepDetailsVM, ChangeShepherdJson, PathId
+            SheepDetailsVM,
+            ChangeShepherdJson, AuthorizeJson,
+            PathId
         )
     ),
     // Tags for grouping API endpoints are defined here

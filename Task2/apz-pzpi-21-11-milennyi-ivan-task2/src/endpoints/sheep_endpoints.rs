@@ -97,7 +97,7 @@ async fn sheep_update(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep
         Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
     };
     match sheep_service.update(sheep).await {
-        Ok(created_sheep) => HttpResponse::Ok().json(created_sheep),
+        Ok(updated_sheep) => HttpResponse::Ok().json(updated_sheep),
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
 }

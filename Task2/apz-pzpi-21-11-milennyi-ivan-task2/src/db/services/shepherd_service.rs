@@ -40,7 +40,7 @@ impl Service<Pool<MySql>> for ShepherdService<Pool<MySql>> {
 }
 #[async_trait]
 impl AuthService<Pool<MySql>> for ShepherdService<Pool<MySql>> {
-    async fn check_username(&self, username: String) -> Result<bool, Self::Error> {
+    async fn check_username(&self, user: &Self::Model) -> Result<bool, Self::Error> {
         todo!()
     }
 

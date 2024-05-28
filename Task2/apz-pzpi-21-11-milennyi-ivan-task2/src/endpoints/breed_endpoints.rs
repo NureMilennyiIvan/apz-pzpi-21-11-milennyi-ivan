@@ -81,7 +81,7 @@ async fn breed_update(breed_service: Data<Arc<BreedService<Pool<MySql>>>>, breed
         Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
     };
     match breed_service.update(breed).await {
-        Ok(created_breed) => HttpResponse::Ok().json(created_breed),
+        Ok(updated_breed) => HttpResponse::Ok().json(updated_breed),
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
 }

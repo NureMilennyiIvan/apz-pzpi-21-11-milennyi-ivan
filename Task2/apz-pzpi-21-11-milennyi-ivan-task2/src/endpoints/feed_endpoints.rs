@@ -81,7 +81,7 @@ async fn feed_update(feed_service: Data<Arc<FeedService<Pool<MySql>>>>, feed_jso
         Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
     };
     match feed_service.update(feed).await {
-        Ok(created_feed) => HttpResponse::Ok().json(created_feed),
+        Ok(updated_feed) => HttpResponse::Ok().json(updated_feed),
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
 }
