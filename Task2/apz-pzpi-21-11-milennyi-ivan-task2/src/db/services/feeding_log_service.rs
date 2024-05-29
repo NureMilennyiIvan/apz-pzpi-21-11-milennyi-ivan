@@ -46,7 +46,7 @@ impl Service<Pool<MySql>> for FeedingLogService<Pool<MySql>> {
         .map(|_| ()).map_err(|error| ServiceError::DatabaseError(error))
     }
 
-    async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+    async fn update(&self, _item: Self::Model) -> Result<Self::Model, Self::Error> {
         Err(ServiceError::ForbiddenError)
     }
 

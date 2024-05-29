@@ -36,13 +36,14 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
 
         let result = query_as::<_, Self::Model>(
             r#"
-            INSERT INTO FeedSupplies (storekeeper_id, amount, feed_id)
+            INSERT INTO FeedSupplies (storekeeper_id, amount, timestamp, feed_id)
             VALUES (?, ?, ?)
-            RETURNING id, storekeeper_id, amount, feed_id
+            RETURNING id, storekeeper_id, amount, timestamp, feed_id
             "#
         )
         .bind(item.storekeeper_id())
         .bind(item.amount())
+        .bind(item.timestamp())
         .bind(item.feed_id())
         .fetch_one(&mut *tx).await
         .map_err(|error| ServiceError::DatabaseError(error));
@@ -64,14 +65,14 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
         .map(|_| ()).map_err(|error| ServiceError::DatabaseError(error))
     }
 
-    async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+    async fn update(&self, _item: Self::Model) -> Result<Self::Model, Self::Error> {
         Err(ServiceError::ForbiddenError)
     }
 
     async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
         query_as::<_, Self::Model>(
             r#"
-            SELECT id, storekeeper_id, amount, feed_id
+            SELECT id, storekeeper_id, amount, timestamp, feed_id
             FROM FeedSupplies
             "#
         )
@@ -82,7 +83,7 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
     async fn get_by_id(&self, id: u64) -> Result<Option<Self::Model>, Self::Error> {
         query_as::<_, Self::Model>(
             r#"
-            SELECT id, storekeeper_id, amount, feed_id
+            SELECT id, storekeeper_id, amount, timestamp, feed_id
             FROM FeedSupplies
             WHERE id = ?
             "#

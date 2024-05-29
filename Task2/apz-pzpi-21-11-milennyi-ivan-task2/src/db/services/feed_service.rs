@@ -93,6 +93,23 @@ impl Service<Pool<MySql>> for FeedService<Pool<MySql>> {
 #[async_trait]
 impl FeedManage<Pool<MySql>> for FeedService<Pool<MySql>>{
     async fn get_all_vms(&self) -> Result<Vec<Self::ViewModel>, Self::Error> {
-        todo!()
+        query_as::<_, FeedVM>(
+            r#"
+            SELECT
+            f.id,
+            f.amount,
+            f.name,
+            f.calories,
+            f.fat,
+            f.protein,
+            f.carbohydrates,
+            b.name AS breed_name,
+            (SELECT COUNT(*) FROM Sheep s WHERE s.breed_id = b.id) AS sheep_count
+            FROM Feeds f
+            LEFT JOIN Breeds b ON f.id = b.feed_id
+            "#
+        )
+        .fetch_all(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 }

@@ -9,6 +9,7 @@ pub(crate) struct FeedSupply{
     storekeeper_id: Option<u64>,
     #[validate(range(min = 1))]
     amount: u64,
+    timestamp: u64,
     feed_id: u64
 }
 
@@ -24,7 +25,9 @@ impl FeedSupply {
     pub fn amount(&self) -> u64 {
         self.amount
     }
-
+    pub fn timestamp(&self) -> u64 {
+        self.timestamp
+    }
     pub fn feed_id(&self) -> u64 {
         self.feed_id
     }
