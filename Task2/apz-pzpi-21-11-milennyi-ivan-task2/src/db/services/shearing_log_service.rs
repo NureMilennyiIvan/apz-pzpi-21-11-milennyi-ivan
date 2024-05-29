@@ -18,7 +18,7 @@ impl Service<Pool<MySql>> for ShearingLogService<Pool<MySql>> {
         ShearingLogService { pool }
     }
 
-    async fn create(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
+    async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
         todo!()
     }
 
@@ -26,11 +26,11 @@ impl Service<Pool<MySql>> for ShearingLogService<Pool<MySql>> {
         todo!()
     }
 
-    async fn update(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
-        todo!()
+    async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+        Err(ServiceError::ForbiddenError)
     }
 
-    async fn get_all(&self) -> Result<Option<Vec<Self::Model>>, Self::Error> {
+    async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
         todo!()
     }
 
@@ -40,7 +40,7 @@ impl Service<Pool<MySql>> for ShearingLogService<Pool<MySql>> {
 }
 #[async_trait]
 impl ShearingLogManage<Pool<MySql>> for ShearingLogService<Pool<MySql>>{
-    async fn get_all_vms_by_sheep_id(&self, id: u64) -> Result<Option<Vec<Self::ViewModel>>, Self::Error> {
+    async fn get_all_vms_by_sheep_id(&self, id: u64) -> Result<Vec<Self::ViewModel>, Self::Error> {
         todo!()
     }
 }

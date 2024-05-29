@@ -1,6 +1,6 @@
 use std::sync::Arc;
 use async_trait::async_trait;
-use sqlx::{MySql, Pool};
+use sqlx::{MySql, Pool, query, query_as};
 use crate::db::service_error::ServiceError;
 use crate::db::traits::{FeedSupplyManage, Service};
 use crate::models::FeedSupply;
@@ -19,30 +19,82 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
         FeedSupplyService { pool }
     }
 
-    async fn create(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
-        // update feed amount
-        todo!()
+    async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+        let mut tx = self.pool.begin().await.map_err(|error| ServiceError::DatabaseError(error))?;
+
+        query(
+            r#"
+            UPDATE Feeds
+            SET amount = amount + ?
+            WHERE id = ?
+            "#
+        )
+        .bind(item.amount())
+        .bind(item.feed_id())
+        .execute(&mut *tx).await
+        .map_err(|error| ServiceError::DatabaseError(error))?;
+
+        let result = query_as::<_, Self::Model>(
+            r#"
+            INSERT INTO FeedSupplies (storekeeper_id, amount, feed_id)
+            VALUES (?, ?, ?)
+            RETURNING id, storekeeper_id, amount, feed_id
+            "#
+        )
+        .bind(item.storekeeper_id())
+        .bind(item.amount())
+        .bind(item.feed_id())
+        .fetch_one(&mut *tx).await
+        .map_err(|error| ServiceError::DatabaseError(error));
+
+        tx.commit().await.map_err(|error| ServiceError::DatabaseError(error))?;
+
+        result
     }
 
     async fn delete(&self, item_id: u64) -> Result<(), Self::Error> {
-        todo!()
+        query(
+            r#"
+            DELETE FROM FeedSupplies
+            WHERE id = ?
+            "#
+        )
+        .bind(item_id)
+        .execute(&*self.pool).await
+        .map(|_| ()).map_err(|error| ServiceError::DatabaseError(error))
     }
 
-    async fn update(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
-        todo!()
+    async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+        Err(ServiceError::ForbiddenError)
     }
 
-    async fn get_all(&self) -> Result<Option<Vec<Self::Model>>, Self::Error> {
-        todo!()
+    async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
+        query_as::<_, Self::Model>(
+            r#"
+            SELECT id, storekeeper_id, amount, feed_id
+            FROM FeedSupplies
+            "#
+        )
+        .fetch_all(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn get_by_id(&self, id: u64) -> Result<Option<Self::Model>, Self::Error> {
-        todo!()
+        query_as::<_, Self::Model>(
+            r#"
+            SELECT id, storekeeper_id, amount, feed_id
+            FROM FeedSupplies
+            WHERE id = ?
+            "#
+        )
+        .bind(id)
+        .fetch_optional(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 }
 #[async_trait]
 impl FeedSupplyManage<Pool<MySql>> for FeedSupplyService<Pool<MySql>>{
-    async fn get_all_vms(&self) -> Result<Option<Vec<Self::ViewModel>>, Self::Error> {
+    async fn get_all_vms(&self) -> Result<Vec<Self::ViewModel>, Self::Error> {
         todo!()
     }
 }

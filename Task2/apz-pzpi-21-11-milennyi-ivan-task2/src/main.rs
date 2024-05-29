@@ -37,7 +37,7 @@ async fn main() -> std::io::Result<()>{
     let app_port: u16 = env::var("APP_PORT").unwrap_or_else(|_| "".to_string())
         .parse().expect("Invalid app port number");
 
-    let db_string = env::var("DB_STRING").unwrap_or_else(|_| "".to_string());
+    let db_string = env::var("DATABASE_URL").unwrap_or_else(|_| "".to_string());
     let db_context: DbContextMySql<Pool<MySql>> = DbContextMySql::new(db_string).await;
 
     let breed_service: Arc<BreedService<Pool<MySql>>> = Arc::new(BreedService::new(db_context.get_pool()));

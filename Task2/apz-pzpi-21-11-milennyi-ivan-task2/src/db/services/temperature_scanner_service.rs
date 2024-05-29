@@ -18,7 +18,7 @@ impl Service<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
         TemperatureScannerService { pool }
     }
 
-    async fn create(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
+    async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
         todo!()
     }
 
@@ -26,11 +26,11 @@ impl Service<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
         todo!()
     }
 
-    async fn update(&self, item: Self::Model) -> Result<Option<Self::Model>, Self::Error> {
+    async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
         todo!()
     }
 
-    async fn get_all(&self) -> Result<Option<Vec<Self::Model>>, Self::Error> {
+    async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
         todo!()
     }
 
