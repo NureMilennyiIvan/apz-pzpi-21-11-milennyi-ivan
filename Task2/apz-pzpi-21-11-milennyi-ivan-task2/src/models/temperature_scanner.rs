@@ -11,3 +11,20 @@ pub(crate) struct TemperatureScanner{
     #[validate(length(min = 1))]
     password: String
 }
+impl TemperatureScanner {
+    pub fn id(&self) -> Option<u64> {
+        self.id
+    }
+
+    pub fn temperature(&self) -> Option<u16> {
+        self.temperature
+    }
+
+    pub fn sheep_id(&self) -> u64 {
+        self.sheep_id
+    }
+
+    pub fn password(&self) -> &str {
+        &self.password
+    }
+}

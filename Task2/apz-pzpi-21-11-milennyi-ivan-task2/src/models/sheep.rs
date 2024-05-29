@@ -11,3 +11,24 @@ pub(crate) struct Sheep{
     sex: bool,
     shepherd_id: Option<u64>
 }
+impl Sheep {
+    pub fn id(&self) -> Option<u64> {
+        self.id
+    }
+
+    pub fn birth_date(&self) -> u64 {
+        self.birth_date
+    }
+
+    pub fn breed_id(&self) -> u64 {
+        self.breed_id
+    }
+
+    pub fn sex(&self) -> bool {
+        self.sex
+    }
+
+    pub fn shepherd_id(&self) -> Option<u64> {
+        self.shepherd_id
+    }
+}

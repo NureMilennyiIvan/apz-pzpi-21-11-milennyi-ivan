@@ -11,3 +11,21 @@ pub(crate) struct ShearingLog{
     #[validate(range(min = 1))]
     wool_amount: u32
 }
+
+impl ShearingLog {
+    pub fn id(&self) -> Option<u64> {
+        self.id
+    }
+
+    pub fn sheep_id(&self) -> u64 {
+        self.sheep_id
+    }
+
+    pub fn timestamp(&self) -> u64 {
+        self.timestamp
+    }
+
+    pub fn wool_amount(&self) -> u32 {
+        self.wool_amount
+    }
+}

@@ -12,3 +12,21 @@ pub(crate) struct Breed{
     #[validate(length(min = 1))]
     info: String
 }
+
+impl Breed {
+    pub fn id(&self) -> Option<u64> {
+        self.id
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn feed_id(&self) -> u64 {
+        self.feed_id
+    }
+
+    pub fn info(&self) -> &str {
+        &self.info
+    }
+}

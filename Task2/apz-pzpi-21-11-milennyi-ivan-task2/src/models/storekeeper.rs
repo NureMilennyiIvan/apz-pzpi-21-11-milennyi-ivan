@@ -15,3 +15,24 @@ pub(crate) struct Storekeeper{
     #[validate(length(min = 1))]
     surname: String,
 }
+impl Storekeeper {
+    pub fn id(&self) -> Option<u64> {
+        self.id
+    }
+
+    pub fn username(&self) -> &str {
+        &self.username
+    }
+
+    pub fn password(&self) -> &str {
+        &self.password
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn surname(&self) -> &str {
+        &self.surname
+    }
+}

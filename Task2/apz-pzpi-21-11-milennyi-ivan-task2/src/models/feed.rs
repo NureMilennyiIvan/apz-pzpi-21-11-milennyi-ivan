@@ -19,3 +19,32 @@ pub(crate) struct Feed{
     #[validate(range(min = 1))]
     carbohydrates: u32
 }
+impl Feed {
+    pub fn id(&self) -> Option<u64> {
+        self.id
+    }
+
+    pub fn amount(&self) -> u32 {
+        self.amount
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn calories(&self) -> u32 {
+        self.calories
+    }
+
+    pub fn fat(&self) -> u32 {
+        self.fat
+    }
+
+    pub fn protein(&self) -> u32 {
+        self.protein
+    }
+
+    pub fn carbohydrates(&self) -> u32 {
+        self.carbohydrates
+    }
+}

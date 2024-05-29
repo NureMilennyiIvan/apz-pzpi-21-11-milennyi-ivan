@@ -11,3 +11,21 @@ pub(crate) struct FeedSupply{
     amount: u64,
     feed_id: u64
 }
+
+impl FeedSupply {
+    pub fn id(&self) -> Option<u64> {
+        self.id
+    }
+
+    pub fn storekeeper_id(&self) -> Option<u64> {
+        self.storekeeper_id
+    }
+
+    pub fn amount(&self) -> u64 {
+        self.amount
+    }
+
+    pub fn feed_id(&self) -> u64 {
+        self.feed_id
+    }
+}

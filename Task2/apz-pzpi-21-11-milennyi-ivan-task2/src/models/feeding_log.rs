@@ -12,3 +12,25 @@ pub(crate) struct FeedingLog{
     #[validate(range(min = 1))]
     amount: u64
 }
+
+impl FeedingLog {
+    pub fn id(&self) -> Option<u64> {
+        self.id
+    }
+
+    pub fn sheep_id(&self) -> u64 {
+        self.sheep_id
+    }
+
+    pub fn timestamp(&self) -> u64 {
+        self.timestamp
+    }
+
+    pub fn feed_id(&self) -> u64 {
+        self.feed_id
+    }
+
+    pub fn amount(&self) -> u64 {
+        self.amount
+    }
+}
