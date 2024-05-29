@@ -19,23 +19,69 @@ impl Service<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
     }
 
     async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        todo!()
+        sqlx::query_as::<_, Self::Model>(
+            r#"
+            INSERT INTO TemperatureScanners (temperature, sheep_id, password)
+            VALUES (?, ?, ?)
+            RETURNING id, temperature, sheep_id, password
+            "#
+        )
+        .bind(item.temperature())
+        .bind(item.sheep_id())
+        .bind(item.password())
+        .fetch_one(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn delete(&self, item_id: u64) -> Result<(), Self::Error> {
-        todo!()
+        sqlx::query(
+            r#"
+            DELETE FROM TemperatureScanners
+            WHERE id = ?
+            "#
+        )
+        .bind(item_id)
+        .execute(&*self.pool).await
+        .map(|_| ()).map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        todo!()
+        sqlx::query_as::<_, Self::Model>(
+            r#"
+            UPDATE TemperatureScanners
+            SET temperature = ?, sheep_id = ?, password = ?
+            WHERE id = ?
+            RETURNING id, temperature, sheep_id, password
+            "#
+        )
+        .bind(item.temperature())
+        .bind(item.sheep_id())
+        .bind(item.password())
+        .bind(item.id().ok_or(ServiceError::CustomError("ID is required".to_string()))?)
+        .fetch_one(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
-        todo!()
+        sqlx::query_as::<_, Self::Model>(
+            r#"
+            SELECT * FROM TemperatureScanners
+            "#
+        )
+        .fetch_all(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn get_by_id(&self, id: u64) -> Result<Option<Self::Model>, Self::Error> {
-        todo!()
+        sqlx::query_as::<_, Self::Model>(
+            r#"
+            SELECT * FROM TemperatureScanners
+            WHERE id = ?
+            "#
+        )
+        .bind(id)
+        .fetch_optional(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 }
 #[async_trait]

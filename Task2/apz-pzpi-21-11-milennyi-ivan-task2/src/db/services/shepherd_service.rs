@@ -1,6 +1,6 @@
 use std::sync::Arc;
 use async_trait::async_trait;
-use sqlx::{MySql, Pool};
+use sqlx::{MySql, Pool, query, query_as};
 use crate::db::service_error::ServiceError;
 use crate::db::traits::{AuthService, Service, ShepherdManage};
 use crate::models::Shepherd;
@@ -19,23 +19,71 @@ impl Service<Pool<MySql>> for ShepherdService<Pool<MySql>> {
     }
 
     async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        todo!()
+        query_as::<_, Self::Model>(
+            r#"
+            INSERT INTO Shepherds (username, password, name, surname)
+            VALUES (?, ?, ?, ?)
+            RETURNING id, username, password, name, surname
+            "#
+        )
+        .bind(item.username())
+        .bind(item.password())
+        .bind(item.name())
+        .bind(item.surname())
+        .fetch_one(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn delete(&self, item_id: u64) -> Result<(), Self::Error> {
-        todo!()
+        query(
+            r#"
+            DELETE FROM Shepherds
+            WHERE id = ?
+            "#
+        )
+        .bind(item_id)
+        .execute(&*self.pool).await
+        .map(|_| ()).map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        todo!()
+        query_as::<_, Self::Model>(
+            r#"
+            UPDATE Shepherds
+            SET username = ?, password = ?, name = ?, surname = ?
+            WHERE id = ?
+            RETURNING id, username, password, name, surname
+            "#
+        )
+        .bind(item.username())
+        .bind(item.password())
+        .bind(item.name())
+        .bind(item.surname())
+        .bind(item.id().ok_or(ServiceError::CustomError("ID is required".to_string()))?)
+        .fetch_one(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
-        todo!()
+        query_as::<_, Self::Model>(
+            r#"
+            SELECT * FROM Shepherds
+            "#
+        )
+        .fetch_all(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn get_by_id(&self, id: u64) -> Result<Option<Self::Model>, Self::Error> {
-        todo!()
+        query_as::<_, Self::Model>(
+            r#"
+            SELECT * FROM Shepherds
+            WHERE id = ?
+            "#
+        )
+        .bind(id)
+        .fetch_optional(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 }
 #[async_trait]
