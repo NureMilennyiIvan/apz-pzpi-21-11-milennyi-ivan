@@ -57,6 +57,11 @@ use crate::endpoints::*;
         storekeeper_endpoints::storekeeper_authorize,
         storekeeper_endpoints::storekeeper_get_all,
         storekeeper_endpoints::storekeeper_get_by_id,
+        temperature_scanner_endpoints::temperature_scanner_get_all,
+        temperature_scanner_endpoints::temperature_scanner_get_by_id,
+        temperature_scanner_endpoints::temperature_scanner_create,
+        temperature_scanner_endpoints::temperature_scanner_update,
+        temperature_scanner_endpoints::temperature_scanner_delete,
     ),
      // Components such as schemas used in API documentation are defined here
     components(

@@ -1,5 +1,6 @@
 use actix_web::web::ServiceConfig;
 use crate::endpoints::*;
+
 pub(crate) fn breed_configure(cfg: &mut ServiceConfig){
     use breed_endpoints::*;
 
@@ -82,4 +83,10 @@ pub(crate) fn storekeeper_configure(cfg: &mut ServiceConfig) {
 }
 pub(crate) fn temperature_scanner_configure(cfg: &mut ServiceConfig) {
     use temperature_scanner_endpoints::*;
+
+    cfg.service(temperature_scanner_create)
+        .service(temperature_scanner_delete)
+        .service(temperature_scanner_update)
+        .service(temperature_scanner_get_all)
+        .service(temperature_scanner_get_by_id);
 }
