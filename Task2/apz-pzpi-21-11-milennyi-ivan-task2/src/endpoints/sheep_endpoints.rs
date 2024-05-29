@@ -1,10 +1,9 @@
 use std::sync::Arc;
 use actix_web::{web::{Data, Json, Path}, get, HttpResponse, post, Responder, patch, delete};
 use sqlx::{MySql, Pool};
-use validator::Validate;
-use crate::db::service_error::ServiceError;
 use crate::db::services::SheepService;
 use crate::db::traits::{Service, SheepManage};
+use crate::endpoints::utils::{send_service_result, validate_json_body};
 use crate::json_structs::{ChangeShepherdJson, PathId};
 use crate::models::Sheep;
 
@@ -15,10 +14,8 @@ use crate::models::Sheep;
 ))]
 #[get("/sheep")]
 async fn sheep_get_all(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>) -> impl Responder{
-    match sheep_service.get_all().await {
-        Ok(sheep) => HttpResponse::Ok().json(sheep),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = sheep_service.get_all().await;
+    send_service_result(result)
 }
 
 
@@ -30,10 +27,8 @@ async fn sheep_get_all(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>) -> i
 #[get("/sheep/{id}")]
 async fn sheep_get_by_id(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match sheep_service.get_by_id(params.id).await {
-        Ok(sheep) => HttpResponse::Ok().json(sheep),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = sheep_service.get_by_id(params.id).await;
+    send_service_result(result)
 }
 
 
@@ -45,10 +40,8 @@ async fn sheep_get_by_id(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, pa
 #[get("/sheep/details/{id}")]
 async fn sheep_get_details_by_id(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match sheep_service.get_details_by_id(params.id).await {
-        Ok(sheep) => HttpResponse::Ok().json(sheep),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = sheep_service.get_details_by_id(params.id).await;
+    send_service_result(result)
 }
 
 
@@ -60,10 +53,8 @@ async fn sheep_get_details_by_id(sheep_service: Data<Arc<SheepService<Pool<MySql
 #[get("/sheep/shepherd/{id}")]
 async fn sheep_get_all_vms_by_shepherd_id(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match sheep_service.get_all_vms_by_shepherd_id(params.id).await {
-        Ok(sheep) => HttpResponse::Ok().json(sheep),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = sheep_service.get_all_vms_by_shepherd_id(params.id).await;
+    send_service_result(result)
 }
 
 
@@ -74,14 +65,12 @@ async fn sheep_get_all_vms_by_shepherd_id(sheep_service: Data<Arc<SheepService<P
 ))]
 #[post("/sheep/create")]
 async fn sheep_create(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep_json: Json<Sheep>) -> impl Responder{
-    let sheep = match sheep_json.validate() {
-        Ok(_) => sheep_json.into_inner(),
-        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    let sheep = match validate_json_body(sheep_json) {
+        Ok(sheep) => sheep,
+        Err(error_response) => return error_response,
     };
-    match sheep_service.create(sheep).await {
-        Ok(created_sheep) => HttpResponse::Ok().json(created_sheep),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = sheep_service.create(sheep).await;
+    send_service_result(result)
 }
 
 
@@ -92,14 +81,12 @@ async fn sheep_create(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep
 ))]
 #[patch("/sheep/update")]
 async fn sheep_update(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep_json: Json<Sheep>) -> impl Responder{
-    let sheep = match sheep_json.validate() {
-        Ok(_) => sheep_json.into_inner(),
-        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    let sheep = match validate_json_body(sheep_json) {
+        Ok(sheep) => sheep,
+        Err(error_response) => return error_response,
     };
-    match sheep_service.update(sheep).await {
-        Ok(updated_sheep) => HttpResponse::Ok().json(updated_sheep),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = sheep_service.update(sheep).await;
+    send_service_result(result)
 }
 
 

@@ -2,10 +2,10 @@ use std::sync::Arc;
 use actix_web::{delete, get, HttpResponse, patch, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
-use validator::Validate;
 use crate::db::service_error::ServiceError;
 use crate::db::services::StorekeeperService;
 use crate::db::traits::{Service, AuthService};
+use crate::endpoints::utils::{send_service_result, validate_json_body};
 use crate::json_structs::{AuthorizeJson, PathId};
 use crate::models::Storekeeper;
 
@@ -16,10 +16,8 @@ use crate::models::Storekeeper;
 ))]
 #[get("/storekeeper")]
 async fn storekeeper_get_all(storekeeper_service: Data<Arc<StorekeeperService<Pool<MySql>>>>) -> impl Responder{
-    match storekeeper_service.get_all().await {
-        Ok(storekeeper) => HttpResponse::Ok().json(storekeeper),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = storekeeper_service.get_all().await;
+    send_service_result(result)
 }
 
 
@@ -31,10 +29,8 @@ async fn storekeeper_get_all(storekeeper_service: Data<Arc<StorekeeperService<Po
 #[get("/storekeeper/{id}")]
 async fn storekeeper_get_by_id(storekeeper_service: Data<Arc<StorekeeperService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match storekeeper_service.get_by_id(params.id).await {
-        Ok(storekeeper) => HttpResponse::Ok().json(storekeeper),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = storekeeper_service.get_by_id(params.id).await;
+    send_service_result(result)
 }
 
 
@@ -45,14 +41,12 @@ async fn storekeeper_get_by_id(storekeeper_service: Data<Arc<StorekeeperService<
 ))]
 #[post("/storekeeper/authorize")]
 async fn storekeeper_authorize(storekeeper_service: Data<Arc<StorekeeperService<Pool<MySql>>>>, authorize_json: Json<AuthorizeJson>) -> impl Responder{
-    let authorize = match authorize_json.validate() {
-        Ok(_) => authorize_json.into_inner(),
-        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    let authorize = match validate_json_body(authorize_json) {
+        Ok(authorize) => authorize,
+        Err(error_response) => return error_response,
     };
-    match storekeeper_service.authorize(authorize.username, authorize.password_hash).await {
-        Ok(storekeeper) => HttpResponse::Ok().json(storekeeper),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = storekeeper_service.authorize(authorize.username, authorize.password_hash).await;
+    send_service_result(result)
 }
 
 
@@ -63,9 +57,9 @@ async fn storekeeper_authorize(storekeeper_service: Data<Arc<StorekeeperService<
 ))]
 #[post("/storekeeper/create")]
 async fn storekeeper_create(storekeeper_service: Data<Arc<StorekeeperService<Pool<MySql>>>>, storekeeper_json: Json<Storekeeper>) -> impl Responder{
-    let storekeeper = match storekeeper_json.validate() {
-        Ok(_) => storekeeper_json.into_inner(),
-        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    let storekeeper =  match validate_json_body(storekeeper_json) {
+        Ok(storekeeper) => storekeeper,
+        Err(error_response) => return error_response,
     };
     match storekeeper_service.check_username(&storekeeper).await{
         Ok(res) => if res{
@@ -73,10 +67,8 @@ async fn storekeeper_create(storekeeper_service: Data<Arc<StorekeeperService<Poo
         },
         Err(error) => return HttpResponse::InternalServerError().json(error.to_string())
     }
-    match storekeeper_service.create(storekeeper).await {
-        Ok(created_storekeeper) => HttpResponse::Ok().json(created_storekeeper),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = storekeeper_service.create(storekeeper).await;
+    send_service_result(result)
 }
 
 
@@ -87,14 +79,12 @@ async fn storekeeper_create(storekeeper_service: Data<Arc<StorekeeperService<Poo
 ))]
 #[patch("/storekeeper/update")]
 async fn storekeeper_update(storekeeper_service: Data<Arc<StorekeeperService<Pool<MySql>>>>, storekeeper_json: Json<Storekeeper>) -> impl Responder{
-    let storekeeper = match storekeeper_json.validate() {
-        Ok(_) => storekeeper_json.into_inner(),
-        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    let storekeeper =  match validate_json_body(storekeeper_json) {
+        Ok(storekeeper) => storekeeper,
+        Err(error_response) => return error_response,
     };
-    match storekeeper_service.update(storekeeper).await {
-        Ok(updated_storekeeper) => HttpResponse::Ok().json(updated_storekeeper),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = storekeeper_service.update(storekeeper).await;
+    send_service_result(result)
 }
 
 

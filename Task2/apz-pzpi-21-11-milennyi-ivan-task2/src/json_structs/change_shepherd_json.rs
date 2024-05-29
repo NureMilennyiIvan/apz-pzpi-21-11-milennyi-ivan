@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use utoipa::{IntoParams, ToSchema};
+use utoipa::ToSchema;
 
 #[derive(Deserialize, ToSchema, Debug)]
 pub(crate) struct ChangeShepherdJson {

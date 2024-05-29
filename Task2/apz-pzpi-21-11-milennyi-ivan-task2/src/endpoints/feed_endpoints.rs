@@ -2,10 +2,9 @@ use std::sync::Arc;
 use actix_web::{delete, get, HttpResponse, patch, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
-use validator::Validate;
-use crate::db::service_error::ServiceError;
 use crate::db::services::FeedService;
 use crate::db::traits::{FeedManage, Service};
+use crate::endpoints::utils::{send_service_result, validate_json_body};
 use crate::json_structs::PathId;
 use crate::models::Feed;
 
@@ -16,10 +15,8 @@ use crate::models::Feed;
 ))]
 #[get("/feed")]
 async fn feed_get_all(feed_service: Data<Arc<FeedService<Pool<MySql>>>>) -> impl Responder{
-    match feed_service.get_all().await {
-        Ok(feed) => HttpResponse::Ok().json(feed),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = feed_service.get_all().await;
+    send_service_result(result)
 }
 
 
@@ -31,10 +28,8 @@ async fn feed_get_all(feed_service: Data<Arc<FeedService<Pool<MySql>>>>) -> impl
 #[get("/feed/{id}")]
 async fn feed_get_by_id(feed_service: Data<Arc<FeedService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match feed_service.get_by_id(params.id).await {
-        Ok(feed) => HttpResponse::Ok().json(feed),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = feed_service.get_by_id(params.id).await;
+    send_service_result(result)
 }
 
 #[utoipa::path(responses(
@@ -44,10 +39,8 @@ async fn feed_get_by_id(feed_service: Data<Arc<FeedService<Pool<MySql>>>>, param
 ))]
 #[get("/feed-vms")]
 async fn feed_get_all_vms(feed_service: Data<Arc<FeedService<Pool<MySql>>>>) -> impl Responder{
-    match feed_service.get_all_vms().await {
-        Ok(feed) => HttpResponse::Ok().json(feed),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = feed_service.get_all_vms().await;
+    send_service_result(result)
 }
 
 
@@ -58,14 +51,12 @@ async fn feed_get_all_vms(feed_service: Data<Arc<FeedService<Pool<MySql>>>>) -> 
 ))]
 #[post("/feed/create")]
 async fn feed_create(feed_service: Data<Arc<FeedService<Pool<MySql>>>>, feed_json: Json<Feed>) -> impl Responder{
-    let feed = match feed_json.validate() {
-        Ok(_) => feed_json.into_inner(),
-        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    let feed = match validate_json_body(feed_json) {
+        Ok(feed) => feed,
+        Err(error_response) => return error_response,
     };
-    match feed_service.create(feed).await {
-        Ok(created_feed) => HttpResponse::Ok().json(created_feed),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = feed_service.create(feed).await;
+    send_service_result(result)
 }
 
 
@@ -76,14 +67,12 @@ async fn feed_create(feed_service: Data<Arc<FeedService<Pool<MySql>>>>, feed_jso
 ))]
 #[patch("/feed/update")]
 async fn feed_update(feed_service: Data<Arc<FeedService<Pool<MySql>>>>, feed_json: Json<Feed>) -> impl Responder{
-    let feed = match feed_json.validate() {
-        Ok(_) => feed_json.into_inner(),
-        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    let feed = match validate_json_body(feed_json) {
+        Ok(feed) => feed,
+        Err(error_response) => return error_response,
     };
-    match feed_service.update(feed).await {
-        Ok(updated_feed) => HttpResponse::Ok().json(updated_feed),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = feed_service.update(feed).await;
+    send_service_result(result)
 }
 
 

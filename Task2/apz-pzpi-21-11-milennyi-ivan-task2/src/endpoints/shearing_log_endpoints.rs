@@ -2,10 +2,9 @@ use std::sync::Arc;
 use actix_web::{delete, get, HttpResponse, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
-use validator::Validate;
-use crate::db::service_error::ServiceError;
 use crate::db::services::ShearingLogService;
 use crate::db::traits::{Service, ShearingLogManage};
+use crate::endpoints::utils::{send_service_result, validate_json_body};
 use crate::json_structs::PathId;
 use crate::models::ShearingLog;
 
@@ -16,10 +15,8 @@ use crate::models::ShearingLog;
 ))]
 #[get("/shearing-log")]
 async fn shearing_log_get_all(shearing_log_service: Data<Arc<ShearingLogService<Pool<MySql>>>>) -> impl Responder{
-    match shearing_log_service.get_all().await {
-        Ok(shearing_log) => HttpResponse::Ok().json(shearing_log),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = shearing_log_service.get_all().await;
+    send_service_result(result)
 }
 
 
@@ -31,10 +28,8 @@ async fn shearing_log_get_all(shearing_log_service: Data<Arc<ShearingLogService<
 #[get("/shearing-log/{id}")]
 async fn shearing_log_get_by_id(shearing_log_service: Data<Arc<ShearingLogService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match shearing_log_service.get_by_id(params.id).await {
-        Ok(shearing_log) => HttpResponse::Ok().json(shearing_log),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = shearing_log_service.get_by_id(params.id).await;
+    send_service_result(result)
 }
 
 
@@ -46,10 +41,8 @@ async fn shearing_log_get_by_id(shearing_log_service: Data<Arc<ShearingLogServic
 #[get("/shearing-log/sheep/{id}")]
 async fn shearing_log_get_all_vms_by_sheep_id(shearing_log_service: Data<Arc<ShearingLogService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match shearing_log_service.get_all_vms_by_sheep_id(params.id).await {
-        Ok(shearing_logs) => HttpResponse::Ok().json(shearing_logs),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = shearing_log_service.get_all_vms_by_sheep_id(params.id).await;
+    send_service_result(result)
 }
 
 
@@ -60,14 +53,12 @@ async fn shearing_log_get_all_vms_by_sheep_id(shearing_log_service: Data<Arc<She
 ))]
 #[post("/shearing-log/create")]
 async fn shearing_log_create(shearing_log_service: Data<Arc<ShearingLogService<Pool<MySql>>>>, shearing_log_json: Json<ShearingLog>) -> impl Responder{
-    let shearing_log = match shearing_log_json.validate() {
-        Ok(_) => shearing_log_json.into_inner(),
-        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    let shearing_log = match validate_json_body(shearing_log_json) {
+        Ok(shearing_log) => shearing_log,
+        Err(error_response) => return error_response,
     };
-    match shearing_log_service.create(shearing_log).await {
-        Ok(created_shearing_log) => HttpResponse::Ok().json(created_shearing_log),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = shearing_log_service.create(shearing_log).await;
+    send_service_result(result)
 }
 
 

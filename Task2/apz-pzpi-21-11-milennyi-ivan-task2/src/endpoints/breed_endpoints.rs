@@ -2,12 +2,12 @@ use std::sync::Arc;
 use actix_web::{delete, get, HttpResponse, patch, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
-use validator::Validate;
-use crate::db::service_error::ServiceError;
 use crate::db::services::BreedService;
 use crate::db::traits::{BreedManage, Service};
+use crate::endpoints::utils::{validate_json_body, send_service_result};
 use crate::json_structs::PathId;
 use crate::models::Breed;
+
 
 #[utoipa::path(responses(
     (status = 200, description = "Breed get all"),
@@ -16,10 +16,8 @@ use crate::models::Breed;
 ))]
 #[get("/breed")]
 async fn breed_get_all(breed_service: Data<Arc<BreedService<Pool<MySql>>>>) -> impl Responder{
-    match breed_service.get_all().await {
-        Ok(breed) => HttpResponse::Ok().json(breed),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = breed_service.get_all().await;
+    send_service_result(result)
 }
 
 
@@ -31,10 +29,8 @@ async fn breed_get_all(breed_service: Data<Arc<BreedService<Pool<MySql>>>>) -> i
 #[get("/breed/{id}")]
 async fn breed_get_by_id(breed_service: Data<Arc<BreedService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match breed_service.get_by_id(params.id).await {
-        Ok(breed) => HttpResponse::Ok().json(breed),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = breed_service.get_by_id(params.id).await;
+    send_service_result(result)
 }
 
 #[utoipa::path(responses(
@@ -44,10 +40,8 @@ async fn breed_get_by_id(breed_service: Data<Arc<BreedService<Pool<MySql>>>>, pa
 ))]
 #[get("/breed-vms")]
 async fn breed_get_all_vms(breed_service: Data<Arc<BreedService<Pool<MySql>>>>) -> impl Responder{
-    match breed_service.get_all_vms().await {
-        Ok(breed) => HttpResponse::Ok().json(breed),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = breed_service.get_all_vms().await;
+    send_service_result(result)
 }
 
 
@@ -58,14 +52,12 @@ async fn breed_get_all_vms(breed_service: Data<Arc<BreedService<Pool<MySql>>>>) 
 ))]
 #[post("/breed/create")]
 async fn breed_create(breed_service: Data<Arc<BreedService<Pool<MySql>>>>, breed_json: Json<Breed>) -> impl Responder{
-    let breed = match breed_json.validate() {
-        Ok(_) => breed_json.into_inner(),
-        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    let breed = match validate_json_body(breed_json) {
+        Ok(breed) => breed,
+        Err(error_response) => return error_response,
     };
-    match breed_service.create(breed).await {
-        Ok(created_breed) => HttpResponse::Ok().json(created_breed),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = breed_service.create(breed).await;
+    send_service_result(result)
 }
 
 
@@ -76,14 +68,12 @@ async fn breed_create(breed_service: Data<Arc<BreedService<Pool<MySql>>>>, breed
 ))]
 #[patch("/breed/update")]
 async fn breed_update(breed_service: Data<Arc<BreedService<Pool<MySql>>>>, breed_json: Json<Breed>) -> impl Responder{
-    let breed = match breed_json.validate() {
-        Ok(_) => breed_json.into_inner(),
-        Err(error) => return HttpResponse::BadRequest().json(ServiceError::ValidationError(error).to_string())
+    let breed = match validate_json_body(breed_json) {
+        Ok(breed) => breed,
+        Err(error_response) => return error_response,
     };
-    match breed_service.update(breed).await {
-        Ok(updated_breed) => HttpResponse::Ok().json(updated_breed),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    let result = breed_service.update(breed).await;
+    send_service_result(result)
 }
 
 

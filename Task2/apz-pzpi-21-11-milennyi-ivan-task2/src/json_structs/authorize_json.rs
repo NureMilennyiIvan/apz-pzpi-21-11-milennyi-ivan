@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use utoipa::{IntoParams, ToSchema};
+use utoipa::ToSchema;
 use validator::Validate;
 
 #[derive(Deserialize, ToSchema, Debug, Validate)]

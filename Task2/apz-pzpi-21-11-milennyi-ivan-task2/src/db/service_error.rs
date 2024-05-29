@@ -8,11 +8,11 @@ pub(crate) enum ServiceError {
     UniqueError
 }
 impl Display for ServiceError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, formatter: &mut Formatter<'_>) -> std::fmt::Result {
         match &self {
-            ServiceError::DatabaseError(error) => write!(f, "Database error: {}", error.to_string()),
-            ServiceError::ValidationError(error) => write!(f, "Validation error {}", error.to_string()),
-            ServiceError::UniqueError => write!(f, "This user already exist:"),
+            ServiceError::DatabaseError(error) => write!(formatter, "Database error: {}", error.to_string()),
+            ServiceError::ValidationError(error) => write!(formatter, "Validation error {}", error.to_string()),
+            ServiceError::UniqueError => write!(formatter, "This user already exist:"),
         }
     }
 }
