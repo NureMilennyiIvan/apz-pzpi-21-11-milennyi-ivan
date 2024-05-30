@@ -43,6 +43,7 @@ use crate::endpoints::*;
         sheep_endpoints::sheep_get_all_vms_by_shepherd_id,
         sheep_endpoints::sheep_create,
         sheep_endpoints::sheep_update,
+        sheep_endpoints::sheep_change_temperature_scanner,
         sheep_endpoints::sheep_change_shepherd,
         sheep_endpoints::sheep_delete,
         shepherd_endpoints::shepherd_create,
@@ -59,8 +60,10 @@ use crate::endpoints::*;
         storekeeper_endpoints::storekeeper_get_by_id,
         temperature_scanner_endpoints::temperature_scanner_get_all,
         temperature_scanner_endpoints::temperature_scanner_get_by_id,
+        temperature_scanner_endpoints::temperature_scanner_authenticate,
         temperature_scanner_endpoints::temperature_scanner_create,
         temperature_scanner_endpoints::temperature_scanner_update,
+        temperature_scanner_endpoints::temperature_scanner_update_temperature,
         temperature_scanner_endpoints::temperature_scanner_delete,
     ),
      // Components such as schemas used in API documentation are defined here
@@ -69,7 +72,7 @@ use crate::endpoints::*;
             Breed, Feed, FeedSupply, FeedingLog, ShearingLog, Sheep, Shepherd, Storekeeper, TemperatureScanner,
             BreedVM, FeedVM, FeedSupplyVM, FeedingLogVM, ShearingLogVM, SheepVM, ShepherdVM, StorekeeperVM, TemperatureScannerVM,
             SheepDetailsVM,
-            ChangeShepherdJson, AuthorizeJson,
+            ChangeForSheepJson, AuthorizeJson, TemperatureScannerAuthJson, TemperatureScannerTempJson,
             PathId
         )
     ),

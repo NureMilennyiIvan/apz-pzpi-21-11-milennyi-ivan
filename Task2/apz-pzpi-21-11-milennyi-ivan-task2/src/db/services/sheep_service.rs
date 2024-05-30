@@ -21,9 +21,9 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
     async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
         query_as::<_, Self::Model>(
             r#"
-            INSERT INTO Sheep (birth_date, breed_id, sex, shepherd_id)
+            INSERT INTO Sheep (birth_date, breed_id, sex, null, shepherd_id)
             VALUES (?, ?, ?, ?)
-            RETURNING id, birth_date, breed_id, sex, shepherd_id
+            RETURNING id, birth_date, breed_id, sex, temperature_scanner_id, shepherd_id
             "#
         )
         .bind(item.birth_date())
@@ -43,21 +43,31 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
         )
         .bind(item_id)
         .execute(&*self.pool).await
-        .map(|_| ()).map_err(|error| ServiceError::DatabaseError(error))
+        .map_err(|error| ServiceError::DatabaseError(error))
+        .map(|result|
+            if result.rows_affected() == 0 {
+                Err(ServiceError::CustomError("Zero rows affected".to_string()))
+            }
+            else{
+                Ok(())
+            }
+        )
+        .unwrap_or_else(|error| Err(error))
     }
 
     async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
         query_as::<_, Self::Model>(
             r#"
             UPDATE Sheep
-            SET birth_date = ?, breed_id = ?, sex = ?, shepherd_id = ?
+            SET birth_date = ?, breed_id = ?, sex = ?, temperature_scanner_id = ?, shepherd_id = ?
             WHERE id = ?
-            RETURNING id, birth_date, breed_id, sex, shepherd_id
+            RETURNING id, birth_date, breed_id, sex, temperature_scanner_id, shepherd_id
             "#
         )
         .bind(item.birth_date())
         .bind(item.breed_id())
         .bind(item.sex())
+        .bind(item.temperature_scanner_id())
         .bind(item.shepherd_id())
         .bind(item.id().ok_or(ServiceError::CustomError("ID is required".to_string()))?)
         .fetch_one(&*self.pool).await
@@ -150,7 +160,7 @@ impl SheepManage<Pool<MySql>> for SheepService<Pool<MySql>>{
             ) AS feed_amount
             FROM Sheep s
             INNER JOIN Breeds b ON s.breed_id = b.id
-            LEFT JOIN TemperatureScanners ts ON s.id = ts.sheep_id
+            LEFT JOIN TemperatureScanners ts ON s.temperature_scanner_id = ts.id
             INNER JOIN Feeds f ON b.feed_id = f.id
             WHERE s.id = ?
             "#
@@ -160,17 +170,49 @@ impl SheepManage<Pool<MySql>> for SheepService<Pool<MySql>>{
         .map_err(|error| ServiceError::DatabaseError(error))
     }
 
-    async fn change_shepherd(&self, sheep_id: u64, shepherd_id: u64) -> Result<(), Self::Error> {
+    async fn change_shepherd(&self, sheep_id: u64, shepherd_id: Option<u64>) -> Result<(), Self::Error> {
         query(
             r#"
             UPDATE Sheep
-            SET shepherd_id = ?,
+            SET shepherd_id = ?
             WHERE id = ?
             "#
         )
        .bind(shepherd_id)
        .bind(sheep_id)
        .execute(&*self.pool).await
-       .map(|_| ()).map_err(|error| ServiceError::DatabaseError(error))
+       .map_err(|error| ServiceError::DatabaseError(error))
+       .map(|result|
+           if result.rows_affected() == 0 {
+               Err(ServiceError::CustomError("Zero rows affected".to_string()))
+           }
+           else{
+               Ok(())
+           }
+       )
+       .unwrap_or_else(|error| Err(error))
+    }
+
+    async fn change_temperature_scanner(&self, sheep_id: u64, temperature_scanner_id: Option<u64>) -> Result<(), Self::Error> {
+        query(
+            r#"
+            UPDATE Sheep
+            SET temperature_scanner_id = ?
+            WHERE id = ?
+            "#
+        )
+        .bind(temperature_scanner_id)
+        .bind(sheep_id)
+        .execute(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
+        .map(|result|
+            if result.rows_affected() == 0 {
+                Err(ServiceError::CustomError("Zero rows affected".to_string()))
+            }
+            else{
+                Ok(())
+            }
+        )
+        .unwrap_or_else(|error| Err(error))
     }
 }

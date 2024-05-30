@@ -55,6 +55,7 @@ pub(crate) fn sheep_configure(cfg: &mut ServiceConfig) {
     cfg.service(sheep_create)
         .service(sheep_delete)
         .service(sheep_update)
+        .service(sheep_change_temperature_scanner)
         .service(sheep_change_shepherd)
         .service(sheep_get_all)
         .service(sheep_get_all_vms_by_shepherd_id)
@@ -87,6 +88,8 @@ pub(crate) fn temperature_scanner_configure(cfg: &mut ServiceConfig) {
     cfg.service(temperature_scanner_create)
         .service(temperature_scanner_delete)
         .service(temperature_scanner_update)
+        .service(temperature_scanner_update_temperature)
+        .service(temperature_scanner_authenticate)
         .service(temperature_scanner_get_all)
         .service(temperature_scanner_get_by_id);
 }

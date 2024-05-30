@@ -1,6 +1,6 @@
 use std::sync::Arc;
 use async_trait::async_trait;
-use sqlx::{MySql, Pool};
+use sqlx::{MySql, Pool, query, query_as};
 use crate::db::service_error::ServiceError;
 use crate::db::traits::{Service, TemperatureScannerManage};
 use crate::models::TemperatureScanner;
@@ -19,22 +19,21 @@ impl Service<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
     }
 
     async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        sqlx::query_as::<_, Self::Model>(
+        query_as::<_, Self::Model>(
             r#"
-            INSERT INTO TemperatureScanners (temperature, sheep_id, password)
+            INSERT INTO TemperatureScanners (temperature, password)
             VALUES (?, ?, ?)
-            RETURNING id, temperature, sheep_id, password
+            RETURNING id, password
             "#
         )
         .bind(item.temperature())
-        .bind(item.sheep_id())
         .bind(item.password())
         .fetch_one(&*self.pool).await
         .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn delete(&self, item_id: u64) -> Result<(), Self::Error> {
-        sqlx::query(
+        query(
             r#"
             DELETE FROM TemperatureScanners
             WHERE id = ?
@@ -42,20 +41,28 @@ impl Service<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
         )
         .bind(item_id)
         .execute(&*self.pool).await
-        .map(|_| ()).map_err(|error| ServiceError::DatabaseError(error))
+        .map_err(|error| ServiceError::DatabaseError(error))
+        .map(|result|
+            if result.rows_affected() == 0 {
+                Err(ServiceError::CustomError("Zero rows affected".to_string()))
+            }
+            else{
+                Ok(())
+            }
+        )
+        .unwrap_or_else(|error| Err(error))
     }
 
     async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        sqlx::query_as::<_, Self::Model>(
+        query_as::<_, Self::Model>(
             r#"
             UPDATE TemperatureScanners
-            SET temperature = ?, sheep_id = ?, password = ?
+            SET temperature = ?, password = ?
             WHERE id = ?
-            RETURNING id, temperature, sheep_id, password
+            RETURNING id, temperature, password
             "#
         )
         .bind(item.temperature())
-        .bind(item.sheep_id())
         .bind(item.password())
         .bind(item.id().ok_or(ServiceError::CustomError("ID is required".to_string()))?)
         .fetch_one(&*self.pool).await
@@ -63,7 +70,7 @@ impl Service<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
     }
 
     async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
-        sqlx::query_as::<_, Self::Model>(
+        query_as::<_, Self::Model>(
             r#"
             SELECT * FROM TemperatureScanners
             "#
@@ -73,7 +80,7 @@ impl Service<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
     }
 
     async fn get_by_id(&self, id: u64) -> Result<Option<Self::Model>, Self::Error> {
-        sqlx::query_as::<_, Self::Model>(
+        query_as::<_, Self::Model>(
             r#"
             SELECT * FROM TemperatureScanners
             WHERE id = ?
@@ -86,5 +93,40 @@ impl Service<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
 }
 #[async_trait]
 impl TemperatureScannerManage<Pool<MySql>> for TemperatureScannerService<Pool<MySql>>{
+    async fn authenticate(&self, id: u64, hash_password: String) -> Result<bool, Self::Error> {
+        query_as::<_, Self::Model>(
+            r#"
+            SELECT COUNT(*)
+            FROM TemperatureScanners ts
+            WHERE ts.id = ? AND ts.password = ? AND (SELECT COUNT(*) FROM Sheep WHERE temperature_scanner_id = ts.id) = 1
+            "#
+        )
+        .bind(id)
+        .bind(hash_password)
+        .fetch_optional(&*self.pool).await
+        .map(|result| result.is_some()).map_err(|error| ServiceError::DatabaseError(error))
+    }
 
+    async fn update_temperature(&self, id: u64, temperature: u64) -> Result<(), Self::Error> {
+        query(
+            r#"
+            UPDATE TemperatureScanners
+            SET temperature = ?
+            WHERE id = ? AND (SELECT COUNT(*) FROM Sheep WHERE temperature_scanner_id = ts.id) = 1
+            "#
+        )
+        .bind(temperature)
+        .bind(id)
+        .execute(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
+        .map(|result|
+            if result.rows_affected() == 0 {
+                Err(ServiceError::CustomError("Zero rows affected".to_string()))
+            }
+            else{
+                Ok(())
+            }
+        )
+        .unwrap_or_else(|error| Err(error))
+    }
 }

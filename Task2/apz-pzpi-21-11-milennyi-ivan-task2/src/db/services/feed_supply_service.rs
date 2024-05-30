@@ -62,7 +62,16 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
         )
         .bind(item_id)
         .execute(&*self.pool).await
-        .map(|_| ()).map_err(|error| ServiceError::DatabaseError(error))
+        .map_err(|error| ServiceError::DatabaseError(error))
+        .map(|result|
+            if result.rows_affected() == 0 {
+                Err(ServiceError::CustomError("Zero rows affected".to_string()))
+            }
+            else{
+                Ok(())
+            }
+        )
+        .unwrap_or_else(|error| Err(error))
     }
 
     async fn update(&self, _item: Self::Model) -> Result<Self::Model, Self::Error> {

@@ -3,9 +3,9 @@ use actix_web::{delete, get, patch, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::services::TemperatureScannerService;
-use crate::db::traits::Service;
+use crate::db::traits::{Service, TemperatureScannerManage};
 use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
-use crate::json_structs::PathId;
+use crate::json_structs::{PathId, TemperatureScannerAuthJson, TemperatureScannerTempJson};
 use crate::models::TemperatureScanner;
 
 #[utoipa::path(responses(
@@ -32,6 +32,20 @@ async fn temperature_scanner_get_by_id(temperature_scanner_service: Data<Arc<Tem
     send_service_result(result)
 }
 
+#[utoipa::path(responses(
+    (status = 200, description = "Temperature scanner authenticate"),
+    (status = 400, description = "Validation error or bad request"),
+    (status = 500, description = "Internal server error")
+))]
+#[post("/temperature-scanner/authenticate")]
+async fn temperature_scanner_authenticate(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, temperature_scanner_authenticate_json: Json<TemperatureScannerAuthJson>) -> impl Responder{
+    let temperature_scanner_authenticate = match validate_json_body(temperature_scanner_authenticate_json) {
+        Ok(temperature_scanner_authenticate) => temperature_scanner_authenticate,
+        Err(error_response) => return error_response,
+    };
+    let result = temperature_scanner_service.authenticate(temperature_scanner_authenticate.id, temperature_scanner_authenticate.hash_password).await;
+    send_service_result(result)
+}
 
 #[utoipa::path(responses(
     (status = 200, description = "Temperature scanner created"),
@@ -45,6 +59,21 @@ async fn temperature_scanner_create(temperature_scanner_service: Data<Arc<Temper
         Err(error_response) => return error_response,
     };
     let result = temperature_scanner_service.create(temperature_scanner).await;
+    send_service_result(result)
+}
+
+#[utoipa::path(responses(
+    (status = 200, description = "Temperature scanner authenticate"),
+    (status = 400, description = "Validation error or bad request"),
+    (status = 500, description = "Internal server error")
+))]
+#[patch("/temperature-scanner/update-temperature")]
+async fn temperature_scanner_update_temperature(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, temperature_scanner_update_temp_json: Json<TemperatureScannerTempJson>) -> impl Responder{
+    let temperature_scanner_update_temp = match validate_json_body(temperature_scanner_update_temp_json) {
+        Ok(temperature_scanner_update_temp) => temperature_scanner_update_temp,
+        Err(error_response) => return error_response,
+    };
+    let result = temperature_scanner_service.update_temperature(temperature_scanner_update_temp.id, temperature_scanner_update_temp.temperature).await;
     send_service_result(result)
 }
 
