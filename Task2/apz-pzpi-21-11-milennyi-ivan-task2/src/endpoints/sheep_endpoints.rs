@@ -4,7 +4,7 @@ use sqlx::{MySql, Pool};
 use crate::db::services::SheepService;
 use crate::db::traits::{Service, SheepManage};
 use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
-use crate::json_structs::{ChangeForSheepJson, PathId};
+use crate::json_structs::{ChangeIdJson, PathId};
 use crate::models::Sheep;
 
 #[utoipa::path(responses(
@@ -95,10 +95,11 @@ async fn sheep_update(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
-#[patch("/sheep/change-shepherd")]
-async fn sheep_change_shepherd(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, change_shepherd_json: Json<ChangeForSheepJson>) -> impl Responder{
+#[patch("/sheep/change-shepherd/{id}")]
+async fn sheep_change_shepherd(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>, change_shepherd_json: Json<ChangeIdJson>) -> impl Responder{
     let change_shepherd = change_shepherd_json.into_inner();
-    match sheep_service.change_shepherd(change_shepherd.sheep_id, change_shepherd.change_id).await {
+    let params = params_url.into_inner();
+    match sheep_service.change_shepherd(params.id, change_shepherd.change_id).await {
         Ok(_) => HttpResponse::Ok().json("Changed"),
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
@@ -109,10 +110,11 @@ async fn sheep_change_shepherd(sheep_service: Data<Arc<SheepService<Pool<MySql>>
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
-#[patch("/sheep/change-temperature-scanner")]
-async fn sheep_change_temperature_scanner(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, change_temperature_scanner_json: Json<ChangeForSheepJson>) -> impl Responder{
+#[patch("/sheep/change-temperature-scanner/{id}")]
+async fn sheep_change_temperature_scanner(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>, change_temperature_scanner_json: Json<ChangeIdJson>) -> impl Responder{
     let change_temperature_scanner = change_temperature_scanner_json.into_inner();
-    match sheep_service.change_temperature_scanner(change_temperature_scanner.sheep_id, change_temperature_scanner.change_id).await {
+    let params = params_url.into_inner();
+    match sheep_service.change_temperature_scanner(params.id, change_temperature_scanner.change_id).await {
         Ok(_) => HttpResponse::Ok().json("Changed"),
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }

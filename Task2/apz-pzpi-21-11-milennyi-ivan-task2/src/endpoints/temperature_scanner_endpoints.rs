@@ -37,13 +37,14 @@ async fn temperature_scanner_get_by_id(temperature_scanner_service: Data<Arc<Tem
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
-#[post("/temperature-scanner/authenticate")]
-async fn temperature_scanner_authenticate(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, temperature_scanner_authenticate_json: Json<TemperatureScannerAuthJson>) -> impl Responder{
+#[post("/temperature-scanner/authenticate/{id}")]
+async fn temperature_scanner_authenticate(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>,  temperature_scanner_authenticate_json: Json<TemperatureScannerAuthJson>) -> impl Responder{
+    let params = params_url.into_inner();
     let temperature_scanner_authenticate = match validate_json_body(temperature_scanner_authenticate_json) {
         Ok(temperature_scanner_authenticate) => temperature_scanner_authenticate,
         Err(error_response) => return error_response,
     };
-    let result = temperature_scanner_service.authenticate(temperature_scanner_authenticate.id, temperature_scanner_authenticate.hash_password).await;
+    let result = temperature_scanner_service.authenticate(params.id, temperature_scanner_authenticate.hash_password).await;
     send_service_result(result)
 }
 
@@ -52,7 +53,7 @@ async fn temperature_scanner_authenticate(temperature_scanner_service: Data<Arc<
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
-#[post("/temperature-scanner/create")]
+#[post("/temperature-scanner/create/{id}")]
 async fn temperature_scanner_create(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, temperature_scanner_json: Json<TemperatureScanner>) -> impl Responder{
     let temperature_scanner = match validate_json_body(temperature_scanner_json) {
         Ok(temperature_scanner) => temperature_scanner,
@@ -68,12 +69,10 @@ async fn temperature_scanner_create(temperature_scanner_service: Data<Arc<Temper
     (status = 500, description = "Internal server error")
 ))]
 #[patch("/temperature-scanner/update-temperature")]
-async fn temperature_scanner_update_temperature(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, temperature_scanner_update_temp_json: Json<TemperatureScannerTempJson>) -> impl Responder{
-    let temperature_scanner_update_temp = match validate_json_body(temperature_scanner_update_temp_json) {
-        Ok(temperature_scanner_update_temp) => temperature_scanner_update_temp,
-        Err(error_response) => return error_response,
-    };
-    let result = temperature_scanner_service.update_temperature(temperature_scanner_update_temp.id, temperature_scanner_update_temp.temperature).await;
+async fn temperature_scanner_update_temperature(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>, temperature_scanner_update_temp_json: Json<TemperatureScannerTempJson>) -> impl Responder{
+    let params = params_url.into_inner();
+    let temperature_scanner_update_temp = temperature_scanner_update_temp_json.into_inner();
+    let result = temperature_scanner_service.update_temperature(params.id, temperature_scanner_update_temp.temperature).await;
     send_service_result(result)
 }
 

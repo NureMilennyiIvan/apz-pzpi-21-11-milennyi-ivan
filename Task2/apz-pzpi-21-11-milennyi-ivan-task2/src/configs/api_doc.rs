@@ -72,7 +72,7 @@ use crate::endpoints::*;
             Breed, Feed, FeedSupply, FeedingLog, ShearingLog, Sheep, Shepherd, Storekeeper, TemperatureScanner,
             BreedVM, FeedVM, FeedSupplyVM, FeedingLogVM, ShearingLogVM, SheepVM, ShepherdVM, StorekeeperVM, TemperatureScannerVM,
             SheepDetailsVM,
-            ChangeForSheepJson, AuthorizeJson, TemperatureScannerAuthJson, TemperatureScannerTempJson,
+            ChangeIdJson, AuthorizeJson, TemperatureScannerAuthJson, TemperatureScannerTempJson,
             PathId
         )
     ),
