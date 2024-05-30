@@ -20,7 +20,7 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
     }
 
     async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        let mut tx = self.pool.begin().await.map_err(|error| ServiceError::DatabaseError(error))?;
+        let mut transaction = self.pool.begin().await.map_err(|error| ServiceError::DatabaseError(error))?;
 
         query(
             r#"
@@ -31,7 +31,7 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
         )
         .bind(item.amount())
         .bind(item.feed_id())
-        .execute(&mut *tx).await
+        .execute(&mut *transaction).await
         .map_err(|error| ServiceError::DatabaseError(error))?;
 
         let result = query_as::<_, Self::Model>(
@@ -45,10 +45,10 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
         .bind(item.amount())
         .bind(item.timestamp())
         .bind(item.feed_id())
-        .fetch_one(&mut *tx).await
+        .fetch_one(&mut *transaction).await
         .map_err(|error| ServiceError::DatabaseError(error));
 
-        tx.commit().await.map_err(|error| ServiceError::DatabaseError(error))?;
+        transaction.commit().await.map_err(|error| ServiceError::DatabaseError(error))?;
 
         result
     }

@@ -17,3 +17,9 @@ pub(super) fn send_service_result<T: Serialize>(result: Result<T, ServiceError>)
         Err(error) => HttpResponse::InternalServerError().json(error.to_string())
     }
 }
+pub(super) fn send_service_message<T: Serialize>(result: Result<T, ServiceError>, message: &str) -> HttpResponse{
+    match result{
+        Ok(_) => HttpResponse::Ok().json(message),
+        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
+    }
+}

@@ -89,11 +89,28 @@ impl Service<Pool<MySql>> for ShepherdService<Pool<MySql>> {
 #[async_trait]
 impl AuthService<Pool<MySql>> for ShepherdService<Pool<MySql>> {
     async fn check_username(&self, user: &Self::Model) -> Result<bool, Self::Error> {
-        todo!()
+        query_as::<_, Self::Model>(
+            r#"
+            SELECT * FROM Shepherds
+            WHERE username = ?
+            "#
+        )
+        .bind(user.username())
+        .fetch_optional(&*self.pool).await.map(|result| result.is_some())
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn authorize(&self, username: String, password_hash: String) -> Result<Option<Self::ViewModel>, Self::Error> {
-        todo!()
+        query_as::<_, Self::ViewModel>(
+            r#"
+            SELECT id, name, surname FROM Shepherds
+            WHERE username = ? AND password = ?
+            "#
+        )
+        .bind(username)
+        .bind(password_hash)
+        .fetch_optional(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 }
 

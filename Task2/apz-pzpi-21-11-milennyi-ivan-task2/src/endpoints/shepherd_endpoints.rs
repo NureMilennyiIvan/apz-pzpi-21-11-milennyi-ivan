@@ -5,7 +5,7 @@ use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
 use crate::db::services::ShepherdService;
 use crate::db::traits::{AuthService, Service};
-use crate::endpoints::utils::{send_service_result, validate_json_body};
+use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
 use crate::json_structs::{AuthorizeJson, PathId};
 use crate::models::Shepherd;
 
@@ -63,11 +63,11 @@ async fn shepherd_create(shepherd_service: Data<Arc<ShepherdService<Pool<MySql>>
         Err(error_response) => return error_response,
     };
     match shepherd_service.check_username(&shepherd).await{
-        Ok(res) => if res{
+        Ok(res) => if res {
             return HttpResponse::BadRequest().json(ServiceError::UniqueError.to_string())
         },
         Err(error) => return HttpResponse::InternalServerError().json(error.to_string())
-    }
+    };
     let result = shepherd_service.create(shepherd).await;
     send_service_result(result)
 }
@@ -97,8 +97,5 @@ async fn shepherd_update(shepherd_service: Data<Arc<ShepherdService<Pool<MySql>>
 #[delete("/shepherd/delete/{id}")]
 async fn shepherd_delete(shepherd_service: Data<Arc<ShepherdService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match shepherd_service.delete(params.id).await {
-        Ok(_) => HttpResponse::Ok().json("Deleted"),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    send_service_message(shepherd_service.delete(params.id).await, "Deleted")
 }

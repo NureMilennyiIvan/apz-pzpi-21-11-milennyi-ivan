@@ -5,7 +5,7 @@ use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
 use crate::db::services::StorekeeperService;
 use crate::db::traits::{Service, AuthService};
-use crate::endpoints::utils::{send_service_result, validate_json_body};
+use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
 use crate::json_structs::{AuthorizeJson, PathId};
 use crate::models::Storekeeper;
 
@@ -96,8 +96,5 @@ async fn storekeeper_update(storekeeper_service: Data<Arc<StorekeeperService<Poo
 #[delete("/storekeeper/delete/{id}")]
 async fn storekeeper_delete(storekeeper_service: Data<Arc<StorekeeperService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match storekeeper_service.delete(params.id).await {
-        Ok(_) => HttpResponse::Ok().json("Deleted"),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    send_service_message(storekeeper_service.delete(params.id).await, "Deleted")
 }

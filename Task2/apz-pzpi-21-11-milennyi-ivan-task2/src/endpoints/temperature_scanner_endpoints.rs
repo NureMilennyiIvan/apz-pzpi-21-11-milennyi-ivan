@@ -1,10 +1,10 @@
 use std::sync::Arc;
-use actix_web::{delete, get, HttpResponse, patch, post, Responder};
+use actix_web::{delete, get, patch, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::services::TemperatureScannerService;
 use crate::db::traits::Service;
-use crate::endpoints::utils::{send_service_result, validate_json_body};
+use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
 use crate::json_structs::PathId;
 use crate::models::TemperatureScanner;
 
@@ -73,8 +73,5 @@ async fn temperature_scanner_update(temperature_scanner_service: Data<Arc<Temper
 #[delete("/temperature-scanner/delete/{id}")]
 async fn temperature_scanner_delete(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match temperature_scanner_service.delete(params.id).await {
-        Ok(_) => HttpResponse::Ok().json("Deleted"),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    send_service_message(temperature_scanner_service.delete(params.id).await, "Deleted")
 }

@@ -3,7 +3,7 @@ use actix_web::{web::{Data, Json, Path}, get, HttpResponse, post, Responder, pat
 use sqlx::{MySql, Pool};
 use crate::db::services::SheepService;
 use crate::db::traits::{Service, SheepManage};
-use crate::endpoints::utils::{send_service_result, validate_json_body};
+use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
 use crate::json_structs::{ChangeShepherdJson, PathId};
 use crate::models::Sheep;
 
@@ -113,8 +113,5 @@ async fn sheep_change_shepherd(sheep_service: Data<Arc<SheepService<Pool<MySql>>
 #[delete("/sheep/delete/{id}")]
 async fn sheep_delete(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match sheep_service.delete(params.id).await {
-        Ok(_) => HttpResponse::Ok().json("Deleted"),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    send_service_message(sheep_service.delete(params.id).await, "Deleted")
 }

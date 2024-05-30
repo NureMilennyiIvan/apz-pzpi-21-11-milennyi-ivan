@@ -1,10 +1,10 @@
 use std::sync::Arc;
-use actix_web::{delete, get, HttpResponse, post, Responder};
+use actix_web::{delete, get, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::services::ShearingLogService;
 use crate::db::traits::{Service, ShearingLogManage};
-use crate::endpoints::utils::{send_service_result, validate_json_body};
+use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
 use crate::json_structs::PathId;
 use crate::models::ShearingLog;
 
@@ -70,8 +70,5 @@ async fn shearing_log_create(shearing_log_service: Data<Arc<ShearingLogService<P
 #[delete("/shearing-log/delete/{id}")]
 async fn shearing_log_delete(shearing_log_service: Data<Arc<ShearingLogService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match shearing_log_service.delete(params.id).await {
-        Ok(_) => HttpResponse::Ok().json("Deleted"),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    send_service_message(shearing_log_service.delete(params.id).await, "Deleted")
 }

@@ -1,10 +1,10 @@
 use std::sync::Arc;
-use actix_web::{delete, get, HttpResponse, patch, post, Responder};
+use actix_web::{delete, get, patch, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::services::BreedService;
 use crate::db::traits::{BreedManage, Service};
-use crate::endpoints::utils::{validate_json_body, send_service_result};
+use crate::endpoints::utils::{validate_json_body, send_service_result, send_service_message};
 use crate::json_structs::PathId;
 use crate::models::Breed;
 
@@ -85,8 +85,5 @@ async fn breed_update(breed_service: Data<Arc<BreedService<Pool<MySql>>>>, breed
 #[delete("/breed/delete/{id}")]
 async fn breed_delete(breed_service: Data<Arc<BreedService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match breed_service.delete(params.id).await {
-        Ok(_) => HttpResponse::Ok().json("Deleted"),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    send_service_message(breed_service.delete(params.id).await, "Deleted")
 }

@@ -91,14 +91,86 @@ impl SheepManage<Pool<MySql>> for SheepService<Pool<MySql>>{
     type SheepDetails = SheepDetailsVM;
 
     async fn get_all_vms_by_shepherd_id(&self, id: u64) -> Result<Vec<Self::ViewModel>, Self::Error> {
-        todo!()
+        query_as::<_, SheepVM>(
+            r#"
+            SELECT
+            s.id,
+            s.name,
+            b.name AS breed,
+            s.sex,
+            s.birth_date,
+            (
+                SELECT MAX(fl.timestamp)
+                FROM FeedingLogs fl
+                WHERE fl.sheep_id = s.id
+            ) AS last_feeding_timestamp,
+            (
+                SELECT MAX(sl.timestamp)
+                FROM ShearingLogs sl
+                WHERE sl.sheep_id = s.id
+            ) AS last_shearing_timestamp
+            FROM Sheep s
+            LEFT JOIN Breeds b ON s.breed_id = b.id
+            WHERE s.shepherd_id = ?
+            "#
+        )
+        .bind(id)
+        .fetch_all(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn get_details_by_id(&self, id: u64) -> Result<Option<Self::SheepDetails>, Self::Error> {
-        todo!()
+        query_as::<_, SheepDetailsVM>(
+            r#"
+            SELECT
+            s.id,
+            s.name,
+            b.name AS breed,
+            s.sex,
+            s.birth_date,
+            (
+                SELECT MAX(fl.timestamp)
+                FROM FeedingLogs fl
+                WHERE fl.sheep_id = s.id
+            ) AS last_feeding_timestamp,
+            (
+                SELECT MAX(sl.timestamp)
+                FROM ShearingLogs sl
+                WHERE sl.sheep_id = s.id
+            ) AS last_shearing_timestamp,
+            s.weight,
+            ts.temperature,
+            f.id AS feed_id,
+            f.name AS feed_name,
+            ROUND(
+                CASE
+                    WHEN s.sex = true THEN s.weight * (0.05 + 0.0001 * TIMESTAMPDIFF(DAY, FROM_UNIXTIME(s.birth_date), NOW()))
+                    ELSE s.weight * (0.04 + 0.0001 * TIMESTAMPDIFF(DAY, FROM_UNIXTIME(s.birth_date), NOW()))
+                END
+            ) AS feed_amount
+            FROM Sheep s
+            INNER JOIN Breeds b ON s.breed_id = b.id
+            LEFT JOIN TemperatureScanners ts ON s.id = ts.sheep_id
+            INNER JOIN Feeds f ON b.feed_id = f.id
+            WHERE s.id = ?
+            "#
+        )
+        .bind(id)
+        .fetch_optional(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn change_shepherd(&self, sheep_id: u64, shepherd_id: u64) -> Result<(), Self::Error> {
-        todo!()
+        query(
+            r#"
+            UPDATE Sheep
+            SET shepherd_id = ?,
+            WHERE id = ?
+            "#
+        )
+       .bind(shepherd_id)
+       .bind(sheep_id)
+       .execute(&*self.pool).await
+       .map(|_| ()).map_err(|error| ServiceError::DatabaseError(error))
     }
 }

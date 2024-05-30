@@ -1,10 +1,10 @@
 use std::sync::Arc;
-use actix_web::{delete, get, HttpResponse, patch, post, Responder};
+use actix_web::{delete, get, patch, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::services::FeedService;
 use crate::db::traits::{FeedManage, Service};
-use crate::endpoints::utils::{send_service_result, validate_json_body};
+use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
 use crate::json_structs::PathId;
 use crate::models::Feed;
 
@@ -84,8 +84,5 @@ async fn feed_update(feed_service: Data<Arc<FeedService<Pool<MySql>>>>, feed_jso
 #[delete("/feed/delete/{id}")]
 async fn feed_delete(feed_service: Data<Arc<FeedService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match feed_service.delete(params.id).await {
-        Ok(_) => HttpResponse::Ok().json("Deleted"),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    send_service_message(feed_service.delete(params.id).await, "Deleted")
 }

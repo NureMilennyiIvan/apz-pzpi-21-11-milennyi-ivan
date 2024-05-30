@@ -1,10 +1,10 @@
 use std::sync::Arc;
-use actix_web::{delete, get, HttpResponse, post, Responder};
+use actix_web::{delete, get, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::services::FeedingLogService;
 use crate::db::traits::{FeedingLogManage, Service};
-use crate::endpoints::utils::{send_service_result, validate_json_body};
+use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
 use crate::json_structs::PathId;
 use crate::models::FeedingLog;
 
@@ -83,8 +83,5 @@ async fn feeding_log_create(feeding_log_service: Data<Arc<FeedingLogService<Pool
 #[delete("/feeding-log/delete/{id}")]
 async fn feeding_log_delete(feeding_log_service: Data<Arc<FeedingLogService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
     let params = params_url.into_inner();
-    match feeding_log_service.delete(params.id).await {
-        Ok(_) => HttpResponse::Ok().json("Deleted"),
-        Err(error) => HttpResponse::InternalServerError().json(error.to_string())
-    }
+    send_service_message(feeding_log_service.delete(params.id).await, "Deleted")
 }
