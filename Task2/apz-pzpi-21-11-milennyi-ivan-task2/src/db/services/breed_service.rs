@@ -97,7 +97,7 @@ impl BreedManage<Pool<MySql>> for BreedService<Pool<MySql>>{
             f.name AS feed_name,
             (SELECT COUNT(*) FROM Sheep s WHERE s.breed_id = b.id) AS sheep_count
             FROM Breeds b
-            LEFT JOIN Feeds f ON b.feed_id = f.id
+            INNER JOIN Feeds f ON b.feed_id = f.id
             "#
         )
         .fetch_all(&*self.pool).await

@@ -21,12 +21,13 @@ impl Service<Pool<MySql>> for ShearingLogService<Pool<MySql>> {
     async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
         query_as::<_, Self::Model>(
             r#"
-            INSERT INTO ShearingLogs (sheep_id, timestamp, wool_amount)
+            INSERT INTO ShearingLogs (sheep_id, shepherd_id, timestamp, wool_amount)
             VALUES (?, ?, ?)
-            RETURNING id, sheep_id, timestamp, wool_amount
+            RETURNING id, sheep_id, shepherd_id, timestamp, wool_amount
             "#
         )
         .bind(item.sheep_id())
+        .bind(item.shepherd_id().ok_or(ServiceError::CustomError("ID is required".to_string()))?)
         .bind(item.timestamp())
         .bind(item.wool_amount())
         .fetch_one(&*self.pool).await
@@ -74,6 +75,23 @@ impl Service<Pool<MySql>> for ShearingLogService<Pool<MySql>> {
 #[async_trait]
 impl ShearingLogManage<Pool<MySql>> for ShearingLogService<Pool<MySql>>{
     async fn get_all_vms_by_sheep_id(&self, id: u64) -> Result<Vec<Self::ViewModel>, Self::Error> {
-        todo!()
+        query_as::<_, ShearingLogVM>(
+            r#"
+            SELECT
+            sl.id,
+            sl.timestamp,
+            sl.wool_amount,
+            sh.name AS shepherd_name,
+            sh.surname AS shepherd_surname,
+            s.name AS sheep_name
+            FROM ShearingLogs sl
+            LEFT JOIN Shepherds sh ON sl.shepherd_id = sh.id
+            INNER JOIN Sheep s ON sl.sheep_id = s.id
+            WHERE sl.sheep_id = ?
+            "#
+        )
+        .bind(id)
+        .fetch_all(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 }

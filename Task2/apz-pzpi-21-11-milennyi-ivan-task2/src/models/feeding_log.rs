@@ -7,6 +7,7 @@ use validator::Validate;
 pub(crate) struct FeedingLog{
     id: Option<u64>,
     sheep_id: u64,
+    shepherd_id: Option<u64>,
     timestamp: u64,
     feed_id: u64,
     #[validate(range(min = 1))]
@@ -21,7 +22,9 @@ impl FeedingLog {
     pub fn sheep_id(&self) -> u64 {
         self.sheep_id
     }
-
+    pub fn shepherd_id(&self) -> Option<u64> {
+        self.shepherd_id
+    }
     pub fn timestamp(&self) -> u64 {
         self.timestamp
     }

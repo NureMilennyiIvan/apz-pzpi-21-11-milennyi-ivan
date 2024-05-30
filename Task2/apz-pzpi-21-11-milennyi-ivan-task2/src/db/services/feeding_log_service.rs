@@ -21,12 +21,13 @@ impl Service<Pool<MySql>> for FeedingLogService<Pool<MySql>> {
     async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
         query_as::<_, Self::Model>(
             r#"
-            INSERT INTO FeedingLogs (sheep_id, timestamp, feed_id, amount)
+            INSERT INTO FeedingLogs (sheep_id, shepherd_id, timestamp, feed_id, amount)
             VALUES (?, ?, ?, ?)
-            RETURNING id, sheep_id, timestamp, feed_id, amount
+            RETURNING id, sheep_id, shepherd_id, timestamp, feed_id, amount
             "#
         )
         .bind(item.sheep_id())
+        .bind(item.shepherd_id().ok_or(ServiceError::CustomError("ID is required".to_string()))?)
         .bind(item.timestamp())
         .bind(item.feed_id())
         .bind(item.amount())
@@ -75,10 +76,44 @@ impl Service<Pool<MySql>> for FeedingLogService<Pool<MySql>> {
 #[async_trait]
 impl FeedingLogManage<Pool<MySql>> for FeedingLogService<Pool<MySql>>{
     async fn get_all_vms_by_sheep_id(&self, id: u64) -> Result<Vec<Self::ViewModel>, Self::Error> {
-        todo!()
+        query_as::<_, FeedingLogVM>(
+            r#"
+            SELECT
+            fl.id,
+            fl.timestamp,
+            fl.amount,
+            sh.name AS shepherd_name,
+            sh.surname AS shepherd_surname,
+            s.name AS sheep_name
+            FROM FeedingLogs fl
+            LEFT JOIN Shepherds sh ON fl.shepherd_id = sh.id
+            INNER JOIN Sheep s ON fl.sheep_id = s.id
+            WHERE fl.sheep_id = ?
+            "#
+        )
+        .bind(id)
+        .fetch_all(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 
     async fn get_all_vms_by_feed_id(&self, id: u64) -> Result<Vec<Self::ViewModel>, Self::Error> {
-        todo!()
+        query_as::<_, FeedingLogVM>(
+            r#"
+            SELECT
+            fl.id,
+            fl.timestamp,
+            fl.amount,
+            sh.name AS shepherd_name,
+            sh.surname AS shepherd_surname,
+            s.name AS sheep_name
+            FROM FeedingLogs fl
+            LEFT JOIN Shepherds sh ON fl.shepherd_id = sh.id
+            INNER JOIN Sheep s ON fl.sheep_id = s.id
+            WHERE fl.feed_id = ?
+            "#
+        )
+        .bind(id)
+        .fetch_all(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 }

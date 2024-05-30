@@ -96,6 +96,19 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
 #[async_trait]
 impl FeedSupplyManage<Pool<MySql>> for FeedSupplyService<Pool<MySql>>{
     async fn get_all_vms(&self) -> Result<Vec<Self::ViewModel>, Self::Error> {
-        todo!()
+        query_as::<_, FeedSupplyVM>(
+            r#"
+            SELECT
+            fs.id,
+            fs.amount,
+            fs.timestamp,
+            s.name AS storekeeper_name,
+            s.surname AS storekeeper_surname
+            FROM FeedSupplies fs
+            LEFT JOIN Storekeepers s ON fs.storekeeper_id = s.id
+            "#
+        )
+        .fetch_all(&*self.pool).await
+        .map_err(|error| ServiceError::DatabaseError(error))
     }
 }
