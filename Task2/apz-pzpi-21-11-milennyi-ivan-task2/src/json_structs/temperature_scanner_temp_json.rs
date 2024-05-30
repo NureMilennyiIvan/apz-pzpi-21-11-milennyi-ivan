@@ -1,6 +1,5 @@
 use serde::Deserialize;
 use utoipa::ToSchema;
-use validator::Validate;
 
 #[derive(Deserialize, ToSchema, Debug)]
 pub(crate) struct TemperatureScannerTempJson {

@@ -93,10 +93,9 @@ impl FeedingLogManage<Pool<MySql>> for FeedingLogService<Pool<MySql>>{
             fl.amount,
             sh.name AS shepherd_name,
             sh.surname AS shepherd_surname,
-            s.name AS sheep_name
+            fl.sheep_id
             FROM FeedingLogs fl
             LEFT JOIN Shepherds sh ON fl.shepherd_id = sh.id
-            INNER JOIN Sheep s ON fl.sheep_id = s.id
             WHERE fl.sheep_id = ?
             "#
         )
@@ -114,10 +113,9 @@ impl FeedingLogManage<Pool<MySql>> for FeedingLogService<Pool<MySql>>{
             fl.amount,
             sh.name AS shepherd_name,
             sh.surname AS shepherd_surname,
-            s.name AS sheep_name
+            fl.sheep_id
             FROM FeedingLogs fl
             LEFT JOIN Shepherds sh ON fl.shepherd_id = sh.id
-            INNER JOIN Sheep s ON fl.sheep_id = s.id
             WHERE fl.feed_id = ?
             "#
         )

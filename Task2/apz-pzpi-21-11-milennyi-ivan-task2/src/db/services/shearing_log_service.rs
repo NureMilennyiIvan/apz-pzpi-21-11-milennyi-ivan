@@ -92,10 +92,9 @@ impl ShearingLogManage<Pool<MySql>> for ShearingLogService<Pool<MySql>>{
             sl.wool_amount,
             sh.name AS shepherd_name,
             sh.surname AS shepherd_surname,
-            s.name AS sheep_name
+            sl.sheep_id
             FROM ShearingLogs sl
             LEFT JOIN Shepherds sh ON sl.shepherd_id = sh.id
-            INNER JOIN Sheep s ON sl.sheep_id = s.id
             WHERE sl.sheep_id = ?
             "#
         )

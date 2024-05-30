@@ -9,5 +9,5 @@ pub(crate) struct ShearingLogVM{
     wool_amount: u64,
     shepherd_name: Option<String>,
     shepherd_surname: Option<String>,
-    sheep_name: String
+    sheep_id: u64
 }

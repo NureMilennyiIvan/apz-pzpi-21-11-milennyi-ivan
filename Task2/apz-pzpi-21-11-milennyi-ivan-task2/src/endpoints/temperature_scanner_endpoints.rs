@@ -32,7 +32,7 @@ async fn temperature_scanner_get_by_id(temperature_scanner_service: Data<Arc<Tem
     send_service_result(result)
 }
 
-#[utoipa::path(responses(
+#[utoipa::path(params(PathId), responses(
     (status = 200, description = "Temperature scanner authenticate"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
@@ -53,7 +53,7 @@ async fn temperature_scanner_authenticate(temperature_scanner_service: Data<Arc<
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
-#[post("/temperature-scanner/create/{id}")]
+#[post("/temperature-scanner/create")]
 async fn temperature_scanner_create(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, temperature_scanner_json: Json<TemperatureScanner>) -> impl Responder{
     let temperature_scanner = match validate_json_body(temperature_scanner_json) {
         Ok(temperature_scanner) => temperature_scanner,
@@ -63,17 +63,17 @@ async fn temperature_scanner_create(temperature_scanner_service: Data<Arc<Temper
     send_service_result(result)
 }
 
-#[utoipa::path(responses(
+#[utoipa::path(params(PathId), responses(
     (status = 200, description = "Temperature scanner authenticate"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
-#[patch("/temperature-scanner/update-temperature")]
+#[patch("/temperature-scanner/update-temperature/{id}")]
 async fn temperature_scanner_update_temperature(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>, temperature_scanner_update_temp_json: Json<TemperatureScannerTempJson>) -> impl Responder{
     let params = params_url.into_inner();
     let temperature_scanner_update_temp = temperature_scanner_update_temp_json.into_inner();
     let result = temperature_scanner_service.update_temperature(params.id, temperature_scanner_update_temp.temperature).await;
-    send_service_result(result)
+    send_service_message(result, "Temperature changed")
 }
 
 

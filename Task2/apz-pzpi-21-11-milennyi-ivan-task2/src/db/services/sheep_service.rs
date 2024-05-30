@@ -21,13 +21,14 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
     async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
         query_as::<_, Self::Model>(
             r#"
-            INSERT INTO Sheep (birth_date, breed_id, sex, null, shepherd_id)
-            VALUES (?, ?, ?, ?)
-            RETURNING id, birth_date, breed_id, sex, temperature_scanner_id, shepherd_id
+            INSERT INTO Sheep (birth_date, breed_id, weight, sex, null, shepherd_id)
+            VALUES (?, ?, ?, ?, ?)
+            RETURNING id, birth_date, breed_id, weight, sex, temperature_scanner_id, shepherd_id
             "#
         )
         .bind(item.birth_date())
         .bind(item.breed_id())
+        .bind(item.weight())
         .bind(item.sex())
         .bind(item.shepherd_id())
         .fetch_one(&*self.pool).await
@@ -59,13 +60,14 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
         query_as::<_, Self::Model>(
             r#"
             UPDATE Sheep
-            SET birth_date = ?, breed_id = ?, sex = ?, temperature_scanner_id = ?, shepherd_id = ?
+            SET birth_date = ?, breed_id = ?, weight = ?, sex = ?, temperature_scanner_id = ?, shepherd_id = ?
             WHERE id = ?
-            RETURNING id, birth_date, breed_id, sex, temperature_scanner_id, shepherd_id
+            RETURNING id, birth_date, breed_id, weight, sex, temperature_scanner_id, shepherd_id
             "#
         )
         .bind(item.birth_date())
         .bind(item.breed_id())
+        .bind(item.weight())
         .bind(item.sex())
         .bind(item.temperature_scanner_id())
         .bind(item.shepherd_id())
@@ -105,7 +107,6 @@ impl SheepManage<Pool<MySql>> for SheepService<Pool<MySql>>{
             r#"
             SELECT
             s.id,
-            s.name,
             b.name AS breed,
             s.sex,
             s.birth_date,
@@ -134,7 +135,6 @@ impl SheepManage<Pool<MySql>> for SheepService<Pool<MySql>>{
             r#"
             SELECT
             s.id,
-            s.name,
             b.name AS breed,
             s.sex,
             s.birth_date,
@@ -152,12 +152,12 @@ impl SheepManage<Pool<MySql>> for SheepService<Pool<MySql>>{
             ts.temperature,
             f.id AS feed_id,
             f.name AS feed_name,
-            ROUND(
+            CAST(ROUND(
                 CASE
                     WHEN s.sex = true THEN s.weight * (0.05 + 0.0001 * TIMESTAMPDIFF(DAY, FROM_UNIXTIME(s.birth_date), NOW()))
                     ELSE s.weight * (0.04 + 0.0001 * TIMESTAMPDIFF(DAY, FROM_UNIXTIME(s.birth_date), NOW()))
                 END
-            ) AS feed_amount
+            ) AS UNSIGNED)AS feed_amount
             FROM Sheep s
             INNER JOIN Breeds b ON s.breed_id = b.id
             LEFT JOIN TemperatureScanners ts ON s.temperature_scanner_id = ts.id

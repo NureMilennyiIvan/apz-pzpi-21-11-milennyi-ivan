@@ -8,6 +8,7 @@ pub(crate) struct Sheep{
     id: Option<u64>,
     birth_date: u64,
     breed_id: u64,
+    weight: u64,
     sex: bool,
     temperature_scanner_id: Option<u64>,
     shepherd_id: Option<u64>
@@ -24,7 +25,9 @@ impl Sheep {
     pub fn breed_id(&self) -> u64 {
         self.breed_id
     }
-
+    pub fn weight(&self) -> u64{
+        self.weight
+    }
     pub fn sex(&self) -> bool {
         self.sex
     }

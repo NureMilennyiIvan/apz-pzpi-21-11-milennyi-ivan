@@ -5,7 +5,6 @@ use utoipa::ToSchema;
 #[derive(Debug, Serialize, FromRow, ToSchema)]
 pub(crate) struct SheepDetailsVM {
     id: u64,
-    name: String,
     breed: String,
     sex: bool,
     birth_date: u64,

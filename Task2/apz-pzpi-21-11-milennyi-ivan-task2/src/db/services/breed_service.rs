@@ -104,7 +104,7 @@ impl BreedManage<Pool<MySql>> for BreedService<Pool<MySql>>{
             b.name,
             b.info,
             f.name AS feed_name,
-            (SELECT COUNT(*) FROM Sheep s WHERE s.breed_id = b.id) AS sheep_count
+            CAST((SELECT COUNT(*) FROM Sheep s WHERE s.breed_id = b.id) AS UNSIGNED) AS sheep_count
             FROM Breeds b
             INNER JOIN Feeds f ON b.feed_id = f.id
             "#

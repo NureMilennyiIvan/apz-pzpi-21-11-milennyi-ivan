@@ -22,8 +22,8 @@ impl Service<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
         query_as::<_, Self::Model>(
             r#"
             INSERT INTO TemperatureScanners (temperature, password)
-            VALUES (?, ?, ?)
-            RETURNING id, password
+            VALUES (?, ?)
+            RETURNING id, temperature, password
             "#
         )
         .bind(item.temperature())
@@ -96,7 +96,7 @@ impl TemperatureScannerManage<Pool<MySql>> for TemperatureScannerService<Pool<My
     async fn authenticate(&self, id: u64, hash_password: String) -> Result<bool, Self::Error> {
         query_as::<_, Self::Model>(
             r#"
-            SELECT COUNT(*)
+            SELECT *
             FROM TemperatureScanners ts
             WHERE ts.id = ? AND ts.password = ? AND (SELECT COUNT(*) FROM Sheep WHERE temperature_scanner_id = ts.id) = 1
             "#
@@ -112,10 +112,11 @@ impl TemperatureScannerManage<Pool<MySql>> for TemperatureScannerService<Pool<My
             r#"
             UPDATE TemperatureScanners
             SET temperature = ?
-            WHERE id = ? AND (SELECT COUNT(*) FROM Sheep WHERE temperature_scanner_id = ts.id) = 1
+            WHERE id = ? AND (SELECT COUNT(*) FROM Sheep WHERE temperature_scanner_id = ?) = 1
             "#
         )
         .bind(temperature)
+        .bind(id)
         .bind(id)
         .execute(&*self.pool).await
         .map_err(|error| ServiceError::DatabaseError(error))
