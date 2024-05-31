@@ -17,7 +17,9 @@ impl Sheep {
     pub fn id(&self) -> Option<u64> {
         self.id
     }
-
+    pub fn set_id(&mut self, id: u64) -> (){
+        self.id = Some(id);
+    }
     pub fn birth_date(&self) -> u64 {
         self.birth_date
     }

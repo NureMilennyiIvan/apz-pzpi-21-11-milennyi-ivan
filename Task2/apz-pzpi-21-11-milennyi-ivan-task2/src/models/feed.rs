@@ -20,10 +20,23 @@ pub(crate) struct Feed{
     carbohydrates: u32
 }
 impl Feed {
+    pub fn new(id: Option<u64>, amount: u32, name: String, calories: u32, fat: u32, protein: u32, carbohydrates: u32) -> Self{
+        Self{
+            id,
+            amount,
+            name,
+            calories,
+            fat,
+            protein,
+            carbohydrates
+        }
+    }
     pub fn id(&self) -> Option<u64> {
         self.id
     }
-
+    pub fn set_id(&mut self, id: u64) -> (){
+        self.id = Some(id);
+    }
     pub fn amount(&self) -> u32 {
         self.amount
     }

@@ -90,7 +90,7 @@ async fn sheep_update(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep
 }
 
 
-#[utoipa::path(responses(
+#[utoipa::path(params(PathId), responses(
     (status = 200, description = "Sheep's shepherd changed"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
@@ -105,7 +105,7 @@ async fn sheep_change_shepherd(sheep_service: Data<Arc<SheepService<Pool<MySql>>
     }
 }
 
-#[utoipa::path(responses(
+#[utoipa::path(params(PathId), responses(
     (status = 200, description = "Sheep's temperature scanner changed"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")

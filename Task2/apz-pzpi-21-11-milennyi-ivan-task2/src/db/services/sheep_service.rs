@@ -18,12 +18,11 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
         SheepService { pool }
     }
 
-    async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        query_as::<_, Self::Model>(
+    async fn create(&self, mut item: Self::Model) -> Result<Self::Model, Self::Error> {
+        query(
             r#"
-            INSERT INTO Sheep (birth_date, breed_id, weight, sex, null, shepherd_id)
-            VALUES (?, ?, ?, ?, ?)
-            RETURNING id, birth_date, breed_id, weight, sex, temperature_scanner_id, shepherd_id
+            INSERT INTO Sheep (birth_date, breed_id, weight, sex, temperature_scanner_id, shepherd_id)
+            VALUES (?, ?, ?, ?, null, ?)
             "#
         )
         .bind(item.birth_date())
@@ -31,8 +30,18 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
         .bind(item.weight())
         .bind(item.sex())
         .bind(item.shepherd_id())
-        .fetch_one(&*self.pool).await
+        .execute(&*self.pool).await
         .map_err(|error| ServiceError::DatabaseError(error))
+        .map(|result|
+            if result.rows_affected() == 1 {
+                item.set_id(result.last_insert_id());
+                Ok(item)
+            }
+            else{
+                Err(ServiceError::CustomError("Insertion went wrong. Zero rows affected".to_string()))
+            }
+        )
+        .unwrap_or_else(|error| Err(error))
     }
 
     async fn delete(&self, item_id: u64) -> Result<(), Self::Error> {
@@ -57,12 +66,11 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
     }
 
     async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        query_as::<_, Self::Model>(
+        query(
             r#"
             UPDATE Sheep
             SET birth_date = ?, breed_id = ?, weight = ?, sex = ?, temperature_scanner_id = ?, shepherd_id = ?
             WHERE id = ?
-            RETURNING id, birth_date, breed_id, weight, sex, temperature_scanner_id, shepherd_id
             "#
         )
         .bind(item.birth_date())
@@ -72,8 +80,17 @@ impl Service<Pool<MySql>> for SheepService<Pool<MySql>> {
         .bind(item.temperature_scanner_id())
         .bind(item.shepherd_id())
         .bind(item.id().ok_or(ServiceError::CustomError("ID is required".to_string()))?)
-        .fetch_one(&*self.pool).await
+        .execute(&*self.pool).await
         .map_err(|error| ServiceError::DatabaseError(error))
+        .map(|result|
+            if result.rows_affected() == 0 {
+                Err(ServiceError::CustomError("Zero rows affected".to_string()))
+            }
+            else{
+                Ok(item)
+            }
+        )
+        .unwrap_or_else(|error|  Err(error))
     }
 
     async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {

@@ -17,7 +17,9 @@ impl ShearingLog {
     pub fn id(&self) -> Option<u64> {
         self.id
     }
-
+    pub fn set_id(&mut self, id: u64) -> (){
+        self.id = Some(id);
+    }
     pub fn sheep_id(&self) -> u64 {
         self.sheep_id
     }

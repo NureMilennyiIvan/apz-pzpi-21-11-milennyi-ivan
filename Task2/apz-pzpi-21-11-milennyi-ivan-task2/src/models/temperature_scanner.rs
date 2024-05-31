@@ -14,7 +14,9 @@ impl TemperatureScanner {
     pub fn id(&self) -> Option<u64> {
         self.id
     }
-
+    pub fn set_id(&mut self, id: u64) -> (){
+        self.id = Some(id);
+    }
     pub fn temperature(&self) -> u16 {
         self.temperature
     }

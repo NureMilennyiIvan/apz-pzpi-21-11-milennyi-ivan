@@ -19,7 +19,9 @@ impl Storekeeper {
     pub fn id(&self) -> Option<u64> {
         self.id
     }
-
+    pub fn set_id(&mut self, id: u64) -> (){
+        self.id = Some(id);
+    }
     pub fn username(&self) -> &str {
         &self.username
     }

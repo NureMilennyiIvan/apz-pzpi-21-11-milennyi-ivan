@@ -18,12 +18,11 @@ impl Service<Pool<MySql>> for FeedingLogService<Pool<MySql>> {
         FeedingLogService { pool }
     }
 
-    async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        query_as::<_, Self::Model>(
+    async fn create(&self, mut item: Self::Model) -> Result<Self::Model, Self::Error> {
+        query(
             r#"
             INSERT INTO FeedingLogs (sheep_id, shepherd_id, timestamp, feed_id, amount)
-            VALUES (?, ?, ?, ?)
-            RETURNING id, sheep_id, shepherd_id, timestamp, feed_id, amount
+            VALUES (?, ?, ?, ?, ?)
             "#
         )
         .bind(item.sheep_id())
@@ -31,8 +30,18 @@ impl Service<Pool<MySql>> for FeedingLogService<Pool<MySql>> {
         .bind(item.timestamp())
         .bind(item.feed_id())
         .bind(item.amount())
-        .fetch_one(&*self.pool).await
+        .execute(&*self.pool).await
         .map_err(|error| ServiceError::DatabaseError(error))
+        .map(|result|
+            if result.rows_affected() == 1 {
+                item.set_id(result.last_insert_id());
+                Ok(item)
+            }
+            else{
+                Err(ServiceError::CustomError("Insertion went wrong. Zero rows affected".to_string()))
+            }
+        )
+        .unwrap_or_else(|error| Err(error))
     }
 
     async fn delete(&self, item_id: u64) -> Result<(), Self::Error> {

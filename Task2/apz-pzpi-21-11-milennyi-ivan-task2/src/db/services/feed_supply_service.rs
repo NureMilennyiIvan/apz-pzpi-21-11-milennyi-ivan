@@ -19,7 +19,7 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
         FeedSupplyService { pool }
     }
 
-    async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
+    async fn create(&self, mut item: Self::Model) -> Result<Self::Model, Self::Error> {
         let mut transaction = self.pool.begin().await.map_err(|error| ServiceError::DatabaseError(error))?;
 
         query(
@@ -34,19 +34,28 @@ impl Service<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
         .execute(&mut *transaction).await
         .map_err(|error| ServiceError::DatabaseError(error))?;
 
-        let result = query_as::<_, Self::Model>(
+        let result = query(
             r#"
             INSERT INTO FeedSupplies (storekeeper_id, amount, timestamp, feed_id)
-            VALUES (?, ?, ?)
-            RETURNING id, storekeeper_id, amount, timestamp, feed_id
+            VALUES (?, ?, ?, ?)
             "#
         )
         .bind(item.storekeeper_id())
         .bind(item.amount())
         .bind(item.timestamp())
         .bind(item.feed_id())
-        .fetch_one(&mut *transaction).await
-        .map_err(|error| ServiceError::DatabaseError(error));
+        .execute(&mut *transaction).await
+        .map_err(|error| ServiceError::DatabaseError(error))
+        .map(|result|
+            if result.rows_affected() == 1 {
+                item.set_id(result.last_insert_id());
+                Ok(item)
+            }
+            else{
+                Err(ServiceError::CustomError("Insertion went wrong. Zero rows affected".to_string()))
+            }
+        )
+        .unwrap_or_else(|error| Err(error));
 
         transaction.commit().await.map_err(|error| ServiceError::DatabaseError(error))?;
 

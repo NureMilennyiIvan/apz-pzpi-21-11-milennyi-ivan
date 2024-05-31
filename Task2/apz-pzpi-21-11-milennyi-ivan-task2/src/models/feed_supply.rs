@@ -17,7 +17,9 @@ impl FeedSupply {
     pub fn id(&self) -> Option<u64> {
         self.id
     }
-
+    pub fn set_id(&mut self, id: u64) -> (){
+        self.id = Some(id);
+    }
     pub fn storekeeper_id(&self) -> Option<u64> {
         self.storekeeper_id
     }

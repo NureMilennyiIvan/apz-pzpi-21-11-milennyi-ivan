@@ -19,20 +19,29 @@ impl Service<Pool<MySql>> for StorekeeperService<Pool<MySql>> {
         StorekeeperService { pool }
     }
 
-    async fn create(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        query_as::<_, Self::Model>(
+    async fn create(&self, mut item: Self::Model) -> Result<Self::Model, Self::Error> {
+        query(
             r#"
             INSERT INTO Storekeepers (username, password, name, surname)
             VALUES (?, ?, ?, ?)
-            RETURNING id, username, password, name, surname
             "#
         )
         .bind(item.username())
         .bind(item.password())
         .bind(item.name())
         .bind(item.surname())
-        .fetch_one(&*self.pool).await
+        .execute(&*self.pool).await
         .map_err(|error| ServiceError::DatabaseError(error))
+        .map(|result|
+            if result.rows_affected() == 1 {
+                item.set_id(result.last_insert_id());
+                Ok(item)
+            }
+            else{
+                Err(ServiceError::CustomError("Insertion went wrong. Zero rows affected".to_string()))
+            }
+        )
+        .unwrap_or_else(|error| Err(error))
     }
 
     async fn delete(&self, item_id: u64) -> Result<(), Self::Error> {
@@ -57,12 +66,11 @@ impl Service<Pool<MySql>> for StorekeeperService<Pool<MySql>> {
     }
 
     async fn update(&self, item: Self::Model) -> Result<Self::Model, Self::Error> {
-        query_as::<_, Self::Model>(
+        query(
             r#"
             UPDATE Storekeepers
             SET username = ?, password = ?, name = ?, surname = ?
             WHERE id = ?
-            RETURNING id, username, password, name, surname
             "#
         )
         .bind(item.username())
@@ -70,8 +78,17 @@ impl Service<Pool<MySql>> for StorekeeperService<Pool<MySql>> {
         .bind(item.name())
         .bind(item.surname())
         .bind(item.id().ok_or(ServiceError::CustomError("ID is required".to_string()))?)
-        .fetch_one(&*self.pool).await
+        .execute(&*self.pool).await
         .map_err(|error| ServiceError::DatabaseError(error))
+        .map(|result|
+            if result.rows_affected() == 0 {
+                Err(ServiceError::CustomError("Zero rows affected".to_string()))
+            }
+            else{
+                Ok(item)
+            }
+        )
+        .unwrap_or_else(|error|  Err(error))
     }
 
     async fn get_all(&self) -> Result<Vec<Self::Model>, Self::Error> {
