@@ -1,16 +1,15 @@
-use std::env;
-use std::net::Ipv4Addr;
-use std::sync::Arc;
+use std::{env, io, net::Ipv4Addr, sync::Arc};
 use actix_cors::Cors;
-use actix_web::{App, HttpServer, main};
-use actix_web::http::header;
-use actix_web::web::Data;
+use actix_web::{App, HttpServer, main, http::header, middleware::Logger, web::Data};
 use dotenv::dotenv;
+use log::info;
 use sqlx::{MySql, Pool};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
+
 use crate::configs::{api_doc, breed_configure, feed_configure, feed_supply_configure, feeding_log_configure, shearing_log_configure, sheep_configure, shepherd_configure, storekeeper_configure, temperature_scanner_configure};
 use db::traits::Service;
+use crate::configs::logger_wrapper::LoggerWrapper;
 use crate::db::db_context::DbContextMySql;
 use crate::db::services::{BreedService, FeedingLogService, FeedService, FeedSupplyService, ShearingLogService, SheepService, ShepherdService, StorekeeperService, TemperatureScannerService};
 use crate::db::traits::Context;
@@ -23,8 +22,9 @@ mod endpoints;
 mod json_structs;
 
 
+
 #[main]
-async fn main() -> std::io::Result<()>{
+async fn main() -> io::Result<()>{
 
     dotenv().ok();
 
@@ -51,6 +51,8 @@ async fn main() -> std::io::Result<()>{
     let temperature_service: Arc<TemperatureScannerService<Pool<MySql>>> = Arc::new(TemperatureScannerService::new(db_context.get_pool()));
 
     let openapi = api_doc::ApiDoc::openapi();
+    LoggerWrapper::default();
+    info!("Server started");
 
     HttpServer::new(move || {
         App::new()
@@ -66,10 +68,11 @@ async fn main() -> std::io::Result<()>{
             .wrap(
                 Cors::default()
                     .allow_any_origin()
-                    .allowed_methods(vec!["GET", "POST"])
+                    .allowed_methods(vec!["GET", "POST", "PATCH", "DELETE"])
                     .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT, header::ACCESS_CONTROL_REQUEST_METHOD, header::ACCESS_CONTROL_REQUEST_HEADERS, header::ORIGIN])
                     .allowed_header(header::CONTENT_TYPE)
             )
+            .wrap(Logger::default())
             .configure(breed_configure)
             .configure(feed_configure)
             .configure(feed_supply_configure)
