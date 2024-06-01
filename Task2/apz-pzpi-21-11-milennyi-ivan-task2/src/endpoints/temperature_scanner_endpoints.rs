@@ -44,7 +44,7 @@ async fn temperature_scanner_authenticate(temperature_scanner_service: Data<Arc<
         Ok(temperature_scanner_authenticate) => temperature_scanner_authenticate,
         Err(error_response) => return error_response,
     };
-    let result = temperature_scanner_service.authenticate(params.id, temperature_scanner_authenticate.hash_password).await;
+    let result = temperature_scanner_service.authenticate(params.id, temperature_scanner_authenticate.password).await;
     send_service_result(result)
 }
 
