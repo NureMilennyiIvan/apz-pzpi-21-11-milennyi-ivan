@@ -81,4 +81,4 @@ use crate::endpoints::*;
         (name = "Server", description = "API view")
     )
 )]
-pub(crate) struct ApiDoc;
+pub(super) struct ApiDoc;

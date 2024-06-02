@@ -1,9 +1,12 @@
 use flexi_logger::{Cleanup, Criterion, FileSpec, Logger as FlexiLogger, Naming, opt_format, WriteMode};
-pub(crate) struct LoggerWrapper{
 
-}
+// Структура обгортки для логера
+pub(crate) struct LoggerWrapper{}
+
 impl LoggerWrapper{
-    pub fn init(directory_name: &str, file_basename: &str, extension_suffix: &str, file_length_bytes: u64) -> Self{
+    // Метод для ініціалізації логера
+    pub fn init_logger(directory_name: &str, file_basename: &str, extension_suffix: &str, file_length_bytes: u64) -> Self{
+        // Налаштування і запуск логера
         FlexiLogger::try_with_str("info").unwrap()
             .log_to_file(FileSpec::default().directory(directory_name).basename(file_basename).suffix(extension_suffix))
             .format(opt_format)
@@ -17,6 +20,7 @@ impl LoggerWrapper{
     }
 }
 impl Default for LoggerWrapper{
+    // Метод для налаштування логера за замовчуванням
     fn default() -> Self {
         FlexiLogger::try_with_str("info").unwrap()
             .log_to_file(FileSpec::default().directory("logs").basename("log").suffix("log"))

@@ -1,6 +1,7 @@
 use actix_web::web::ServiceConfig;
 use crate::endpoints::*;
 
+// Конфігурація сервісів для порід
 pub(crate) fn breed_configure(cfg: &mut ServiceConfig){
     use breed_endpoints::*;
 
@@ -11,6 +12,8 @@ pub(crate) fn breed_configure(cfg: &mut ServiceConfig){
         .service(breed_get_all_vms)
         .service(breed_get_by_id);
 }
+
+// Конфігурація сервісів для кормів
 pub(crate) fn feed_configure(cfg: &mut ServiceConfig){
     use feed_endpoints::*;
 
@@ -21,6 +24,8 @@ pub(crate) fn feed_configure(cfg: &mut ServiceConfig){
         .service(feed_get_all_vms)
         .service(feed_get_by_id);
 }
+
+// Конфігурація сервісів для постачання кормів
 pub(crate) fn feed_supply_configure(cfg: &mut ServiceConfig){
     use feed_supply_endpoints::*;
 
@@ -30,6 +35,8 @@ pub(crate) fn feed_supply_configure(cfg: &mut ServiceConfig){
         .service(feed_supply_get_all_vms)
         .service(feed_supply_get_by_id);
 }
+
+// Конфігурація сервісів для логів годування
 pub(crate) fn feeding_log_configure(cfg: &mut ServiceConfig){
     use feeding_log_endpoints::*;
 
@@ -40,6 +47,8 @@ pub(crate) fn feeding_log_configure(cfg: &mut ServiceConfig){
         .service(feeding_log_get_all_vms_by_feed_id)
         .service(feeding_log_get_all_vms_by_sheep_id);
 }
+
+// Конфігурація сервісів для логів стрижки
 pub(crate) fn shearing_log_configure(cfg: &mut ServiceConfig){
     use shearing_log_endpoints::*;
 
@@ -49,6 +58,8 @@ pub(crate) fn shearing_log_configure(cfg: &mut ServiceConfig){
         .service(shearing_log_get_by_id)
         .service(shearing_log_get_all_vms_by_sheep_id);
 }
+
+// Конфігурація сервісів для овець
 pub(crate) fn sheep_configure(cfg: &mut ServiceConfig) {
     use sheep_endpoints::*;
 
@@ -62,6 +73,8 @@ pub(crate) fn sheep_configure(cfg: &mut ServiceConfig) {
         .service(sheep_get_by_id)
         .service(sheep_get_details_by_id);
 }
+
+// Конфігурація сервісів для пастухів
 pub(crate) fn shepherd_configure(cfg: &mut ServiceConfig) {
     use shepherd_endpoints::*;
 
@@ -72,6 +85,8 @@ pub(crate) fn shepherd_configure(cfg: &mut ServiceConfig) {
         .service(shepherd_get_all)
         .service(shepherd_get_by_id);
 }
+
+// Конфігурація сервісів для комірників
 pub(crate) fn storekeeper_configure(cfg: &mut ServiceConfig) {
     use storekeeper_endpoints::*;
 
@@ -82,6 +97,8 @@ pub(crate) fn storekeeper_configure(cfg: &mut ServiceConfig) {
         .service(storekeeper_get_all)
         .service(storekeeper_get_by_id);
 }
+
+// Конфігурація сервісів для сканерів температури
 pub(crate) fn temperature_scanner_configure(cfg: &mut ServiceConfig) {
     use temperature_scanner_endpoints::*;
 

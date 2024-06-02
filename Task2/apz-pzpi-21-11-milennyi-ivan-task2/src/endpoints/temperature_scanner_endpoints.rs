@@ -13,20 +13,21 @@ use crate::models::TemperatureScanner;
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
+// Ендпойнт для отримання всіх сканерів температури
 #[get("/temperature-scanner")]
-async fn temperature_scanner_get_all(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>) -> impl Responder{
+async fn temperature_scanner_get_all(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>) -> impl Responder {
     let result = temperature_scanner_service.get_all().await;
     send_service_result(result)
 }
-
 
 #[utoipa::path(params(PathId), responses(
     (status = 200, description = "Temperature scanner get by id"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
+// Ендпойнт для отримання сканера температури за ідентифікатором
 #[get("/temperature-scanner/{id}")]
-async fn temperature_scanner_get_by_id(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
+async fn temperature_scanner_get_by_id(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder {
     let params = params_url.into_inner();
     let result = temperature_scanner_service.get_by_id(params.id).await;
     send_service_result(result)
@@ -37,8 +38,9 @@ async fn temperature_scanner_get_by_id(temperature_scanner_service: Data<Arc<Tem
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
+// Ендпойнт для автентифікації сканера температури
 #[post("/temperature-scanner/authenticate/{id}")]
-async fn temperature_scanner_authenticate(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>,  temperature_scanner_authenticate_json: Json<TemperatureScannerAuthJson>) -> impl Responder{
+async fn temperature_scanner_authenticate(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>, temperature_scanner_authenticate_json: Json<TemperatureScannerAuthJson>) -> impl Responder {
     let params = params_url.into_inner();
     let temperature_scanner_authenticate = match validate_json_body(temperature_scanner_authenticate_json) {
         Ok(temperature_scanner_authenticate) => temperature_scanner_authenticate,
@@ -53,8 +55,9 @@ async fn temperature_scanner_authenticate(temperature_scanner_service: Data<Arc<
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
+// Ендпойнт для створення нового сканера температури
 #[post("/temperature-scanner/create")]
-async fn temperature_scanner_create(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, temperature_scanner_json: Json<TemperatureScanner>) -> impl Responder{
+async fn temperature_scanner_create(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, temperature_scanner_json: Json<TemperatureScanner>) -> impl Responder {
     let temperature_scanner = match validate_json_body(temperature_scanner_json) {
         Ok(temperature_scanner) => temperature_scanner,
         Err(error_response) => return error_response,
@@ -68,22 +71,23 @@ async fn temperature_scanner_create(temperature_scanner_service: Data<Arc<Temper
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
+// Ендпойнт для оновлення температури сканера
 #[patch("/temperature-scanner/update-temperature/{id}")]
-async fn temperature_scanner_update_temperature(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>, temperature_scanner_update_temp_json: Json<TemperatureScannerTempJson>) -> impl Responder{
+async fn temperature_scanner_update_temperature(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>, temperature_scanner_update_temp_json: Json<TemperatureScannerTempJson>) -> impl Responder {
     let params = params_url.into_inner();
     let temperature_scanner_update_temp = temperature_scanner_update_temp_json.into_inner();
     let result = temperature_scanner_service.update_temperature(params.id, temperature_scanner_update_temp.temperature).await;
     send_service_message(result, "Temperature changed")
 }
 
-
 #[utoipa::path(responses(
     (status = 200, description = "Temperature scanner updated"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
+// Ендпойнт для оновлення сканера температури
 #[patch("/temperature-scanner/update")]
-async fn temperature_scanner_update(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, temperature_scanner_json: Json<TemperatureScanner>) -> impl Responder{
+async fn temperature_scanner_update(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, temperature_scanner_json: Json<TemperatureScanner>) -> impl Responder {
     let temperature_scanner = match validate_json_body(temperature_scanner_json) {
         Ok(temperature_scanner) => temperature_scanner,
         Err(error_response) => return error_response,
@@ -92,14 +96,14 @@ async fn temperature_scanner_update(temperature_scanner_service: Data<Arc<Temper
     send_service_result(result)
 }
 
-
 #[utoipa::path(params(PathId), responses(
     (status = 200, description = "Temperature scanner deleted"),
     (status = 400, description = "Validation error or bad request"),
     (status = 500, description = "Internal server error")
 ))]
+// Ендпойнт для видалення сканера температури за ідентифікатором
 #[delete("/temperature-scanner/delete/{id}")]
-async fn temperature_scanner_delete(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder{
+async fn temperature_scanner_delete(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder {
     let params = params_url.into_inner();
     send_service_message(temperature_scanner_service.delete(params.id).await, "Deleted")
 }
