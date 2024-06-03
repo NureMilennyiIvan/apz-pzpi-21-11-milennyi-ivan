@@ -1,28 +1,39 @@
+import axios from "axios";
 import { Storekeeper } from "../../models/Storekeeper";
+import { API_URL } from "../../utils/config";
 import { AuthService } from "../interfaces/IAuthService";
 import { IStorekeeperService } from "../interfaces/IStorekeeperService";
 
 export class StorekeeperService implements IStorekeeperService, AuthService<Storekeeper>{
-    create(item: Storekeeper): Promise<Storekeeper> {
-        throw new Error("Method not implemented.");
+    private static STOREKEEPER_URLS = {
+        GET_ALL: `${API_URL}/storekeeper`,
+        GET_BY_ID: (id: number) => `${API_URL}/storekeeper/${id}`,
+        CREATE: `${API_URL}/storekeeper/create`,
+        DELETE: (id: number) => `${API_URL}/storekeeper/delete/${id}`,
+        UPDATE: `${API_URL}/storekeeper/update`,
+        AUTHORIZE: `${API_URL}/storekeeper/authorize`
     }
-    delete(itemId: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    async create(item: Storekeeper): Promise<Storekeeper> {
+        const response = await axios.post<Storekeeper>(StorekeeperService.STOREKEEPER_URLS.CREATE, item);
+        return response.data;
     }
-    update(item: Storekeeper): Promise<Storekeeper> {
-        throw new Error("Method not implemented.");
+    async delete(itemId: number): Promise<void> {
+        await axios.delete(StorekeeperService.STOREKEEPER_URLS.DELETE(itemId));
     }
-    getAll(): Promise<Storekeeper[]> {
-        throw new Error("Method not implemented.");
+    async update(item: Storekeeper): Promise<Storekeeper> {
+        const response = await axios.put<Storekeeper>(StorekeeperService.STOREKEEPER_URLS.UPDATE, item);
+        return response.data;
     }
-    getById(id: number): Promise<Storekeeper | null> {
-        throw new Error("Method not implemented.");
+    async getAll(): Promise<Storekeeper[]> {
+        const response = await axios.get<Storekeeper[]>(StorekeeperService.STOREKEEPER_URLS.GET_ALL);
+        return response.data;
     }
-    checkUsername(user: Storekeeper): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async getById(id: number): Promise<Storekeeper | null> {
+        const response = await axios.get<Storekeeper | null>(StorekeeperService.STOREKEEPER_URLS.GET_BY_ID(id));
+        return response.data;
     }
-    authorize(username: string, passwordHash: string): Promise<Storekeeper | null> {
-        throw new Error("Method not implemented.");
+    async authorize(username: string, passwordHash: string): Promise<Storekeeper | null> {
+        const response = await axios.post<Storekeeper | null>(StorekeeperService.STOREKEEPER_URLS.AUTHORIZE, {username: username, password_hash: passwordHash});
+        return response.data;
     }
-    
 }

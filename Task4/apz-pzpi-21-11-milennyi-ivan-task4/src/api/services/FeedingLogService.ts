@@ -1,27 +1,42 @@
+import axios from "axios";
 import { FeedingLog } from "../../models/FeedingLog";
+import { API_URL } from "../../utils/config";
 import { FeedingLogVM } from "../../viewModels/FeedingLogVM";
 import { IFeedingLogService } from "../interfaces/IFeedingLogService";
 
 export class FeedingLogService implements IFeedingLogService {
-    getAllVMsBySheepId(id: number): Promise<FeedingLogVM[]> {
-        throw new Error("Method not implemented.");
+    private static FEEDING_LOG_URLS = {
+        GET_ALL: `${API_URL}/feeding-log`,
+        GET_BY_ID: (id: number) => `${API_URL}/feeding-log/${id}`,
+        CREATE: `${API_URL}/feeding-log/create`,
+        DELETE: (id: number) => `${API_URL}/feeding-log/delete/${id}`,
+        GET_ALL_VMS_BY_SHEEP_ID: (id: number) =>  `${API_URL}/feeding-log/feed/${id}`,
+        GET_ALL_VMS_BY_FEED_ID: (id: number) =>  `${API_URL}/feeding-log/sheep/${id}`
     }
-    getAllVMsByFeedId(id: number): Promise<FeedingLogVM[]> {
-        throw new Error("Method not implemented.");
+    async create(item: FeedingLog): Promise<FeedingLog> {
+        const response = await axios.post<FeedingLog>(FeedingLogService.FEEDING_LOG_URLS.CREATE, item);
+        return response.data;
     }
-    create(item: FeedingLog): Promise<FeedingLog> {
-        throw new Error("Method not implemented.");
+    async delete(itemId: number): Promise<void> {
+        await axios.delete(FeedingLogService.FEEDING_LOG_URLS.DELETE(itemId));
     }
-    delete(itemId: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    async update(_item: FeedingLog): Promise<FeedingLog> {
+        throw new Error("Method is forbidden.");
     }
-    update(item: FeedingLog): Promise<FeedingLog> {
-        throw new Error("Method not implemented.");
+    async getAll(): Promise<FeedingLog[]> {
+        const response = await axios.get<FeedingLog[]>(FeedingLogService.FEEDING_LOG_URLS.GET_ALL);
+        return response.data;
     }
-    getAll(): Promise<FeedingLog[]> {
-        throw new Error("Method not implemented.");
+    async getById(id: number): Promise<FeedingLog | null> {
+        const response = await axios.get<FeedingLog | null>(FeedingLogService.FEEDING_LOG_URLS.GET_BY_ID(id));
+        return response.data;
     }
-    getById(id: number): Promise<FeedingLog | null> {
-        throw new Error("Method not implemented.");
+    async getAllVMsBySheepId(id: number): Promise<FeedingLogVM[]> {
+        const response = await axios.get<FeedingLogVM[]>(FeedingLogService.FEEDING_LOG_URLS.GET_ALL_VMS_BY_SHEEP_ID(id));
+        return response.data;
+    }
+    async getAllVMsByFeedId(id: number): Promise<FeedingLogVM[]> {
+        const response = await axios.get<FeedingLogVM[]>(FeedingLogService.FEEDING_LOG_URLS.GET_ALL_VMS_BY_FEED_ID(id));
+        return response.data;
     }
 }

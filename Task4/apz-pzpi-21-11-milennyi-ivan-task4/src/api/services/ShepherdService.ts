@@ -1,29 +1,39 @@
+import axios from "axios";
 import { Shepherd } from "../../models/Shepherd";
-import { Storekeeper } from "../../models/Storekeeper";
+import { API_URL } from "../../utils/config";
 import { AuthService } from "../interfaces/IAuthService";
 import { IShepherdService } from "../interfaces/IShepherdService";
 
 export class ShepherdService implements IShepherdService, AuthService<Shepherd>{
-    create(item: Shepherd): Promise<Shepherd> {
-        throw new Error("Method not implemented.");
+    private static SHEPHERD_URLS = {
+        GET_ALL: `${API_URL}/shepherd`,
+        GET_BY_ID: (id: number) => `${API_URL}/shepherd/${id}`,
+        CREATE: `${API_URL}/shepherd/create`,
+        DELETE: (id: number) => `${API_URL}/shepherd/delete/${id}`,
+        UPDATE: `${API_URL}/shepherd/update`,
+        AUTHORIZE: `${API_URL}/shepherd/authorize`
     }
-    delete(itemId: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    async create(item: Shepherd): Promise<Shepherd> {
+        const response = await axios.post<Shepherd>(ShepherdService.SHEPHERD_URLS.CREATE, item);
+        return response.data;
     }
-    update(item: Shepherd): Promise<Shepherd> {
-        throw new Error("Method not implemented.");
+    async delete(itemId: number): Promise<void> {
+        await axios.delete(ShepherdService.SHEPHERD_URLS.DELETE(itemId));
     }
-    getAll(): Promise<Shepherd[]> {
-        throw new Error("Method not implemented.");
+    async update(item: Shepherd): Promise<Shepherd> {
+        const response = await axios.put<Shepherd>(ShepherdService.SHEPHERD_URLS.UPDATE, item);
+        return response.data;
     }
-    getById(id: number): Promise<Shepherd | null> {
-        throw new Error("Method not implemented.");
+    async getAll(): Promise<Shepherd[]> {
+        const response = await axios.get<Shepherd[]>(ShepherdService.SHEPHERD_URLS.GET_ALL);
+        return response.data;
     }
-    checkUsername(user: Shepherd): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async getById(id: number): Promise<Shepherd | null> {
+        const response = await axios.get<Shepherd | null>(ShepherdService.SHEPHERD_URLS.GET_BY_ID(id));
+        return response.data;
     }
-    authorize(username: string, passwordHash: string): Promise<Shepherd | null> {
-        throw new Error("Method not implemented.");
+    async authorize(username: string, passwordHash: string): Promise<Shepherd | null> {
+        const response = await axios.post<Shepherd | null>(ShepherdService.SHEPHERD_URLS.AUTHORIZE, {username: username, password_hash: passwordHash});
+        return response.data;
     }
-   
 }

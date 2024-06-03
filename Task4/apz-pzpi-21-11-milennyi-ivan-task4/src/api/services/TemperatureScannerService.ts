@@ -1,21 +1,34 @@
+import axios from "axios";
 import { TemperatureScanner } from "../../models/TemperatureScanner";
+import { API_URL } from "../../utils/config";
 import { ITemperatureScannerService } from "../interfaces/ITemperatureScannerService";
 
 export class TemperatureScannerService implements ITemperatureScannerService{
-    create(item: TemperatureScanner): Promise<TemperatureScanner> {
-        throw new Error("Method not implemented.");
+    private static TEMPERATURE_SCANNER_URLS = {
+        GET_ALL: `${API_URL}/temperature-scanner`,
+        GET_BY_ID: (id: number) => `${API_URL}/temperature-scanner/${id}`,
+        CREATE: `${API_URL}/temperature-scanner/create`,
+        DELETE: (id: number) => `${API_URL}/temperature-scanner/delete/${id}`,
+        UPDATE: `${API_URL}/temperature-scanner/update`
     }
-    delete(itemId: number): Promise<void> {
-        throw new Error("Method not implemented.");
+    async create(item: TemperatureScanner): Promise<TemperatureScanner> {
+        const response = await axios.post<TemperatureScanner>(TemperatureScannerService.TEMPERATURE_SCANNER_URLS.CREATE, item);
+        return response.data;
     }
-    update(item: TemperatureScanner): Promise<TemperatureScanner> {
-        throw new Error("Method not implemented.");
+    async delete(itemId: number): Promise<void> {
+        await axios.delete(TemperatureScannerService.TEMPERATURE_SCANNER_URLS.DELETE(itemId));
     }
-    getAll(): Promise<TemperatureScanner[]> {
-        throw new Error("Method not implemented.");
+    async update(item: TemperatureScanner): Promise<TemperatureScanner> {
+        const response = await axios.put<TemperatureScanner>(TemperatureScannerService.TEMPERATURE_SCANNER_URLS.UPDATE, item);
+        return response.data;
     }
-    getById(id: number): Promise<TemperatureScanner | null> {
-        throw new Error("Method not implemented.");
+    async getAll(): Promise<TemperatureScanner[]> {
+        const response = await axios.get<TemperatureScanner[]>(TemperatureScannerService.TEMPERATURE_SCANNER_URLS.GET_ALL);
+        return response.data;
+    }
+    async getById(id: number): Promise<TemperatureScanner | null> {
+        const response = await axios.get<TemperatureScanner | null>(TemperatureScannerService.TEMPERATURE_SCANNER_URLS.GET_BY_ID(id));
+        return response.data;
     }
 
 }

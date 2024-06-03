@@ -5,6 +5,6 @@ import { IService } from "./IService";
 export interface ISheepService<DetailsViewModel> extends IService<Sheep, SheepVM> {
     getAllVMsByShepherdId(id: number): Promise<SheepVM[]>;
     getDetailsById(id: number): Promise<DetailsViewModel | null>;
-    changeShepherd(sheepId: number, shepherdId: number | null): Promise<void>;
-    changeTemperatureScanner(sheepId: number, temperatureScannerId: number | null): Promise<void>;
+    changeShepherd(sheepId: number, changeId: number | null): Promise<void>;
+    changeTemperatureScanner(sheepId: number, changeId: number | null): Promise<void>;
 }
