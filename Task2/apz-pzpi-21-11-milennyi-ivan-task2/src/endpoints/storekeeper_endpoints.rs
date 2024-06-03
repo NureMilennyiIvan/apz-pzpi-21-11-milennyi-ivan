@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use actix_web::{delete, get, HttpResponse, patch, post, Responder};
+use actix_web::{delete, get, HttpResponse, post, put, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
@@ -78,7 +78,7 @@ async fn storekeeper_create(storekeeper_service: Data<Arc<StorekeeperService<Poo
     (status = 500, description = "Internal server error")
 ))]
 // Ендпойнт для оновлення інформації про комірника
-#[patch("/storekeeper/update")]
+#[put("/storekeeper/update")]
 async fn storekeeper_update(storekeeper_service: Data<Arc<StorekeeperService<Pool<MySql>>>>, storekeeper_json: Json<Storekeeper>) -> impl Responder {
     let storekeeper = match validate_json_body(storekeeper_json) {
         Ok(storekeeper) => storekeeper,

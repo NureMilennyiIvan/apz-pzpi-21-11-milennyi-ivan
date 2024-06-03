@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use actix_web::{web::{Data, Json, Path}, get, post, Responder, patch, delete};
+use actix_web::{web::{Data, Json, Path}, get, post, Responder, patch, delete, put};
 use sqlx::{MySql, Pool};
 use crate::db::services::SheepService;
 use crate::db::traits::{Service, SheepManage};
@@ -80,7 +80,7 @@ async fn sheep_create(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep
     (status = 500, description = "Internal server error")
 ))]
 // Ендпойнт для оновлення інформації про вівцю
-#[patch("/sheep/update")]
+#[put("/sheep/update")]
 async fn sheep_update(sheep_service: Data<Arc<SheepService<Pool<MySql>>>>, sheep_json: Json<Sheep>) -> impl Responder {
     let sheep = match validate_json_body(sheep_json) {
         Ok(sheep) => sheep,

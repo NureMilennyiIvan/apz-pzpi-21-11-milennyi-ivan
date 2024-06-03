@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use actix_web::{delete, get, HttpResponse, patch, post, Responder};
+use actix_web::{delete, get, HttpResponse, post, put, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
@@ -78,7 +78,7 @@ async fn shepherd_create(shepherd_service: Data<Arc<ShepherdService<Pool<MySql>>
     (status = 500, description = "Internal server error")
 ))]
 // Ендпойнт для оновлення інформації про пастуха
-#[patch("/shepherd/update")]
+#[put("/shepherd/update")]
 async fn shepherd_update(shepherd_service: Data<Arc<ShepherdService<Pool<MySql>>>>, shepherd_json: Json<Shepherd>) -> impl Responder {
     let shepherd = match validate_json_body(shepherd_json) {
         Ok(shepherd) => shepherd,

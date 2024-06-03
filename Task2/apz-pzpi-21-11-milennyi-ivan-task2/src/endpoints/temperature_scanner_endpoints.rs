@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use actix_web::{delete, get, patch, post, Responder};
+use actix_web::{delete, get, patch, post, put, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::services::TemperatureScannerService;
@@ -86,7 +86,7 @@ async fn temperature_scanner_update_temperature(temperature_scanner_service: Dat
     (status = 500, description = "Internal server error")
 ))]
 // Ендпойнт для оновлення сканера температури
-#[patch("/temperature-scanner/update")]
+#[put("/temperature-scanner/update")]
 async fn temperature_scanner_update(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>, temperature_scanner_json: Json<TemperatureScanner>) -> impl Responder {
     let temperature_scanner = match validate_json_body(temperature_scanner_json) {
         Ok(temperature_scanner) => temperature_scanner,

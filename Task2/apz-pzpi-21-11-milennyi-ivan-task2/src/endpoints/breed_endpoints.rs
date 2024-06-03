@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use actix_web::{delete, get, patch, post, Responder};
+use actix_web::{delete, get, post, put, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::services::BreedService;
@@ -67,7 +67,7 @@ async fn breed_create(breed_service: Data<Arc<BreedService<Pool<MySql>>>>, breed
     (status = 500, description = "Internal server error")
 ))]
 // Ендпойнт для оновлення породи
-#[patch("/breed/update")]
+#[put("/breed/update")]
 async fn breed_update(breed_service: Data<Arc<BreedService<Pool<MySql>>>>, breed_json: Json<Breed>) -> impl Responder {
     let breed = match validate_json_body(breed_json) {
         Ok(breed) => breed,

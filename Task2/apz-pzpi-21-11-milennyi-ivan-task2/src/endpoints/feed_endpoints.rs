@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use actix_web::{delete, get, patch, post, Responder};
+use actix_web::{delete, get, post, put, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::services::FeedService;
@@ -67,7 +67,7 @@ async fn feed_create(feed_service: Data<Arc<FeedService<Pool<MySql>>>>, feed_jso
     (status = 500, description = "Internal server error")
 ))]
 // Ендпойнт для оновлення корму
-#[patch("/feed/update")]
+#[put("/feed/update")]
 async fn feed_update(feed_service: Data<Arc<FeedService<Pool<MySql>>>>, feed_json: Json<Feed>) -> impl Responder {
     let feed = match validate_json_body(feed_json) {
         Ok(feed) => feed,

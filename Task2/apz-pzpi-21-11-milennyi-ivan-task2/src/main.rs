@@ -70,7 +70,7 @@ async fn main() -> io::Result<()>{
             .wrap(
                 Cors::default()
                     .allow_any_origin()
-                    .allowed_methods(vec!["GET", "POST", "PATCH", "DELETE"])
+                    .allowed_methods(vec!["GET", "POST", "PUT", "PATCH", "DELETE"])
                     .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT, header::ACCESS_CONTROL_REQUEST_METHOD, header::ACCESS_CONTROL_REQUEST_HEADERS, header::ORIGIN])
                     .allowed_header(header::CONTENT_TYPE)
             )
