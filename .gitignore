@@ -1,15 +1,15 @@
 .idea/
 #Task2
-Task2/apz-pzpi-21-11-milennyi-ivan-task2/target
+Task2/apz-pzpi-21-11-milennyi-ivan-task2/target/
 Task2/apz-pzpi-21-11-milennyi-ivan-task2/Cargo.lock
 Task2/apz-pzpi-21-11-milennyi-ivan-task2/logs/
-Task2/apz-pzpi-21-11-milennyi-ivan-task2/.idea
-Task2/.idea
+Task2/apz-pzpi-21-11-milennyi-ivan-task2/.idea/
+Task2/.idea/
 #Task3
-Task3/apz-pzpi-21-11-milennyi-ivan-task3/target
+Task3/apz-pzpi-21-11-milennyi-ivan-task3/target/
 Task3/apz-pzpi-21-11-milennyi-ivan-task3/Cargo.lock
-Task3/apz-pzpi-21-11-milennyi-ivan-task3/.idea
-Task3/.idea
+Task3/apz-pzpi-21-11-milennyi-ivan-task3/.idea/
+Task3/.idea/
 #Task4
 Task4/apz-pzpi-21-11-milennyi-ivan-task4/logs
 Task4/apz-pzpi-21-11-milennyi-ivan-task4/*.log
@@ -31,3 +31,4 @@ Task4/apz-pzpi-21-11-milennyi-ivan-task4/*.suo
 Task4/apz-pzpi-21-11-milennyi-ivan-task4/*.njsproj
 Task4/apz-pzpi-21-11-milennyi-ivan-task4/*.sln
 Task4/apz-pzpi-21-11-milennyi-ivan-task4/*.sw?
+/Task4/apz-pzpi-21-11-milennyi-ivan-task4/.vscode/
