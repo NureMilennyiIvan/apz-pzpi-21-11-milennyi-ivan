@@ -1,0 +1,19 @@
+{
+    "router": {
+      "switchButtonText": "Switch language",
+      "logoutButtonText": "Logout"
+    },
+    "authorizationForm": {
+        "usernameHeader": "Username",
+        "passwordHeader": "Password",
+        "shepherdStatus": "Shepherd",
+        "storekeeperStatus": "Storekeeper",
+        "signInButtonText": "Sign In",
+        "registrationButtonText": "Registration",
+        "errorUsernameHeader1": "Incorrect username",
+        "errorUsernameHeader2": "Authorization failed. Check the data or try again",
+        "errorPasswordHeader": "Provide password",
+        "usernamePlaceholder": "Enter username",
+        "passwordPlaceholder": "Enter password"
+    }
+}

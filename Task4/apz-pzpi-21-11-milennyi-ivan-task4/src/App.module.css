@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 100% высоты экрана */
+    
+
+}
+  
+.content {
+    flex: 1; /* Занимает все доступное пространство */
+}
+.header{
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    background-color: rgb(122, 26, 114);
+}
+
+.footer{
+    height: 80px;
+    bottom: 0;
+    left: 0;
+    background-color: rgb(122, 26, 114);
+}
+.buttonContainer{
+    margin-right: 30px;
+}
+.button{
+    width: 100px;
+    background-color: white;
+    color:rgb(33, 33, 33);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    border-radius: 7px;
+    border: 1px solid rgb(122, 26, 114);
+    cursor: pointer;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+.button:hover{
+    background-color:  rgb(238, 238, 238);
+}

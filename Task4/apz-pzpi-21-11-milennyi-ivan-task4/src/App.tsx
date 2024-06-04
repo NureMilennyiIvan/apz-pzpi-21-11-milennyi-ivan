@@ -1,34 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useNavigate } from 'react-router-dom';
+import styles from './App.module.css';
+import { useEffectUser } from './utils/helpers';
+import { IUserProps } from './components/properties/IUserProps';
+import { UserRole } from './utils/UserRole';
+import AuthorizationForm from './components/properties/common/AuthorixationForm';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC<IUserProps> = ({user, setUser}) => {
+  const navigate = useNavigate();
+  useEffectUser(user, navigate);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className={styles.content}>
+        {user.Role === UserRole.Unauthorized && (
+          <AuthorizationForm user={user} setUser={setUser}/>
+        )}
+        {user.Role === UserRole.Shepherd && (
+          <div></div>
+          //<ShepherdMainPage user={user} setUser={setUser}/>
+        )}
+        {user.Role === UserRole.Storekeeper && (
+                    <div></div>
+          //<StorekeeperMainPage user={user} setUser={setUser}/>
+        )}
+        {user.Role === UserRole.Admin && (
+          <div></div>
+          //<AdminMainPage/>
+        )}        
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
   )
 }
 
