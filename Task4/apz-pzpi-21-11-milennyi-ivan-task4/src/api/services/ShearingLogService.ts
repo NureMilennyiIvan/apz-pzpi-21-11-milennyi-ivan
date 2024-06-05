@@ -4,7 +4,7 @@ import { API_URL } from "../../utils/config";
 import { ShearingLogVM } from "../../viewModels/ShearingLogVM";
 import { IShearingLogService } from "../interfaces/IShearingLogService";
 
-export class ShearingService implements IShearingLogService{
+export class ShearingLogService implements IShearingLogService{
     private static SHEARING_LOG_URLS = {
         GET_ALL: `${API_URL}/shearing-log`,
         GET_BY_ID: (id: number) => `${API_URL}/shearing-log/${id}`,
@@ -14,25 +14,25 @@ export class ShearingService implements IShearingLogService{
     }
 
     async create(item: ShearingLog): Promise<ShearingLog> {
-        const response = await axios.post<ShearingLog>(ShearingService.SHEARING_LOG_URLS.CREATE, item);
+        const response = await axios.post<ShearingLog>(ShearingLogService.SHEARING_LOG_URLS.CREATE, item);
         return response.data;
     }
     async delete(itemId: number): Promise<void> {
-        await axios.delete(ShearingService.SHEARING_LOG_URLS.DELETE(itemId));
+        await axios.delete(ShearingLogService.SHEARING_LOG_URLS.DELETE(itemId));
     }
     async update(_item: ShearingLog): Promise<ShearingLog> {
         throw new Error("Method is forbidden.");
     }
     async getAll(): Promise<ShearingLog[]> {
-        const response = await axios.get<ShearingLog[]>(ShearingService.SHEARING_LOG_URLS.GET_ALL);
+        const response = await axios.get<ShearingLog[]>(ShearingLogService.SHEARING_LOG_URLS.GET_ALL);
         return response.data;
     }
     async getById(id: number): Promise<ShearingLog | null> {
-        const response = await axios.get<ShearingLog | null>(ShearingService.SHEARING_LOG_URLS.GET_BY_ID(id));
+        const response = await axios.get<ShearingLog | null>(ShearingLogService.SHEARING_LOG_URLS.GET_BY_ID(id));
         return response.data;
     }
     async getAllVMsBySheepId(id: number): Promise<ShearingLogVM[]> {
-        const response = await axios.get<ShearingLogVM[]>(ShearingService.SHEARING_LOG_URLS.GET_ALL_VMS_BY_SHEEP_ID(id));
+        const response = await axios.get<ShearingLogVM[]>(ShearingLogService.SHEARING_LOG_URLS.GET_ALL_VMS_BY_SHEEP_ID(id));
         return response.data;
     }
 }

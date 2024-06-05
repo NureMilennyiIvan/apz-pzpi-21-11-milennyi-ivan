@@ -7,7 +7,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import styles from './App.module.css'
 import App from './App'
 import { SheepDetailsPage } from './components/shepherd/SheepDetailsPage'
-import { FeedForm } from './components/shepherd/FeedForm'
 import { ShearForm } from './components/shepherd/ShearForm'
 
 const Router = () => {
@@ -46,7 +45,6 @@ const Router = () => {
         <Routes>
           <Route element={<App user={user} setUser={setUser}/>} path="/"></Route>
           <Route element={<SheepDetailsPage user={user} setUser={setUser}/>} path="/sheep/:sheepId/details"></Route>
-          <Route element={<FeedForm user={user} setUser={setUser}/>} path="/sheep/:sheepId/create/feeding-log"></Route>
           <Route element={<ShearForm user={user} setUser={setUser}/>} path="/sheep/:sheepId/create/shearing-log"></Route>
           <Route element={<div>Not Found 404</div>} path="*"></Route>
         </Routes>

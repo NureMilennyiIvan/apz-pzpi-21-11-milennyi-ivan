@@ -1,13 +1,13 @@
 export class Breed {
     id: number | null;
     name: string;
-    feedId: number;
+    feed_id: number;
     info: string;
 
     constructor(id: number | null, name: string, feedId: number, info: string) {
         this.id = id;
         this.name = name;
-        this.feedId = feedId;
+        this.feed_id = feedId;
         this.info = info;
     }
 }

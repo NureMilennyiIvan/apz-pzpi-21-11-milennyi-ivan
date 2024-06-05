@@ -1,19 +1,19 @@
 export class Sheep {
     id: number | null;
-    birthDate: number;
-    breedId: number;
+    birth_date: number;
+    breed_id: number;
     weight: number;
     sex: boolean;
-    temperatureScannerId: number | null;
-    shepherdId: number | null;
+    temperature_scanner_id: number | null;
+    shepherd_id: number | null;
 
     constructor(id: number | null, birthDate: number, breedId: number, weight: number, sex: boolean, temperatureScannerId: number | null, shepherdId: number | null) {
         this.id = id;
-        this.birthDate = birthDate;
-        this.breedId = breedId;
+        this.birth_date = birthDate;
+        this.breed_id = breedId;
         this.weight = weight;
         this.sex = sex;
-        this.temperatureScannerId = temperatureScannerId;
-        this.shepherdId = shepherdId;
+        this.temperature_scanner_id = temperatureScannerId;
+        this.shepherd_id = shepherdId;
     }
 }

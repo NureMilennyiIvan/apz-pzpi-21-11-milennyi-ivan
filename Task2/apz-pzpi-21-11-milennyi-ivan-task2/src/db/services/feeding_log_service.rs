@@ -23,7 +23,21 @@ impl Service<Pool<MySql>> for FeedingLogService<Pool<MySql>> {
 
     // Функція для створення нового логу годування
     async fn create(&self, mut item: Self::Model) -> Result<Self::Model, Self::Error> {
+        let mut transaction = self.pool.begin().await.map_err(|error| ServiceError::DatabaseError(error))?;
+
         query(
+            r#"
+            UPDATE Feeds
+            SET amount = amount - ?
+            WHERE id = ?
+            "#
+        )
+            .bind(item.amount())
+            .bind(item.feed_id())
+            .execute(&mut *transaction).await
+            .map_err(|error| ServiceError::DatabaseError(error))?;
+
+        let result = query(
             r#"
             INSERT INTO FeedingLogs (sheep_id, shepherd_id, timestamp, feed_id, amount)
             VALUES (?, ?, ?, ?, ?)
@@ -34,7 +48,7 @@ impl Service<Pool<MySql>> for FeedingLogService<Pool<MySql>> {
             .bind(item.timestamp())
             .bind(item.feed_id())
             .bind(item.amount())
-            .execute(&*self.pool).await
+            .execute(&mut *transaction).await
             .map_err(|error| ServiceError::DatabaseError(error))
             .map(|result|
                 if result.rows_affected() == 1 {
@@ -44,7 +58,11 @@ impl Service<Pool<MySql>> for FeedingLogService<Pool<MySql>> {
                     Err(ServiceError::CustomError("Insertion went wrong. Zero rows affected".to_string()))
                 }
             )
-            .unwrap_or_else(|error| Err(error))
+            .unwrap_or_else(|error| Err(error));
+
+        transaction.commit().await.map_err(|error| ServiceError::DatabaseError(error))?;
+
+        result
     }
 
     // Функція для видалення логу годування за його ідентифікатором

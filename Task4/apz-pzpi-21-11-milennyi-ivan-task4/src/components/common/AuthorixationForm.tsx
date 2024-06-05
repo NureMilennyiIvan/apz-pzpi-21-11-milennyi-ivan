@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { ShepherdService } from "../../../api/services/ShepherdService";
-import { StorekeeperService } from "../../../api/services/StorekeeperService";
-import { UserRole } from "../../../utils/UserRole";
-import { IUserProps } from "../IUserProps";
+import { ShepherdService } from "../../api/services/ShepherdService";
+import { StorekeeperService } from "../../api/services/StorekeeperService";
+import { UserRole } from "../../utils/UserRole";
+import { IUserProps } from "../properties/IUserProps";
 import { useTranslation } from "react-i18next";
-import { handleElementChange, hashPassword, saveAuthUserToLocalStorage } from "../../../utils/helpers";
-import { AuthUser } from "../../../utils/AuthUser";
+import { handleElementChange, hashPassword, saveAuthUserToLocalStorage } from "../../utils/helpers";
+import { AuthUser } from "../../utils/AuthUser";
 import styles from "./AuthorizationForm.module.css";
 
 const AuthorizationForm: React.FC<IUserProps> = ({ setUser }) => {

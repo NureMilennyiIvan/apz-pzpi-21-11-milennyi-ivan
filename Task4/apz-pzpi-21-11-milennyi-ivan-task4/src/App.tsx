@@ -3,7 +3,7 @@ import styles from './App.module.css';
 import { useEffectUser } from './utils/helpers';
 import { IUserProps } from './components/properties/IUserProps';
 import { UserRole } from './utils/UserRole';
-import AuthorizationForm from './components/properties/common/AuthorixationForm';
+import AuthorizationForm from './components/common/AuthorixationForm';
 import { ShepherdMainPage } from './components/shepherd/ShepherdMainPage';
 
 const App: React.FC<IUserProps> = ({user, setUser}) => {

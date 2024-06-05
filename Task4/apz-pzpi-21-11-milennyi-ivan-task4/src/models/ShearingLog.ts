@@ -1,15 +1,15 @@
 export class ShearingLog {
     id: number | null;
-    sheepId: number;
-    shepherdId: number | null;
+    sheep_id: number;
+    shepherd_id: number | null;
     timestamp: number;
-    woolAmount: number;
+    wool_amount: number;
 
     constructor(id: number | null, sheepId: number, shepherdId: number | null, timestamp: number, woolAmount: number) {
         this.id = id;
-        this.sheepId = sheepId;
-        this.shepherdId = shepherdId;
+        this.sheep_id = sheepId;
+        this.shepherd_id = shepherdId;
         this.timestamp = timestamp;
-        this.woolAmount = woolAmount;
+        this.wool_amount = woolAmount * 1000;
     }
 }

@@ -1,15 +1,15 @@
 export class FeedSupply {
     id: number | null;
-    storekeeperId: number | null;
+    storekeeper_id: number | null;
     amount: number;
     timestamp: number;
-    feedId: number;
+    feed_id: number;
 
     constructor(id: number | null, storekeeperId: number | null, amount: number, timestamp: number, feedId: number) {
         this.id = id;
-        this.storekeeperId = storekeeperId;
+        this.storekeeper_id = storekeeperId;
         this.amount = amount;
         this.timestamp = timestamp;
-        this.feedId = feedId;
+        this.feed_id = feedId;
     }
 }

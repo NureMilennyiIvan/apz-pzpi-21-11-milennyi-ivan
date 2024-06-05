@@ -67,5 +67,7 @@ export const timeInDays = (timestamp: number | null): number => {
   if (timestamp == null){
     return Infinity;
   }
-  return parseInt(((new Date().getTime() - timestamp) / 1000 / 3600 / 24).toString());
+  const difference = (new Date().getTime() - timestamp);
+  const days = difference / 1000 / 3600 / 24;
+  return Math.floor(days);
 }

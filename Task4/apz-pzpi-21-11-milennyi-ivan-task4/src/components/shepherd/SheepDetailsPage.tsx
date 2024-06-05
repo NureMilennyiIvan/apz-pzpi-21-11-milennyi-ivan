@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { SheepDetailsVM } from "../../viewModels/extraViewModels/SheepDetailsVM";
 import { useEffectUser } from "../../utils/helpers";
+import { FeedingLog } from "../../models/FeedingLog";
+import { FeedingLogService } from "../../api/services/FeedingLogService";
 
 export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
     const sheepService = new SheepService();
@@ -13,6 +15,9 @@ export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
     const {t} = useTranslation();
     const navigate = useNavigate();
     useEffectUser(user, navigate);
+
+    const [trigger, setTrigger] = useState<boolean>(true);
+    const feedingLogService = new FeedingLogService();
 
     useEffect(() => {
         const fetchSheepDetails = async () =>{
@@ -26,7 +31,21 @@ export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
             }
         }
         fetchSheepDetails();
-    }, []);
+    }, [trigger]);
+
+    const createFeedingLog = async (details: SheepDetailsVM) =>{
+        if (details.feedAmount <= 0){
+            return;
+        }
+        try{
+            const feedingLog = new FeedingLog(null, details.id, user.Id, new Date().getTime(), details.feedId, details.feedAmount);
+            await feedingLogService.create(feedingLog);
+            setTrigger(!trigger);
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
     return(
         <div>
         <div>
@@ -71,14 +90,14 @@ export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
 
                     <div>
                         {sheepDetails.isFeed ? (
-                            <button onClick={() => navigate("/sheep/" + sheepId + "/create/feeding-log")}>Feed sheep</button> 
+                            <button onClick={() => createFeedingLog(sheepDetails)}>Feed sheep</button> 
                         ):     (
                             <></>
                         )}
                     </div>
                     <div>
                         {sheepDetails.isShear ? (
-                            <button onClick={() => navigate("/sheep/" + sheepId + "/create/shearing-log")}>Feed sheep</button> 
+                            <button onClick={() => navigate("/sheep/" + sheepId + "/create/shearing-log")}>Shear sheep</button> 
                         ):     (
                             <></>
                         )}
