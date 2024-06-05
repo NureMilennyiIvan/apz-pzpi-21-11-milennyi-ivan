@@ -7,6 +7,7 @@ use utoipa::ToSchema;
 pub(crate) struct SheepDetailsVM {
     id: u64, // Ідентифікатор вівці
     breed: String, // Порода вівці
+    breed_info: String, // Інформація про породу
     sex: bool, // Стать вівці
     birth_date: u64, // Дата народження (у вигляді таймстемпу)
     last_feeding_timestamp: Option<u64>, // Час останнього годування (може бути відсутнім)
@@ -15,5 +16,5 @@ pub(crate) struct SheepDetailsVM {
     temperature: Option<u64>, // Температура вівці (може бути відсутньою)
     feed_id: u64, // Ідентифікатор корму
     feed_name: String, // Назва корму
-    feed_amount: u64 // Кількість корму
+    feed_amount: u64, // Кількість корму
 }

@@ -33,7 +33,6 @@ export class ShepherdService implements IShepherdService, AuthService<Shepherd>{
         return response.data;
     }
     async authorize(username: string, passwordHash: string): Promise<Shepherd | null> {
-        console.log("authorize", username, passwordHash);
         const response = await axios.post<Shepherd | null>(ShepherdService.SHEPHERD_URLS.AUTHORIZE, {username: username, password_hash: passwordHash});
         return response.data;
     }

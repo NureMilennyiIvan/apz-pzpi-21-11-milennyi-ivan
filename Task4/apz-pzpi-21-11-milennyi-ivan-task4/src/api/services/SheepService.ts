@@ -37,12 +37,23 @@ export class SheepService implements ISheepService<SheepDetailsVM> {
         return response.data;
     }
     async getAllVMsByShepherdId(id: number): Promise<SheepVM[]> {
-        const response = await axios.get<SheepVM[]>(SheepService.SHEEP_URLS.GET_ALL_VMS_BY_SHEPHERD_ID(id));
-        return response.data;
+        const response = await axios.get<[]>(SheepService.SHEEP_URLS.GET_ALL_VMS_BY_SHEPHERD_ID(id));
+        const vms: SheepVM[] = [];
+        response.data.map(sheep => {
+            //@ts-ignore
+            vms.push(new SheepVM(sheep.id, sheep.breed, sheep.sex, sheep.birth_date, sheep.last_feeding_timestamp, sheep.last_shearing_timestamp));
+        });
+        return vms;
     }
     async getDetailsById(id: number): Promise<SheepDetailsVM | null> {
-        const response = await axios.get<SheepDetailsVM | null>(SheepService.SHEEP_URLS.GET_DETAILS_BY_ID(id));
-        return response.data;
+        const response = await axios.get(SheepService.SHEEP_URLS.GET_DETAILS_BY_ID(id));
+        const sheepDetails = response.data;
+        if (sheepDetails){
+            //@ts-ignore
+            return new SheepDetailsVM(sheepDetails.id, sheepDetails.breed, sheepDetails.breed_info, sheepDetails.sex, sheepDetails.birth_date, sheepDetails.weight, sheepDetails.feed_id, 
+                sheepDetails.feed_name, sheepDetails.feed_amount, sheepDetails.last_feeding_timestamp, sheepDetails.last_shearing_timestamp, sheepDetails.temperature); 
+        }
+        return null;
     }
     async changeShepherd(sheepId: number, changeId: number | null): Promise<void> {
         await axios.patch<void>(SheepService.SHEEP_URLS.CHANGE_SHEPHERD(sheepId), {change_id: changeId})

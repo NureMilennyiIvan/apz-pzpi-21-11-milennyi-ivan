@@ -164,6 +164,7 @@ impl SheepManage<Pool<MySql>> for SheepService<Pool<MySql>>{
             SELECT
             s.id,
             b.name AS breed,
+            b.info AS breed_info,
             s.sex,
             s.birth_date,
             (

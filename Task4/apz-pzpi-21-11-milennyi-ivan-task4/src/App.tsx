@@ -4,6 +4,7 @@ import { useEffectUser } from './utils/helpers';
 import { IUserProps } from './components/properties/IUserProps';
 import { UserRole } from './utils/UserRole';
 import AuthorizationForm from './components/properties/common/AuthorixationForm';
+import { ShepherdMainPage } from './components/shepherd/ShepherdMainPage';
 
 const App: React.FC<IUserProps> = ({user, setUser}) => {
   const navigate = useNavigate();
@@ -15,8 +16,7 @@ const App: React.FC<IUserProps> = ({user, setUser}) => {
           <AuthorizationForm user={user} setUser={setUser}/>
         )}
         {user.Role === UserRole.Shepherd && (
-          <div></div>
-          //<ShepherdMainPage user={user} setUser={setUser}/>
+          <ShepherdMainPage user={user} setUser={setUser}/>
         )}
         {user.Role === UserRole.Storekeeper && (
                     <div></div>

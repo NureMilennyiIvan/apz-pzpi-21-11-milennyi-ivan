@@ -1,10 +1,11 @@
-import { timestampToDate } from "../../utils/helpers";
+import { timeInDays, timestampToDate } from "../../utils/helpers";
 
 export class SheepDetailsVM {
     id: number;
     breed: string;
+    breedInfo: string;
     sex: boolean;
-    birthDate: number;
+    age: number;
     lastFeedingDate: string | null;
     lastShearingDate: string | null;
     weight: number;
@@ -12,10 +13,13 @@ export class SheepDetailsVM {
     feedId: number;
     feedName: string;
     feedAmount: number;
+    isFeed: boolean;
+    isShear: boolean;
 
     constructor(
         id: number,
         breed: string,
+        breedInfo: string,
         sex: boolean,
         birthDate: number,
         weight: number,
@@ -28,8 +32,9 @@ export class SheepDetailsVM {
     ) {
         this.id = id;
         this.breed = breed;
+        this.breedInfo = breedInfo;
         this.sex = sex;
-        this.birthDate = birthDate;
+        this.age = timeInDays(birthDate);
         this.weight = weight / 1000;
         this.feedId = feedId;
         this.feedName = feedName;
@@ -37,5 +42,7 @@ export class SheepDetailsVM {
         this.lastFeedingDate = (lastFeedingTimestamp != null) ? timestampToDate(lastFeedingTimestamp) : null;
         this.lastShearingDate = (lastShearingTimestamp != null) ? timestampToDate(lastShearingTimestamp) : null;
         this.temperature = (temperature != null) ? temperature / 10: null;
+        this.isFeed = (timeInDays(lastFeedingTimestamp) > 0) ? true : false;
+        this.isShear = (timeInDays(lastShearingTimestamp) > 0) ? true : false;
     }
 }

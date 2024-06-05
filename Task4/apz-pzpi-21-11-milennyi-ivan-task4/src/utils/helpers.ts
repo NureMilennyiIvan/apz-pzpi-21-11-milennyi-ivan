@@ -62,3 +62,10 @@ export const useEffectUser = (dependency: AuthUser, navigate: NavigateFunction) 
 export const handleElementChange = (e: React.ChangeEvent<HTMLInputElement>, setChanges: (value: React.SetStateAction<any>) => void) => {
    setChanges(e.target.value);
 };
+
+export const timeInDays = (timestamp: number | null): number => {
+  if (timestamp == null){
+    return Infinity;
+  }
+  return parseInt(((new Date().getTime() - timestamp) / 1000 / 3600 / 24).toString());
+}
