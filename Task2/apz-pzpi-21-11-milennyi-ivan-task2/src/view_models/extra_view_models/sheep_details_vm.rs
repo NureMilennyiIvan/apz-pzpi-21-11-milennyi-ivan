@@ -16,5 +16,6 @@ pub(crate) struct SheepDetailsVM {
     temperature: Option<u64>, // Температура вівці (може бути відсутньою)
     feed_id: u64, // Ідентифікатор корму
     feed_name: String, // Назва корму
-    feed_amount: u64, // Кількість корму
+    required_feed_amount: u64, // Потрібна кількість корму
+    available_feed_amount: u64, // Доступна кількість корму
 }

@@ -9,7 +9,6 @@ import { FeedingLog } from "../../models/FeedingLog";
 import { FeedingLogService } from "../../api/services/FeedingLogService";
 
 export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
-    const sheepService = new SheepService();
     const [sheepDetails, setSheepDetails] = useState<SheepDetailsVM | null>();
     const { sheepId } = useParams();
     const {t} = useTranslation();
@@ -17,8 +16,9 @@ export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
     useEffectUser(user, navigate);
 
     const [trigger, setTrigger] = useState<boolean>(true);
-    const feedingLogService = new FeedingLogService();
 
+    const sheepService = new SheepService();
+    const feedingLogService = new FeedingLogService();
     useEffect(() => {
         const fetchSheepDetails = async () =>{
             try{
@@ -34,11 +34,11 @@ export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
     }, [trigger]);
 
     const createFeedingLog = async (details: SheepDetailsVM) =>{
-        if (details.feedAmount <= 0){
+        if (details.requiredFeedAmount <= 0){
             return;
         }
         try{
-            const feedingLog = new FeedingLog(null, details.id, user.Id, new Date().getTime(), details.feedId, details.feedAmount);
+            const feedingLog = new FeedingLog(null, details.id, user.Id, new Date().getTime(), details.feedId, details.requiredFeedAmount);
             await feedingLogService.create(feedingLog);
             setTrigger(!trigger);
         }
@@ -79,7 +79,10 @@ export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
                         <h4>{sheepDetails.feedName}</h4>
                     </div>
                     <div>
-                        <h4>{sheepDetails.feedAmount}</h4>
+                        <h4>{sheepDetails.requiredFeedAmount}</h4>
+                    </div>
+                    <div>
+                        <h4>{sheepDetails.availableFeedAmount}</h4>
                     </div>
                     <div>
                         <h4>{sheepDetails.lastFeedingDate ? sheepDetails.lastFeedingDate : "No date"}</h4>
@@ -102,6 +105,7 @@ export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
                             <></>
                         )}
                     </div>
+
                 </div>
             ) : (
                 <></>

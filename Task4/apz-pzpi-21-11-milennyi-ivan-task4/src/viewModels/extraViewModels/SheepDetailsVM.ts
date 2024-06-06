@@ -12,7 +12,8 @@ export class SheepDetailsVM {
     temperature: number | null;
     feedId: number;
     feedName: string;
-    feedAmount: number;
+    requiredFeedAmount: number;
+    availableFeedAmount: number;
     isFeed: boolean;
     isShear: boolean;
 
@@ -25,7 +26,8 @@ export class SheepDetailsVM {
         weight: number,
         feedId: number,
         feedName: string,
-        feedAmount: number,
+        requiredFeedAmount: number,
+        availableFeedAmount: number,
         lastFeedingTimestamp: number | null,
         lastShearingTimestamp: number | null,
         temperature: number | null
@@ -38,7 +40,8 @@ export class SheepDetailsVM {
         this.weight = weight / 1000;
         this.feedId = feedId;
         this.feedName = feedName;
-        this.feedAmount = feedAmount / 1000;
+        this.requiredFeedAmount = requiredFeedAmount / 1000;
+        this.availableFeedAmount = availableFeedAmount / 1000;
         this.lastFeedingDate = (lastFeedingTimestamp != null) ? timestampToDate(lastFeedingTimestamp) : null;
         this.lastShearingDate = (lastShearingTimestamp != null) ? timestampToDate(lastShearingTimestamp) : null;
         this.temperature = (temperature != null) ? temperature / 10: null;

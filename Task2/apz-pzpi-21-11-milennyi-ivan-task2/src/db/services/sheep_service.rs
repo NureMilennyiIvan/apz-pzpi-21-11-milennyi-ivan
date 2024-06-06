@@ -186,7 +186,8 @@ impl SheepManage<Pool<MySql>> for SheepService<Pool<MySql>>{
                     WHEN s.sex = true THEN s.weight * (0.05 + 0.0001 * TIMESTAMPDIFF(DAY, FROM_UNIXTIME(s.birth_date), NOW()))
                     ELSE s.weight * (0.04 + 0.0001 * TIMESTAMPDIFF(DAY, FROM_UNIXTIME(s.birth_date), NOW()))
                 END
-            ) AS UNSIGNED)AS feed_amount
+            ) AS UNSIGNED) AS required_feed_amount,
+            f.amount AS available_feed_amount
             FROM Sheep s
             INNER JOIN Breeds b ON s.breed_id = b.id
             LEFT JOIN TemperatureScanners ts ON s.temperature_scanner_id = ts.id

@@ -1,54 +1,54 @@
-import { useEffect, useState } from "react";
-import { SheepService } from "../../api/services/SheepService";
-import { SheepVM } from "../../viewModels/SheepVM";
+import { useState } from "react";
+
 import { IUserProps } from "../properties/IUserProps";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { SheepList } from "./SheepList";
+import { BreedsList } from "./BreedsList";
+import { FeedsList } from "./FeedsList";
 
 export const ShepherdMainPage: React.FC<IUserProps> = ({user}) =>{
-    const sheepService = new SheepService();
-    const [sheepVM, setSheepVM] = useState<SheepVM[]>([]);
-    const {t} = useTranslation();
-    const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchSheep = async () =>{
-            try{
-                const data = await sheepService.getAllVMsByShepherdId(user.Id!);
-                setSheepVM(data);
-            }
-            catch (error){
-                alert(error);
-                setSheepVM([]);
-            }
+    const {t} = useTranslation();
+    const [selectedButton, setSelectedButton] = useState<number|null>(1);
+    const [content, setContent] = useState<JSX.Element>(<SheepList id={user.Id!}/>);
+    
+    const handleButtonClick = (buttonIndex: number) => {
+        setSelectedButton(buttonIndex);
+        switch(buttonIndex) {
+            case 1:
+                setContent(<SheepList id={user.Id!}/>);
+                break;
+            case 2:
+                setContent(<BreedsList/>);
+                break;
+            case 3:
+                setContent(<FeedsList/>);
+                break;
+            default:
+                break;
         }
-        fetchSheep();
-    }, []);
+    }
+    
     return(
         <div>
-        <div>
-            {sheepVM.length > 0 ? (sheepVM.map((sheep) => (
-            <div key={sheep.id} onClick={() => navigate("sheep/" + sheep.id + "/details")}>
+            <div>
                 <div>
-                    <h4>{sheep.id}</h4>
+                    <button style={{ backgroundColor: selectedButton === 1 ? 'rgb(238, 238, 238)' : 'white' }} onClick={() => handleButtonClick(1)}>
+                        <h4 >Sheep</h4> 
+                    </button>
                 </div>
                 <div>
-                    <h4>{sheep.breed}</h4>
+                    <button style={{ backgroundColor: selectedButton === 2 ? 'rgb(238, 238, 238)' : 'white' }} onClick={() => handleButtonClick(2)}>
+                        <h4 >Breeds</h4> 
+                    </button>
                 </div>
                 <div>
-                    <h4>{sheep.sex}</h4>
-                </div>
-                <div>
-                    <h4>{sheep.lastFeedingDate}</h4>
-                </div>
-                <div>
-                    <h4>{sheep.lastFeedingDate}</h4>
+                    <button style={{ backgroundColor: selectedButton === 3 ? 'rgb(238, 238, 238)' : 'white' }} onClick={() => handleButtonClick(3)}>
+                        <h4 >Feeds</h4> 
+                    </button>
                 </div>
             </div>
-          ))) : (
-            <p></p>
-          )}
-        </div>
+            {content}
       </div>
     )
 }

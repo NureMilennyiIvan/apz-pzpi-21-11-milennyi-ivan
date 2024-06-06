@@ -51,7 +51,7 @@ export class SheepService implements ISheepService<SheepDetailsVM> {
         if (sheepDetails){
             //@ts-ignore
             return new SheepDetailsVM(sheepDetails.id, sheepDetails.breed, sheepDetails.breed_info, sheepDetails.sex, sheepDetails.birth_date, sheepDetails.weight, sheepDetails.feed_id, 
-                sheepDetails.feed_name, sheepDetails.feed_amount, sheepDetails.last_feeding_timestamp, sheepDetails.last_shearing_timestamp, sheepDetails.temperature); 
+                sheepDetails.feed_name, sheepDetails.required_feed_amount, sheepDetails.available_feed_amount, sheepDetails.last_feeding_timestamp, sheepDetails.last_shearing_timestamp, sheepDetails.temperature); 
         }
         return null;
     }

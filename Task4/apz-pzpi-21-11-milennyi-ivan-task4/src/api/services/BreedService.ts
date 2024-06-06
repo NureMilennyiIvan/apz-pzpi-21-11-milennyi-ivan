@@ -33,7 +33,12 @@ export class BreedService implements IBreedService {
         return response.data;
     }
     async getAllVMs(): Promise<BreedVM[]> {
-        const response = await axios.get<BreedVM[]>(BreedService.BREED_URLS.GET_ALL_VMS);
-        return response.data;
+        const response = await axios.get<[]>(BreedService.BREED_URLS.GET_ALL_VMS);
+        const vms: BreedVM[] = [];
+        response.data.map(breed => {
+            //@ts-ignore
+            vms.push(new BreedVM(breed.id, breed.name, breed.info, breed.feed_name, breed.sheep_count));
+        });
+        return vms;
     }
 }

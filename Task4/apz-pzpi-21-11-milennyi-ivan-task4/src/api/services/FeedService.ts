@@ -33,7 +33,12 @@ export class FeedService implements IFeedService {
         return response.data;
     }
     async getAllVMs(): Promise<FeedVM[]> {
-        const response = await axios.get<FeedVM[]>(FeedService.FEED_URLS.GET_ALL_VMS);
-        return response.data;
+        const response = await axios.get<[]>(FeedService.FEED_URLS.GET_ALL_VMS);
+        const vms: FeedVM[] = [];
+        response.data.map(feed => {
+            //@ts-ignore
+            vms.push(new FeedVM(feed.id, feed.amount, feed.name, feed.calories, feed.fat, feed.protein, feed.carbohydrates, feed.breed_name, feed.sheep_count));
+        });
+        return vms;
     }
 }
