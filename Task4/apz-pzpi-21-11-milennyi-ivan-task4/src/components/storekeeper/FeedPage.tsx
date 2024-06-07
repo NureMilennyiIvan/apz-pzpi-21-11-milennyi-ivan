@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffectUser } from "../../utils/helpers";
 import { useState } from "react";
 import { IUserProps } from "../properties/IUserProps";
-import { FeedingLogsList } from "./FeedingLogsList";
+import { FeedingLogsListFeed } from "./FeedingLogsListFeed";
 import { FeedSuppliesList } from "./FeedSuppliesList";
 
 export const FeedPage: React.FC<IUserProps> = ({user}) =>{
@@ -21,7 +21,7 @@ export const FeedPage: React.FC<IUserProps> = ({user}) =>{
                 setContent(<FeedSuppliesList feedId={parseInt(feedId!)}/>);
                 break;
             case 2:
-                setContent(<FeedingLogsList feedId={parseInt(feedId!)}/>);
+                setContent(<FeedingLogsListFeed feedId={parseInt(feedId!)}/>);
                 break;
             default:
                 break;

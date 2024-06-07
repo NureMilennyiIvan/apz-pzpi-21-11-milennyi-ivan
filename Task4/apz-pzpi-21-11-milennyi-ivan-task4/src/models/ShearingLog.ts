@@ -10,6 +10,6 @@ export class ShearingLog {
         this.sheep_id = sheepId;
         this.shepherd_id = shepherdId;
         this.timestamp = timestamp;
-        this.wool_amount = woolAmount * 1000;
+        this.wool_amount = woolAmount;
     }
 }

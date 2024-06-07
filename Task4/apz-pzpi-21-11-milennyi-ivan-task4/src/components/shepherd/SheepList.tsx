@@ -30,7 +30,7 @@ export const SheepList: React.FC<ISheepList> = ({id}) =>{
     return (
         <div>
             {sheepVMList.length > 0 ? (sheepVMList.map((sheep) => (
-            <div key={sheep.id} onClick={() => navigate("sheep/" + sheep.id + "/details")}>
+            <div key={sheep.id} onClick={() => navigate("sheep/" + sheep.id)}>
                 <div>
                     <h4>{sheep.id}</h4>
                 </div>

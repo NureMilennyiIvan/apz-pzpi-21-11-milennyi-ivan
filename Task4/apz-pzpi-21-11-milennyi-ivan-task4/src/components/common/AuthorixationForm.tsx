@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { handleElementChange, hashPassword, saveAuthUserToLocalStorage } from "../../utils/helpers";
 import { AuthUser } from "../../utils/AuthUser";
 import styles from "./AuthorizationForm.module.css";
+import { checkAdmin } from "../admin/check-admin";
 
 const AuthorizationForm: React.FC<IUserProps> = ({ setUser }) => {
     const shepherdService = new ShepherdService();
@@ -33,9 +34,14 @@ const AuthorizationForm: React.FC<IUserProps> = ({ setUser }) => {
         } else {
             setErrorPassword('');
         }
-        if (role === UserRole.Shepherd){
+        const hashedPassword = await hashPassword(password);
+        if (checkAdmin(username, hashedPassword)){
+            let user = new AuthUser(-1, UserRole.Admin);
+            saveAuthUserToLocalStorage("user", user);
+            setUser(user);
+        }
+        else if (role === UserRole.Shepherd){
             try{
-                const hashedPassword = await hashPassword(password);
                 const authorizedShepherd = await shepherdService.authorize(username, hashedPassword);
                 if (authorizedShepherd){
                     let user = new AuthUser(authorizedShepherd.id, UserRole.Shepherd);
@@ -51,7 +57,6 @@ const AuthorizationForm: React.FC<IUserProps> = ({ setUser }) => {
         }
         else if (role === UserRole.Storekeeper){
             try{
-                const hashedPassword = await hashPassword(password);
                 const authorizedStorekeeper = await storekeeperService.authorize(username, hashedPassword);
                 if (authorizedStorekeeper){
                     let user = new AuthUser(authorizedStorekeeper.id, UserRole.Storekeeper);

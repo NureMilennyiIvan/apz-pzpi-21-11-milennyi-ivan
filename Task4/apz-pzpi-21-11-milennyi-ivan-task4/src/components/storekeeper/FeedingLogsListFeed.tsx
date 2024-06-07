@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { FeedingLogService } from "../../api/services/FeedingLogService";
 import { FeedingLogVM } from "../../viewModels/FeedingLogVM";
 
-interface IFeedingLogsList{
+interface IFeedingLogsListFeed{
     feedId: number;
 }
 
-export const FeedingLogsList: React.FC<IFeedingLogsList> =({feedId}) =>{
+export const FeedingLogsListFeed: React.FC<IFeedingLogsListFeed> =({feedId}) =>{
     const feedingLogService = new FeedingLogService();
     const [feedingLogsVMList, setFeedingLogsVMList] = useState<FeedingLogVM[]>([]);
     

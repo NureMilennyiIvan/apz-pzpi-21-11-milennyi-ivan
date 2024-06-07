@@ -7,22 +7,34 @@ import { SheepDetailsVM } from "../../viewModels/extraViewModels/SheepDetailsVM"
 import { useEffectUser } from "../../utils/helpers";
 import { FeedingLog } from "../../models/FeedingLog";
 import { FeedingLogService } from "../../api/services/FeedingLogService";
+import { ShearingLog } from "../../models/ShearingLog";
+import { ShearingLogService } from "../../api/services/ShearingLogService";
 
-export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
-    const [sheepDetails, setSheepDetails] = useState<SheepDetailsVM | null>();
-    const { sheepId } = useParams();
-    const {t} = useTranslation();
-    const navigate = useNavigate();
-    useEffectUser(user, navigate);
-
-    const [trigger, setTrigger] = useState<boolean>(true);
-
+interface ISheepDetailsPage{
+    shepherdId: number;
+    sheepId: number;
+}
+export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({shepherdId, sheepId}) =>{
     const sheepService = new SheepService();
     const feedingLogService = new FeedingLogService();
+    const shearingLogService = new ShearingLogService();
+    const [sheepDetails, setSheepDetails] = useState<SheepDetailsVM | null>();
+    const [trigger, setTrigger] = useState<boolean>(true);
+
+    const [woolAmount, setWoolAmount] = useState<string>(''); 
+    const [errorWoolAmount, setErrorWoolAmount] = useState<string>('');
+    const [errorAmount, setErrorAmount] = useState<string>('');
+    const {t} = useTranslation();
+
+
+
     useEffect(() => {
         const fetchSheepDetails = async () =>{
             try{
-                const data = await sheepService.getDetailsById(parseInt(sheepId!));
+                const data = await sheepService.getDetailsById(sheepId);
+                setErrorAmount('');
+                setErrorWoolAmount('');
+                setWoolAmount('');
                 setSheepDetails(data);
             }
             catch (error){
@@ -35,17 +47,36 @@ export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
 
     const createFeedingLog = async (details: SheepDetailsVM) =>{
         if (details.requiredFeedAmount <= 0){
+            setErrorAmount(t(""));
             return;
         }
+        setErrorAmount('');
         try{
-            const feedingLog = new FeedingLog(null, details.id, user.Id, new Date().getTime(), details.feedId, details.requiredFeedAmount);
+            const feedingLog = new FeedingLog(null, sheepId, shepherdId, new Date().getTime(), details.feedId, details.requiredFeedAmount * 1000);
             await feedingLogService.create(feedingLog);
             setTrigger(!trigger);
         }
         catch(error){
             console.log(error);
+            setErrorAmount(t(""));
         }
     }
+    const createShearingLog = async () =>{
+        if (woolAmount.length == 0 || !(/^(0|[1-9]\d*)$/.test(woolAmount))) {
+            setErrorWoolAmount(t(""));
+            return;
+        }
+        setErrorWoolAmount('');
+        try{
+            const shearingLog = new ShearingLog(null, sheepId, shepherdId, new Date().getTime(), parseInt(woolAmount) * 1000);
+            await shearingLogService.create(shearingLog);
+            setTrigger(!trigger);
+        }
+        catch(error){
+            console.log(error);
+            setErrorWoolAmount(t(""));
+        }
+    };
     return(
         <div>
         <div>
@@ -100,7 +131,7 @@ export const SheepDetailsPage: React.FC<IUserProps> = ({user}) =>{
                     </div>
                     <div>
                         {sheepDetails.isShear ? (
-                            <button onClick={() => navigate("/sheep/" + sheepId + "/create/shearing-log")}>Shear sheep</button> 
+                            <button onClick={() => createShearingLog()}>Shear sheep</button> 
                         ):     (
                             <></>
                         )}

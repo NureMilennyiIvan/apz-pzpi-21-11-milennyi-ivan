@@ -27,7 +27,8 @@ export const StorekeeperMainPage: React.FC<IUserProps> = ({user}) =>{
     return (
         <div>
             {feedsVMList.length > 0 ? (feedsVMList.map((feed) => (
-            <div key={feed.id} onClick={() => navigate("feed/" + feed.id + "/details")}>
+            <div key={feed.id}>
+                <div onClick={() => navigate("feed/" + feed.id)}>
                 <div>
                     <h4>{feed.name}</h4>
                 </div>
@@ -40,8 +41,9 @@ export const StorekeeperMainPage: React.FC<IUserProps> = ({user}) =>{
                 <div>
                     <h4>{feed.sheepCount}</h4>
                 </div>
+                </div>
                 <div>
-                    <button></button>
+                    <button onClick={() => navigate("create/feed-supply/" + feed.id)}></button>
                 </div>
             </div>
           ))) : (

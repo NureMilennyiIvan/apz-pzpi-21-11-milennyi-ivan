@@ -36,7 +36,7 @@ export class ShearingLogService implements IShearingLogService{
         const vms: ShearingLogVM[] = [];
         response.data.map(shearingLog => {
             //@ts-ignore
-            vms.push(new ShearingLogVM(shearingLog.id, shearingLog.timestamp, shearingLog.woolAmount, shearingLog.sheep_id, shearingLog.shepherd_name, shearingLog.shepherd_surname));
+            vms.push(new ShearingLogVM(shearingLog.id, shearingLog.timestamp, shearingLog.wool_amount, shearingLog.sheep_id, shearingLog.shepherd_name, shearingLog.shepherd_surname));
         });
         return vms;
     }
