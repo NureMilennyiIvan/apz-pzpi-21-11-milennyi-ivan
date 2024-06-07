@@ -4,11 +4,11 @@ export class FeedingLogVM {
     id: number;
     date: string;
     amount: number;
-    shepherdName?: string;
-    shepherdSurname?: string;
+    shepherdName: string | null;
+    shepherdSurname: string | null;
     sheepId: number;
 
-    constructor(id: number, timestamp: number, amount: number, sheepId: number, shepherdName?: string, shepherdSurname?: string) {
+    constructor(id: number, timestamp: number, amount: number, sheepId: number, shepherdName: string | null, shepherdSurname: string | null) {
         this.id = id;
         this.amount = amount / 1000;
         this.shepherdName = shepherdName;

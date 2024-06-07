@@ -2,7 +2,7 @@ use std::sync::Arc;
 use actix_web::{delete, get, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
-use crate::db::services::FeedSupplyService;
+use crate::db::services::{FeedingLogService, FeedSupplyService};
 use crate::db::traits::{FeedSupplyManage, Service};
 use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
 use crate::json_structs::PathId;
@@ -42,6 +42,19 @@ async fn feed_supply_get_by_id(feed_supply_service: Data<Arc<FeedSupplyService<P
 #[get("/feed-supply-vms")]
 async fn feed_supply_get_all_vms(feed_supply_service: Data<Arc<FeedSupplyService<Pool<MySql>>>>) -> impl Responder {
     let result = feed_supply_service.get_all_vms().await;
+    send_service_result(result)
+}
+
+#[utoipa::path(params(PathId), responses(
+    (status = 200, description = "Feed supplies all vms by feed id"),
+    (status = 400, description = "Validation error or bad request"),
+    (status = 500, description = "Internal server error")
+))]
+// Ендпойнт для отримання всіх ViewModel постачань кормів за ідентифікатором корму
+#[get("/feed-supply/feed/{id}")]
+async fn feed_supply_get_all_vms_by_feed_id(feed_supply_service: Data<Arc<FeedSupplyService<Pool<MySql>>>>, params_url: Path<PathId>) -> impl Responder {
+    let params = params_url.into_inner();
+    let result = feed_supply_service.get_all_vms_by_feed_id(params.id).await;
     send_service_result(result)
 }
 

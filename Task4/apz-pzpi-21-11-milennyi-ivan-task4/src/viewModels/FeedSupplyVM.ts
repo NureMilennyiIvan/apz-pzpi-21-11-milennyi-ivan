@@ -4,10 +4,10 @@ export class FeedSupplyVM {
     id: number;
     amount: number;
     date: string;
-    storekeeperName?: string;
-    storekeeperSurname?: string;
+    storekeeperName: string | null;
+    storekeeperSurname: string | null;
 
-    constructor(id: number, amount: number, timestamp: number, storekeeperName?: string, storekeeperSurname?: string) {
+    constructor(id: number, amount: number, timestamp: number, storekeeperName: string | null, storekeeperSurname: string | null) {
         this.id = id;
         this.amount = amount / 1000;
         this.storekeeperName = storekeeperName;

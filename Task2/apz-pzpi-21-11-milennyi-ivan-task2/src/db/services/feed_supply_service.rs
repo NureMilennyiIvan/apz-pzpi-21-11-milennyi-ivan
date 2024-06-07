@@ -137,4 +137,23 @@ impl FeedSupplyManage<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
             .fetch_all(&*self.pool).await
             .map_err(|error| ServiceError::DatabaseError(error))
     }
+    // Функція для отримання всіх ViewModel постачань кормів за ідентифікатором корму
+    async fn get_all_vms_by_feed_id(&self, id: u64) -> Result<Vec<Self::ViewModel>, Self::Error> {
+        query_as::<_, FeedSupplyVM>(
+            r#"
+            SELECT
+            fs.id,
+            fs.amount,
+            fs.timestamp,
+            s.name AS storekeeper_name,
+            s.surname AS storekeeper_surname
+            FROM FeedSupplies fs
+            LEFT JOIN Storekeepers s ON fs.storekeeper_id = s.id
+            WHERE fs.feed_id = ?
+            "#
+        )
+            .bind(id)
+            .fetch_all(&*self.pool).await
+            .map_err(|error| ServiceError::DatabaseError(error))
+    }
 }

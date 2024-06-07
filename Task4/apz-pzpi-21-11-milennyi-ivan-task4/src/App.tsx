@@ -5,6 +5,7 @@ import { IUserProps } from './components/properties/IUserProps';
 import { UserRole } from './utils/UserRole';
 import AuthorizationForm from './components/common/AuthorixationForm';
 import { ShepherdMainPage } from './components/shepherd/ShepherdMainPage';
+import { StorekeeperMainPage } from './components/storekeeper/StorekeeperMainPage';
 
 const App: React.FC<IUserProps> = ({user, setUser}) => {
   const navigate = useNavigate();
@@ -19,8 +20,7 @@ const App: React.FC<IUserProps> = ({user, setUser}) => {
           <ShepherdMainPage user={user} setUser={setUser}/>
         )}
         {user.Role === UserRole.Storekeeper && (
-                    <div></div>
-          //<StorekeeperMainPage user={user} setUser={setUser}/>
+          <StorekeeperMainPage user={user} setUser={setUser}/>
         )}
         {user.Role === UserRole.Admin && (
           <div></div>

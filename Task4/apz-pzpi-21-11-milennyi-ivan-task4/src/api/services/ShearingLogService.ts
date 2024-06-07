@@ -32,7 +32,12 @@ export class ShearingLogService implements IShearingLogService{
         return response.data;
     }
     async getAllVMsBySheepId(id: number): Promise<ShearingLogVM[]> {
-        const response = await axios.get<ShearingLogVM[]>(ShearingLogService.SHEARING_LOG_URLS.GET_ALL_VMS_BY_SHEEP_ID(id));
-        return response.data;
+        const response = await axios.get<[]>(ShearingLogService.SHEARING_LOG_URLS.GET_ALL_VMS_BY_SHEEP_ID(id));
+        const vms: ShearingLogVM[] = [];
+        response.data.map(shearingLog => {
+            //@ts-ignore
+            vms.push(new ShearingLogVM(shearingLog.id, shearingLog.timestamp, shearingLog.woolAmount, shearingLog.sheep_id, shearingLog.shepherd_name, shearingLog.shepherd_surname));
+        });
+        return vms;
     }
 }

@@ -8,10 +8,11 @@ import styles from './App.module.css'
 import App from './App'
 import { SheepDetailsPage } from './components/shepherd/SheepDetailsPage'
 import { ShearForm } from './components/shepherd/ShearForm'
+import { FeedPage } from './components/storekeeper/FeedPage'
 
 const Router = () => {
-   const [user, setUser] = useState<AuthUser>(new AuthUser(null, UserRole.Unauthorized));
-
+   const [user, setUser] = useState<AuthUser>(new AuthUser(1, UserRole.Storekeeper));
+   //const [user, setUser] = useState<AuthUser>(new AuthUser(null, UserRole.Unauthorized));
    const logout = () =>{
        const unauthorized_user = new AuthUser(null, UserRole.Unauthorized);
        saveAuthUserToLocalStorage("user", unauthorized_user);
@@ -45,6 +46,7 @@ const Router = () => {
         <Routes>
           <Route element={<App user={user} setUser={setUser}/>} path="/"></Route>
           <Route element={<SheepDetailsPage user={user} setUser={setUser}/>} path="/sheep/:sheepId/details"></Route>
+          <Route element={<FeedPage user={user} setUser={setUser}/>} path="/feed/:feedId/details"></Route>
           <Route element={<ShearForm user={user} setUser={setUser}/>} path="/sheep/:sheepId/create/shearing-log"></Route>
           <Route element={<div>Not Found 404</div>} path="*"></Route>
         </Routes>

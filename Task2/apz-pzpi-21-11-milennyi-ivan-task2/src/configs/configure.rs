@@ -33,6 +33,7 @@ pub(crate) fn feed_supply_configure(cfg: &mut ServiceConfig){
         .service(feed_supply_delete)
         .service(feed_supply_get_all)
         .service(feed_supply_get_all_vms)
+        .service(feed_supply_get_all_vms_by_feed_id)
         .service(feed_supply_get_by_id);
 }
 

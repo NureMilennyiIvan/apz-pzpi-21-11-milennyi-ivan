@@ -10,8 +10,8 @@ export class FeedingLogService implements IFeedingLogService {
         GET_BY_ID: (id: number) => `${API_URL}/feeding-log/${id}`,
         CREATE: `${API_URL}/feeding-log/create`,
         DELETE: (id: number) => `${API_URL}/feeding-log/delete/${id}`,
-        GET_ALL_VMS_BY_SHEEP_ID: (id: number) =>  `${API_URL}/feeding-log/feed/${id}`,
-        GET_ALL_VMS_BY_FEED_ID: (id: number) =>  `${API_URL}/feeding-log/sheep/${id}`
+        GET_ALL_VMS_BY_SHEEP_ID: (id: number) =>  `${API_URL}/feeding-log/sheep/${id}`,
+        GET_ALL_VMS_BY_FEED_ID: (id: number) =>  `${API_URL}/feeding-log/feed/${id}`
     }
     async create(item: FeedingLog): Promise<FeedingLog> {
         const response = await axios.post<FeedingLog>(FeedingLogService.FEEDING_LOG_URLS.CREATE, item);
@@ -32,11 +32,21 @@ export class FeedingLogService implements IFeedingLogService {
         return response.data;
     }
     async getAllVMsBySheepId(id: number): Promise<FeedingLogVM[]> {
-        const response = await axios.get<FeedingLogVM[]>(FeedingLogService.FEEDING_LOG_URLS.GET_ALL_VMS_BY_SHEEP_ID(id));
-        return response.data;
+        const response = await axios.get<[]>(FeedingLogService.FEEDING_LOG_URLS.GET_ALL_VMS_BY_SHEEP_ID(id));
+        const vms: FeedingLogVM[] = [];
+        response.data.map(feedingLog => {
+            //@ts-ignore
+            vms.push(new FeedingLogVM(feedingLog.id, feedingLog.timestamp, feedingLog.amount, feedingLog.sheep_id, feedingLog.shepherd_name, feedingLog.shepherd_surname));
+        });
+        return vms;
     }
     async getAllVMsByFeedId(id: number): Promise<FeedingLogVM[]> {
-        const response = await axios.get<FeedingLogVM[]>(FeedingLogService.FEEDING_LOG_URLS.GET_ALL_VMS_BY_FEED_ID(id));
-        return response.data;
+        const response = await axios.get<[]>(FeedingLogService.FEEDING_LOG_URLS.GET_ALL_VMS_BY_FEED_ID(id));
+        const vms: FeedingLogVM[] = [];
+        response.data.map(feedingLog => {
+            //@ts-ignore
+            vms.push(new FeedingLogVM(feedingLog.id, feedingLog.timestamp, feedingLog.amount, feedingLog.sheep_id, feedingLog.shepherd_name, feedingLog.shepherd_surname));
+        });
+        return vms;
     }
 }

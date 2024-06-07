@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { SheepService } from "../../api/services/SheepService";
 import { SheepVM } from "../../viewModels/SheepVM";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface ISheepList{
     id: number;
@@ -11,6 +12,7 @@ export const SheepList: React.FC<ISheepList> = ({id}) =>{
     const sheepService = new SheepService();
     const [sheepVMList, setSheepVMList] = useState<SheepVM[]>([]);
     const navigate = useNavigate();
+    const {t} = useTranslation();
     
     useEffect(() => {
         const fetchSheep = async () =>{

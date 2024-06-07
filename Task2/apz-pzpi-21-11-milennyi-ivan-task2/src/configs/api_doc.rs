@@ -23,6 +23,7 @@ use crate::endpoints::*;
         feed_endpoints::feed_delete,
         feed_supply_endpoints::feed_supply_get_all,
         feed_supply_endpoints::feed_supply_get_by_id,
+        feed_supply_endpoints::feed_supply_get_all_vms_by_feed_id,
         feed_supply_endpoints::feed_supply_get_all_vms,
         feed_supply_endpoints::feed_supply_create,
         feed_supply_endpoints::feed_supply_delete,

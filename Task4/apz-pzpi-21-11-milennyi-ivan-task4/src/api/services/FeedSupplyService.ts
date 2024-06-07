@@ -10,7 +10,8 @@ export class FeedSupplyService implements IFeedSupplyService{
         GET_BY_ID: (id: number) => `${API_URL}/feed-supply/${id}`,
         CREATE: `${API_URL}/feed-supply/create`,
         DELETE: (id: number) => `${API_URL}/feed-supply/delete/${id}`,
-        GET_ALL_VMS: `${API_URL}/feed-supply-vms`
+        GET_ALL_VMS: `${API_URL}/feed-supply-vms`,
+        GET_ALL_VMS_BY_FEED_ID: (id: number) =>  `${API_URL}/feed-supply/feed/${id}`
     }
     async create(item: FeedSupply): Promise<FeedSupply> {
         const response = await axios.post<FeedSupply>(FeedSupplyService.FEED_SUPPLY_URLS.CREATE, item);
@@ -31,7 +32,21 @@ export class FeedSupplyService implements IFeedSupplyService{
         return response.data;
     }
     async getAllVMs(): Promise<FeedSupplyVM[]> {
-        const response = await axios.get<FeedSupplyVM[]>(FeedSupplyService.FEED_SUPPLY_URLS.GET_ALL_VMS);
-        return response.data;
+        const response = await axios.get<[]>(FeedSupplyService.FEED_SUPPLY_URLS.GET_ALL_VMS);
+        const vms: FeedSupplyVM[] = [];
+        response.data.map(feedSupply => {
+            //@ts-ignore
+            vms.push(new FeedSupplyVM(feedSupply.id, feedSupply.amount, feedSupply.timestamp, feedSupply.storekeeper_name, feedSupply.storekeeper_surname));
+        });
+        return vms;
+    }
+    async getAllVMsByFeedId(id: number): Promise<FeedSupplyVM[]> {
+        const response = await axios.get<[]>(FeedSupplyService.FEED_SUPPLY_URLS.GET_ALL_VMS_BY_FEED_ID(id));
+        const vms: FeedSupplyVM[] = [];
+        response.data.map(feedSupply => {
+            //@ts-ignore
+            vms.push(new FeedSupplyVM(feedSupply.id, feedSupply.amount, feedSupply.timestamp, feedSupply.storekeeper_name, feedSupply.storekeeper_surname));
+        });
+        return vms;
     }
 }
