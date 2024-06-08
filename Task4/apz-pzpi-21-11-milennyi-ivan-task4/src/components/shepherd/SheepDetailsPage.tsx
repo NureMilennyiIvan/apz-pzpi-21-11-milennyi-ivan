@@ -1,43 +1,38 @@
 import { useEffect, useState } from "react";
 import { SheepService } from "../../api/services/SheepService";
-import { IUserProps } from "../properties/IUserProps";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
 import { SheepDetailsVM } from "../../viewModels/extraViewModels/SheepDetailsVM";
-import { useEffectUser } from "../../utils/helpers";
 import { FeedingLog } from "../../models/FeedingLog";
 import { FeedingLogService } from "../../api/services/FeedingLogService";
 import { ShearingLog } from "../../models/ShearingLog";
 import { ShearingLogService } from "../../api/services/ShearingLogService";
+import styles from '../../assets/css/SheepDetailsPage.module.css';
 
-interface ISheepDetailsPage{
+interface ISheepDetailsPage {
     shepherdId: number;
     sheepId: number;
 }
-export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({shepherdId, sheepId}) =>{
+
+export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({shepherdId, sheepId}) => {
     const sheepService = new SheepService();
     const feedingLogService = new FeedingLogService();
     const shearingLogService = new ShearingLogService();
     const [sheepDetails, setSheepDetails] = useState<SheepDetailsVM | null>();
     const [trigger, setTrigger] = useState<boolean>(true);
-
     const [woolAmount, setWoolAmount] = useState<string>(''); 
     const [errorWoolAmount, setErrorWoolAmount] = useState<string>('');
     const [errorAmount, setErrorAmount] = useState<string>('');
     const {t} = useTranslation();
 
-
-
     useEffect(() => {
-        const fetchSheepDetails = async () =>{
-            try{
+        const fetchSheepDetails = async () => {
+            try {
                 const data = await sheepService.getDetailsById(sheepId);
                 setErrorAmount('');
                 setErrorWoolAmount('');
                 setWoolAmount('');
                 setSheepDetails(data);
-            }
-            catch (error){
+            } catch (error) {
                 alert(error);
                 setSheepDetails(null);
             }
@@ -45,41 +40,40 @@ export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({shepherdId, sheep
         fetchSheepDetails();
     }, [trigger]);
 
-    const createFeedingLog = async (details: SheepDetailsVM) =>{
-        if (details.requiredFeedAmount <= 0){
+    const createFeedingLog = async (details: SheepDetailsVM) => {
+        if (details.requiredFeedAmount <= 0) {
             setErrorAmount(t(""));
             return;
         }
         setErrorAmount('');
-        try{
+        try {
             const feedingLog = new FeedingLog(null, sheepId, shepherdId, new Date().getTime(), details.feedId, details.requiredFeedAmount * 1000);
             await feedingLogService.create(feedingLog);
             setTrigger(!trigger);
-        }
-        catch(error){
+        } catch (error) {
             console.log(error);
             setErrorAmount(t(""));
         }
     }
-    const createShearingLog = async () =>{
+
+    const createShearingLog = async () => {
         if (woolAmount.length == 0 || !(/^(0|[1-9]\d*)$/.test(woolAmount))) {
             setErrorWoolAmount(t(""));
             return;
         }
         setErrorWoolAmount('');
-        try{
+        try {
             const shearingLog = new ShearingLog(null, sheepId, shepherdId, new Date().getTime(), parseInt(woolAmount) * 1000);
             await shearingLogService.create(shearingLog);
             setTrigger(!trigger);
-        }
-        catch(error){
+        } catch (error) {
             console.log(error);
             setErrorWoolAmount(t(""));
         }
     };
-    return(
-        <div>
-        <div>
+
+    return (
+        <div className={styles.container}>
             {sheepDetails ? (
                 <div>
                     <div>
@@ -121,27 +115,28 @@ export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({shepherdId, sheep
                     <div>
                         <h4>{sheepDetails.lastShearingDate ? sheepDetails.lastShearingDate : "No date"}</h4>
                     </div>
-
                     <div>
                         {sheepDetails.isFeed ? (
-                            <button onClick={() => createFeedingLog(sheepDetails)}>Feed sheep</button> 
-                        ):     (
+                            <button className={styles.button} onClick={() => createFeedingLog(sheepDetails)}>Feed sheep</button> 
+                        ) : (
                             <></>
                         )}
                     </div>
                     <div>
                         {sheepDetails.isShear ? (
-                            <button onClick={() => createShearingLog()}>Shear sheep</button> 
-                        ):     (
+                            <div>
+                                <input className={styles.input} type="text" value={woolAmount} onChange={(e) => setWoolAmount(e.target.value)} placeholder="Enter wool amount" />
+                                {errorWoolAmount && <span className={styles.error}>{errorWoolAmount}</span>}
+                                <button className={styles.button} onClick={() => createShearingLog()}>Shear sheep</button>
+                            </div>
+                        ) : (
                             <></>
                         )}
                     </div>
-
                 </div>
             ) : (
                 <></>
             )}
         </div>
-      </div>
     )
 }

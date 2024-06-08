@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ShearingLogService } from "../../api/services/ShearingLogService";
 import { ShearingLogVM } from "../../viewModels/ShearingLogVM";
-
+import styles from "../../assets/css/ShearingLogsList.module.css";
 interface IShearingLogsList{
     sheepId: number;
 }
@@ -26,7 +26,7 @@ export const ShearingLogsList: React.FC<IShearingLogsList> =({sheepId}) =>{
     return (
         <div>
             {shearingLogsVMList.length > 0 ? (shearingLogsVMList.map((shearingLog) => (
-                <div key={shearingLog.id}>
+                <div key={shearingLog.id} className={styles.container}>
                     <div>
                         <h4>{shearingLog.id}</h4>
                     </div>

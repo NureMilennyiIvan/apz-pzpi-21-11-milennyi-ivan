@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FeedSupplyService } from "../../api/services/FeedSupplyService";
 import { FeedSupplyVM } from "../../viewModels/FeedSupplyVM";
+import styles from "../../assets/css/FeedSuppliesList.module.css";
 
 interface IFeedSuppliesList{
     feedId: number;
@@ -27,7 +28,7 @@ export const FeedSuppliesList: React.FC<IFeedSuppliesList> =({feedId}) =>{
     return (
         <div>
             {feedSuppliesVMList.length > 0 ? (feedSuppliesVMList.map((feedSupply) => (
-                <div key={feedSupply.id}>
+                <div key={feedSupply.id} className={styles.container}>
                     <div>
                         <h4>{feedSupply.id}</h4>
                     </div>

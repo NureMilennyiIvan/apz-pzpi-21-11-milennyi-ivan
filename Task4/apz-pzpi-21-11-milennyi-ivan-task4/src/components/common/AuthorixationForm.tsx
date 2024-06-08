@@ -6,7 +6,7 @@ import { IUserProps } from "../properties/IUserProps";
 import { useTranslation } from "react-i18next";
 import { handleElementChange, hashPassword, saveAuthUserToLocalStorage } from "../../utils/helpers";
 import { AuthUser } from "../../utils/AuthUser";
-import styles from "./AuthorizationForm.module.css";
+import styles from "../../assets/css/AuthorizationForm.module.css";
 import { checkAdmin } from "../admin/check-admin";
 
 const AuthorizationForm: React.FC<IUserProps> = ({ setUser }) => {

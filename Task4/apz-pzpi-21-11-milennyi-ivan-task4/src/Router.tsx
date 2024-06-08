@@ -4,9 +4,8 @@ import { AuthUser } from './utils/AuthUser'
 import { getAuthUserFromLocalStorage, saveAuthUserToLocalStorage } from './utils/helpers'
 import { useTranslation } from 'react-i18next'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import styles from './App.module.css'
+import styles from './assets/css/App.module.css'
 import App from './App'
-import { ShearForm } from './components/shepherd/ShearForm'
 import { FeedPage } from './components/storekeeper/FeedPage'
 import { SheepMainPage } from './components/shepherd/SheepMainPage'
 import { CreateFeedSupplyForm } from './components/storekeeper/CreateFeedSupplyForm'
@@ -45,17 +44,19 @@ const Router = () => {
                </div>
            )}
         </header>
-        <Routes>
-          <Route element={<App user={user} setUser={setUser}/>} path="/"></Route>
-          <Route element={<SheepMainPage user={user} setUser={setUser}/>} path="/sheep/:sheepId"></Route>
-          <Route element={<FeedPage user={user} setUser={setUser}/>} path="/feed/:feedId"></Route>
-          <Route element={<ShearForm user={user} setUser={setUser}/>} path="/sheep/:sheepId/create/shearing-log"></Route>
-          <Route element={<CreateFeedSupplyForm user={user} setUser={setUser}/>} path="/create/feed-supply/:feedId"></Route>
-          <Route element={<div>Not Found 404</div>} path="*"></Route>
-        </Routes>
+        <div className={styles.content}>
+          <Routes>
+            <Route element={<App user={user} setUser={setUser}/>} path="/"></Route>
+            <Route element={<SheepMainPage user={user} setUser={setUser}/>} path="/sheep/:sheepId"></Route>
+            <Route element={<FeedPage user={user} setUser={setUser}/>} path="/feed/:feedId"></Route>
+            <Route element={<CreateFeedSupplyForm user={user} setUser={setUser}/>} path="/create/feed-supply/:feedId"></Route>
+            <Route element={<div>Not Found 404</div>} path="*"></Route>
+          </Routes>
+        </div>
+
       </BrowserRouter>
       <footer className={styles.footer}>
-
+        © 2024 Wool Farm Management System
       </footer>
    </div>)
 }

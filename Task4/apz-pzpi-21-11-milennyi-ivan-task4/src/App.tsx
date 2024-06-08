@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import styles from './App.module.css';
 import { useEffectUser } from './utils/helpers';
 import { IUserProps } from './components/properties/IUserProps';
 import { UserRole } from './utils/UserRole';
@@ -13,7 +12,7 @@ const App: React.FC<IUserProps> = ({user, setUser}) => {
   useEffectUser(user, navigate);
 
   return (
-      <div className={styles.content}>
+      <div>
         {user.Role === UserRole.Unauthorized && (
           <AuthorizationForm user={user} setUser={setUser}/>
         )}

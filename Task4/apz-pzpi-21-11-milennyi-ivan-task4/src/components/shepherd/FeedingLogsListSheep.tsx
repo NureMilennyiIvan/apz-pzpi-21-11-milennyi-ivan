@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FeedingLogService } from "../../api/services/FeedingLogService";
 import { FeedingLogVM } from "../../viewModels/FeedingLogVM";
-
+import styles from "../../assets/css/FeedingLogsList.module.css";
 interface IFeedingLogsListSheep{
     sheepId: number;
 }
@@ -26,7 +26,7 @@ export const FeedingLogsListSheep: React.FC<IFeedingLogsListSheep> =({sheepId}) 
     return (
         <div>
             {feedingLogsVMList.length > 0 ? (feedingLogsVMList.map((feedingLog) => (
-                <div key={feedingLog.id}>
+                <div key={feedingLog.id} className={styles.container}>
                     <div>
                         <h4>{feedingLog.id}</h4>
                     </div>

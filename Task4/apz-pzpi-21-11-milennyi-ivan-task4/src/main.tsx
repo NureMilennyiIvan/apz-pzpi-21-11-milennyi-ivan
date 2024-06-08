@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client'
-import './index.css'
+//import './index.css'
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next'
 

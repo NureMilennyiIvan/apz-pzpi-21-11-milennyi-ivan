@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    min-height: 65vh;
+}
+
+h4 {
+    margin: 0.5rem 0;
+}
+
+.button {
+    background-color: #3b5998;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #8b9dc3;
+}
+
+.error {
+    color: red;
+    font-size: 0.8rem;
+}
+
+.input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
