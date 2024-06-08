@@ -140,7 +140,7 @@ impl FeedManage<Pool<MySql>> for FeedService<Pool<MySql>> {
             b.name AS breed_name,
             CAST((SELECT COUNT(*) FROM Sheep s WHERE s.breed_id = b.id) AS UNSIGNED) AS sheep_count
             FROM Feeds f
-            INNER JOIN Breeds b ON f.id = b.feed_id
+            LEFT JOIN Breeds b ON f.id = b.feed_id
             "#
         )
             .fetch_all(&*self.pool).await

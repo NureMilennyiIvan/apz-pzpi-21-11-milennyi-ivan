@@ -12,6 +12,6 @@ pub(crate) struct FeedVM {
     fat: u32, // Вміст жиру
     protein: u32, // Вміст білків
     carbohydrates: u32, // Вміст вуглеводів
-    breed_name: String, // Назва породи, для якої призначений корм
-    sheep_count: u64, // Кількість овець, що споживають цей корм
+    breed_name: Option<String>, // Назва породи, для якої призначений корм
+    sheep_count: Option<u64>, // Кількість овець, що споживають цей корм
 }

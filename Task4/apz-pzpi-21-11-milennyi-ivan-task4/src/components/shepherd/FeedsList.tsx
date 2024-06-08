@@ -21,36 +21,30 @@ export const FeedsList = () => {
     }, []);
     
     return (
-        <div>
-            {feedsVMList.length > 0 ? (feedsVMList.map((feed) => (
-                <div key={feed.id} className={styles.container}>
-                    <div>
-                        <h4>{feed.name}</h4>
+        <div className={styles.list}>
+            {feedsVMList.length > 0 ? (
+                feedsVMList.map((feed) => (
+                    <div key={feed.id} className={styles.card}>
+                        <div className={styles.cardHeader}>
+                            <h2 className={styles.feedName}>{feed.name}</h2>
+                        </div>
+                        <div className={styles.cardBody}>
+                            <p><strong>Кількість:</strong> {feed.amount} кг</p>
+                            <p><strong>Калорії:</strong> {feed.calories} ккал</p>
+                            <p><strong>Жири:</strong> {feed.fat} г</p>
+                            <p><strong>Білки:</strong> {feed.protein} г</p>
+                            <p><strong>Вуглеводи:</strong> {feed.carbohydrates} г</p>
+                            {feed.breedName ? (
+                                <p><strong>Порода:</strong> {feed.breedName}</p>
+                            ) : (
+                                <p><strong>Порода:</strong> Не призначена</p>
+                            )}
+                            <p><strong>Кількість овець:</strong> {feed.sheepCount}</p>
+                        </div>
                     </div>
-                    <div>
-                        <h4>{feed.amount}</h4>
-                    </div>
-                    <div>
-                        <h4>{feed.calories}</h4>
-                    </div>
-                    <div>
-                        <h4>{feed.fat}</h4>
-                    </div>
-                    <div>
-                        <h4>{feed.protein}</h4>
-                    </div>
-                    <div>
-                        <h4>{feed.carbohydrates}</h4>
-                    </div>
-                    <div>
-                        <h4>{feed.breedName}</h4>
-                    </div>
-                    <div>
-                        <h4>{feed.sheepCount}</h4>
-                    </div>
-                </div>
-            ))) : (
-                <p></p>
+                ))
+            ) : (
+                <p>Немає даних про корми</p>
             )}
         </div>
     );

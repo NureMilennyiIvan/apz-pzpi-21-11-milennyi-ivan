@@ -19,17 +19,15 @@ export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({shepherdId, sheep
     const shearingLogService = new ShearingLogService();
     const [sheepDetails, setSheepDetails] = useState<SheepDetailsVM | null>();
     const [trigger, setTrigger] = useState<boolean>(true);
-    const [woolAmount, setWoolAmount] = useState<string>(''); 
-    const [errorWoolAmount, setErrorWoolAmount] = useState<string>('');
-    const [errorAmount, setErrorAmount] = useState<string>('');
+    const [woolAmount, setWoolAmount] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState<string>('');
     const {t} = useTranslation();
 
     useEffect(() => {
         const fetchSheepDetails = async () => {
             try {
                 const data = await sheepService.getDetailsById(sheepId);
-                setErrorAmount('');
-                setErrorWoolAmount('');
+                setErrorMessage('');
                 setWoolAmount('');
                 setSheepDetails(data);
             } catch (error) {
@@ -41,34 +39,29 @@ export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({shepherdId, sheep
     }, [trigger]);
 
     const createFeedingLog = async (details: SheepDetailsVM) => {
-        if (details.requiredFeedAmount <= 0) {
-            setErrorAmount(t(""));
-            return;
-        }
-        setErrorAmount('');
         try {
-            const feedingLog = new FeedingLog(null, sheepId, shepherdId, new Date().getTime(), details.feedId, details.requiredFeedAmount * 1000);
+            const feedingLog = new FeedingLog(null, sheepId, shepherdId, new Date().getTime(), details.feedId, Math.floor(details.requiredFeedAmount * 1000));
             await feedingLogService.create(feedingLog);
             setTrigger(!trigger);
         } catch (error) {
             console.log(error);
-            setErrorAmount(t(""));
+            setErrorMessage(t("в"));
         }
     }
 
     const createShearingLog = async () => {
         if (woolAmount.length == 0 || !(/^(0|[1-9]\d*)$/.test(woolAmount))) {
-            setErrorWoolAmount(t(""));
+            setErrorMessage(t("в"));
             return;
         }
-        setErrorWoolAmount('');
+        setErrorMessage('');
         try {
-            const shearingLog = new ShearingLog(null, sheepId, shepherdId, new Date().getTime(), parseInt(woolAmount) * 1000);
+            const shearingLog = new ShearingLog(null, sheepId, shepherdId, new Date().getTime(), Math.floor(parseInt(woolAmount) * 1000));
             await shearingLogService.create(shearingLog);
             setTrigger(!trigger);
         } catch (error) {
             console.log(error);
-            setErrorWoolAmount(t(""));
+            setErrorMessage(t("в"));
         }
     };
 
@@ -76,66 +69,90 @@ export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({shepherdId, sheep
         <div className={styles.container}>
             {sheepDetails ? (
                 <div>
-                    <div>
-                        <h4>{sheepDetails.id}</h4>
+                    <div className={styles.cardHeader}>
+                        <h2 className={styles.sheepId}>Вівця #{sheepDetails.id}</h2>
                     </div>
-                    <div>
-                        <h4>{sheepDetails.breed}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheepDetails.breedInfo}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheepDetails.age}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheepDetails.sex}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheepDetails.temperature}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheepDetails.weight}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheepDetails.feedId}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheepDetails.feedName}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheepDetails.requiredFeedAmount}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheepDetails.availableFeedAmount}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheepDetails.lastFeedingDate ? sheepDetails.lastFeedingDate : "No date"}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheepDetails.lastShearingDate ? sheepDetails.lastShearingDate : "No date"}</h4>
-                    </div>
-                    <div>
-                        {sheepDetails.isFeed ? (
-                            <button className={styles.button} onClick={() => createFeedingLog(sheepDetails)}>Feed sheep</button> 
-                        ) : (
-                            <></>
-                        )}
-                    </div>
-                    <div>
-                        {sheepDetails.isShear ? (
-                            <div>
-                                <input className={styles.input} type="text" value={woolAmount} onChange={(e) => setWoolAmount(e.target.value)} placeholder="Enter wool amount" />
-                                {errorWoolAmount && <span className={styles.error}>{errorWoolAmount}</span>}
-                                <button className={styles.button} onClick={() => createShearingLog()}>Shear sheep</button>
+                    <div className={styles.details}>
+                        <div className={styles.infoGroup}>
+                        <div className={styles.infoItem}>
+                            <p><strong>Порода:</strong> {sheepDetails.breed}</p>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <p><strong>Вік:</strong> {sheepDetails.age} днів</p>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <p><strong>Стать:</strong> {sheepDetails.sex ? 'Самець' : 'Самка'}</p>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <div className={styles.temperature}>
+                                <p><strong>Температура:</strong> {sheepDetails.temperature ? `${sheepDetails.temperature} °C` : 'Немає даних'}</p>
                             </div>
-                        ) : (
-                            <></>
-                        )}
+                            {sheepDetails.temperature !== null ? (
+                                <p>{sheepDetails.temperature >= 36 && sheepDetails.temperature <= 37.5 ? 'Температура в нормі' : 'Температура ненормальна'}</p>
+                            ) : (
+                                <p>Сканер температури відсутній</p>
+                            )}
+                        </div>
+                        <div className={styles.infoItem}>
+                            <p><strong>Вага:</strong> {sheepDetails.weight} кг</p>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <p><strong>Корм:</strong> {sheepDetails.feedName}</p>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <p><strong>Доступно корму:</strong> {sheepDetails.availableFeedAmount} кг</p>
+                        </div>
                     </div>
+                    <div className={styles.statusGroup}>
+                        <div className={styles.infoItem}>
+                            <p><strong>Кількість корму для годування:</strong> {sheepDetails.requiredFeedAmount} кг</p>
+                        </div>
+                        <div className={styles.infoItem}>
+                            <div className={styles.feeding}>
+                                <p><strong>Останнє годування:</strong> {sheepDetails.lastFeedingDate ? sheepDetails.lastFeedingDate : "Немає даних"}</p>                       
+                            </div>
+                            {sheepDetails.isFeed ? (
+                                <div>
+                                    {sheepDetails.requiredFeedAmount <= sheepDetails.availableFeedAmount ? ( 
+                                        <div className={styles.form}>
+                                            <button className={styles.button} onClick={() => createFeedingLog(sheepDetails)}>Нагодувати вівцю</button>
+
+                                        </div>
+                                    ) : (                                
+                                        <p>Недостатньо корму</p>
+                                     )}
+                                </div>
+
+                            ) : (
+                                <p>Годування не потрібно</p>
+                            )}
+                        </div>
+                        <div className={styles.infoItem}>
+                            <div className={styles.shearing}>
+                                <p><strong>Остання стрижка:</strong> {sheepDetails.lastShearingDate ? sheepDetails.lastShearingDate : "Немає даних"}</p>
+                            </div>
+                            {sheepDetails.isShear ? (
+                                <div>
+                                    <input className={styles.input} type="text" value={woolAmount} onChange={(e) => setWoolAmount(e.target.value)} placeholder="Введіть зістриженої кількість вовни" />
+
+                                    <button className={styles.button} onClick={() => createShearingLog()}>Постригти вівцю</button>
+                                </div>
+                            ) : (
+                                <p>Стрижка не потрібна</p>
+                            )}
+                        </div>
+                        <div className={styles.errorItem}>
+                            {errorMessage && <span className={styles.error}>{errorMessage}</span>}
+                        </div>
+                    </div>
+
                 </div>
+                <div className={styles.infoItem}>
+                    <p><strong>Інформація про породу:</strong> {sheepDetails.breedInfo}</p>
+                </div>
+            </div>
             ) : (
-                <></>
+                <p>404 NotFound</p>
             )}
         </div>
     )

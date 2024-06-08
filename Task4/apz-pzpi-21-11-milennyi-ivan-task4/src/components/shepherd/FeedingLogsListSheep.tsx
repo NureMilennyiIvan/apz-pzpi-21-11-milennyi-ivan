@@ -24,30 +24,21 @@ export const FeedingLogsListSheep: React.FC<IFeedingLogsListSheep> =({sheepId}) 
         fetchFeedSupplies();
     }, []);
     return (
-        <div>
+        <div className={styles.list}>
             {feedingLogsVMList.length > 0 ? (feedingLogsVMList.map((feedingLog) => (
-                <div key={feedingLog.id} className={styles.container}>
-                    <div>
-                        <h4>{feedingLog.id}</h4>
+                <div key={feedingLog.id} className={styles.card}>
+                    <div className={styles.cardHeader}>
+                        <h2 className={styles.logId}>Запис #{feedingLog.id}</h2>
                     </div>
-                    <div>
-                        <h4>{feedingLog.date}</h4>
-                    </div>
-                    <div>
-                        <h4>{feedingLog.amount}</h4>
-                    </div>
-                    <div>
-                        <h4>{feedingLog.sheepId}</h4>
-                    </div>
-                    <div>
-                        <h4>{feedingLog.shepherdName}</h4>
-                    </div>
-                    <div>
-                        <h4>{feedingLog.shepherdSurname}</h4>
+                    <div className={styles.cardBody}>
+                            <p><strong>Вівця:</strong> #{feedingLog.sheepId}</p>
+                            <p><strong>Виконавець:</strong> {feedingLog.shepherdName !== null ? `${feedingLog.shepherdName} ${feedingLog.shepherdSurname}` : 'Немає даних'}</p>
+                            <p><strong>Витрачено корму:</strong> {feedingLog.amount} кг</p>
+                            <p><strong>Дата:</strong> {feedingLog.date}</p>
                     </div>
                 </div>
             ))) : (
-                <p></p>
+                <p>Немає інформації про записи годувань</p>
             )}
         </div>
     )

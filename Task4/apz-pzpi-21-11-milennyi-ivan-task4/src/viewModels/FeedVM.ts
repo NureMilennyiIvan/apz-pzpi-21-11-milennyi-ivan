@@ -6,10 +6,10 @@ export class FeedVM {
     fat: number;
     protein: number;
     carbohydrates: number;
-    breedName: string;
+    breedName: string | null;
     sheepCount: number;
 
-    constructor(id: number, amount: number, name: string, calories: number, fat: number, protein: number, carbohydrates: number, breedName: string, sheepCount: number) {
+    constructor(id: number, amount: number, name: string, calories: number, fat: number, protein: number, carbohydrates: number, breedName: string | null, sheepCount: number) {
         this.id = id;
         this.amount = amount / 1000;
         this.name = name;

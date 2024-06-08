@@ -24,30 +24,21 @@ export const ShearingLogsList: React.FC<IShearingLogsList> =({sheepId}) =>{
         fetchFeedSupplies();
     }, []);
     return (
-        <div>
+        <div className={styles.list}>
             {shearingLogsVMList.length > 0 ? (shearingLogsVMList.map((shearingLog) => (
-                <div key={shearingLog.id} className={styles.container}>
-                    <div>
-                        <h4>{shearingLog.id}</h4>
+                <div key={shearingLog.id} className={styles.card}>
+                    <div className={styles.cardHeader}>
+                        <h2 className={styles.logId}>Запис #{shearingLog.id}</h2>
                     </div>
-                    <div>
-                        <h4>{shearingLog.date}</h4>
-                    </div>
-                    <div>
-                        <h4>{shearingLog.woolAmount}</h4>
-                    </div>
-                    <div>
-                        <h4>{shearingLog.sheepId}</h4>
-                    </div>
-                    <div>
-                        <h4>{shearingLog.shepherdName}</h4>
-                    </div>
-                    <div>
-                        <h4>{shearingLog.shepherdSurname}</h4>
+                    <div className={styles.cardBody}>
+                            <p><strong>Вівця:</strong> #{shearingLog.sheepId}</p>
+                            <p><strong>Виконавець:</strong> {shearingLog.shepherdName !== null ? `${shearingLog.shepherdName} ${shearingLog.shepherdSurname}` : 'Немає даних'}</p>
+                            <p><strong>Отримано шерсті:</strong> {shearingLog.woolAmount} кг</p>
+                            <p><strong>Дата:</strong> {shearingLog.date}</p>
                     </div>
                 </div>
             ))) : (
-                <p></p>
+                <p>Немає інформації про записи стрижок</p>
             )}
         </div>
     )

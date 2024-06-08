@@ -26,27 +26,20 @@ export const FeedSuppliesList: React.FC<IFeedSuppliesList> =({feedId}) =>{
         fetchFeedSupplies();
     }, []);
     return (
-        <div>
+        <div className={styles.list}>
             {feedSuppliesVMList.length > 0 ? (feedSuppliesVMList.map((feedSupply) => (
-                <div key={feedSupply.id} className={styles.container}>
-                    <div>
-                        <h4>{feedSupply.id}</h4>
+                <div key={feedSupply.id} className={styles.card}>
+                    <div className={styles.cardHeader}>
+                        <h2 className={styles.supplyId}>Постачання #{feedSupply.id}</h2>
                     </div>
-                    <div>
-                        <h4>{feedSupply.date}</h4>
-                    </div>
-                    <div>
-                        <h4>{feedSupply.amount}</h4>
-                    </div>
-                    <div>
-                        <h4>{feedSupply.storekeeperName}</h4>
-                    </div>
-                    <div>
-                        <h4>{feedSupply.storekeeperSurname}</h4>
+                    <div className={styles.cardBody}>
+                            <p><strong>Виконавець:</strong> {feedSupply.storekeeperName !== null ? `${feedSupply.storekeeperName} ${feedSupply.storekeeperSurname}` : 'Немає даних'}</p>
+                            <p><strong>Додано корму:</strong> {feedSupply.amount} кг</p>
+                            <p><strong>Дата:</strong> {feedSupply.date}</p>
                     </div>
                 </div>
             ))) : (
-                <p></p>
+                <p>Немає інформації про постачання</p>
             )}
         </div>
     )

@@ -29,27 +29,23 @@ export const SheepList: React.FC<ISheepList> = ({id}) => {
     }, []);
     
     return (
-        <div>
-            {sheepVMList.length > 0 ? (sheepVMList.map((sheep) => (
-                <div key={sheep.id} className={styles.container} onClick={() => navigate("sheep/" + sheep.id)}>
-                    <div>
-                        <h4>{sheep.id}</h4>
+        <div className={styles.list}>
+            {sheepVMList.length > 0 ? (
+                sheepVMList.map((sheep) => (
+                    <div key={sheep.id} className={styles.card} onClick={() => navigate("sheep/" + sheep.id)}>
+                        <div className={styles.cardHeader}>
+                            <h2 className={styles.sheepId}>Вівця #{sheep.id}</h2>
+                        </div>
+                        <div className={styles.cardBody}>
+                            <p><strong>Порода:</strong> {sheep.breed}</p>
+                            <p><strong>Стать:</strong> {sheep.sex ? 'Самець' : 'Самка'}</p>
+                            <p><strong>Останнє годування:</strong> {sheep.lastFeedingDate}</p>
+                            <p><strong>Останнє стрижка:</strong> {sheep.lastShearingDate}</p>
+                        </div>
                     </div>
-                    <div>
-                        <h4>{sheep.breed}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheep.sex}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheep.lastFeedingDate}</h4>
-                    </div>
-                    <div>
-                        <h4>{sheep.lastFeedingDate}</h4>
-                    </div>
-                </div>
-            ))) : (
-                <p></p>
+                ))
+            ) : (
+                <p>Немає даних про овець</p>
             )}
         </div>
     );

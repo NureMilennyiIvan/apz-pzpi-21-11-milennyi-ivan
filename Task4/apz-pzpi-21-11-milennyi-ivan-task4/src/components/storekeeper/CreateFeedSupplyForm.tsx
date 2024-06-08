@@ -19,7 +19,7 @@ export const CreateFeedSupplyForm: React.FC<IUserProps> = ({user}) => {
 
     const createFeedSupply = async () => {
         if (amount.length == 0 || !(/^(0|[1-9]\d*)$/.test(amount))) {
-            setErrorAmount(t(""));
+            setErrorAmount("gjhgj");
             return;
         }
         setErrorAmount('');
@@ -37,9 +37,13 @@ export const CreateFeedSupplyForm: React.FC<IUserProps> = ({user}) => {
         <div className={styles.container}>
             <div className={styles.form}>
                 <div>
-                    <label className={styles.label}>{t("createFeedSupplyForm.amountLabel")}</label>
+                    <div className={styles.label}>
+                        <label >{t("createFeedSupplyForm.amountLabel")}</label>
+                    </div>
                     <input className={styles.input} type="text" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter amount" />
-                    {errorAmount && <span className={styles.error}>{errorAmount}</span>}
+                    <div className={styles.error}>
+                        {errorAmount && <span>{errorAmount}</span>}
+                    </div>
                 </div>
                 <div>
                     <button className={styles.button} onClick={createFeedSupply}>{t("createFeedSupplyForm.submitButton")}</button>
