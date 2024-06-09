@@ -33,11 +33,11 @@ export const FeedPage: React.FC<IUserProps> = ({user}) =>{
         <div className={styles.container}>
             <div className={styles.buttonPanel}>
                     <button className={styles.button} style={{ backgroundColor: selectedButton === 1 ? 'rgb(238, 238, 238)' : 'white' }} onClick={() => handleButtonClick(1)}>
-                        <h4 >Supplies</h4> 
+                        <h4 >{t("feedPage.suppliesHeader")}</h4> 
                     </button>
 
                     <button className={styles.button} style={{ backgroundColor: selectedButton === 2 ? 'rgb(238, 238, 238)' : 'white' }} onClick={() => handleButtonClick(2)}>
-                        <h4 >Consumptions</h4> 
+                        <h4 >{t("feedPage.consumptionsHeader")}</h4> 
                     </button>
             </div>
             <div className={styles.content}>

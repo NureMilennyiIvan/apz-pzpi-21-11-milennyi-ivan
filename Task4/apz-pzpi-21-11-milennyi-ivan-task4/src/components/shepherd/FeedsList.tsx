@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { FeedService } from "../../api/services/FeedService";
 import { FeedVM } from "../../viewModels/FeedVM";
 import styles from '../../assets/css/FeedsList.module.css';
+import { useTranslation } from "react-i18next";
 
 export const FeedsList = () => {
     const feedService = new FeedService();
     const [feedsVMList, setFeedsVMList] = useState<FeedVM[]>([]);
+    const {t} = useTranslation();
     
     useEffect(() => {
         const fetchFeeds = async () => {
@@ -29,22 +31,18 @@ export const FeedsList = () => {
                             <h2 className={styles.feedName}>{feed.name}</h2>
                         </div>
                         <div className={styles.cardBody}>
-                            <p><strong>Кількість:</strong> {feed.amount} кг</p>
-                            <p><strong>Калорії:</strong> {feed.calories} ккал</p>
-                            <p><strong>Жири:</strong> {feed.fat} г</p>
-                            <p><strong>Білки:</strong> {feed.protein} г</p>
-                            <p><strong>Вуглеводи:</strong> {feed.carbohydrates} г</p>
-                            {feed.breedName ? (
-                                <p><strong>Порода:</strong> {feed.breedName}</p>
-                            ) : (
-                                <p><strong>Порода:</strong> Не призначена</p>
-                            )}
-                            <p><strong>Кількість овець:</strong> {feed.sheepCount}</p>
+                            <p><strong>{t("feedsList.amountHeader")}:</strong> {feed.amount} {t("feedsList.amountUnitsHeader")}</p>
+                            <p><strong>{t("feedsList.caloriesHeader")}:</strong> {feed.calories} {t("feedsList.caloriesUnitsHeader")}</p>
+                            <p><strong>{t("feedsList.fatsHeader")}:</strong> {feed.fat} г</p>
+                            <p><strong>{t("feedsList.proteinsHeader")}:</strong> {feed.protein} г</p>
+                            <p><strong>{t("feedsList.carbohydratesHeader")}:</strong> {feed.carbohydrates} г</p>
+                            <p><strong>{t("feedsList.breedHeader")}:</strong> {feed.breedName ? feed.breedName : `${t('feedsList.notAssignedHeader')}` }</p>
+                            <p><strong>{t("feedsList.sheepCountHeader")}:</strong> {feed.sheepCount}</p>
                         </div>
                     </div>
                 ))
             ) : (
-                <p>Немає даних про корми</p>
+                <p>{t("feedsList.notFoundHeader")}</p>
             )}
         </div>
     );

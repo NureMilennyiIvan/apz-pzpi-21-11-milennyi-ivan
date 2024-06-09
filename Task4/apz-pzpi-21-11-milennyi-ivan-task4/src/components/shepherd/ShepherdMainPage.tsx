@@ -32,13 +32,13 @@ export const ShepherdMainPage: React.FC<IUserProps> = ({user}) => {
         <div className={styles.container}>
             <div className={styles.buttonPanel}>
                 <button className={styles.button} style={{ backgroundColor: selectedButton === 1 ? 'rgb(238, 238, 238)' : 'white' }} onClick={() => handleButtonClick(1)}>
-                    <h4>Sheep</h4> 
+                    <h4>{t("shepherdMainPage.sheepButtonText")}</h4> 
                 </button>
                 <button className={styles.button} style={{ backgroundColor: selectedButton === 2 ? 'rgb(238, 238, 238)' : 'white' }} onClick={() => handleButtonClick(2)}>
-                    <h4>Breeds</h4> 
+                    <h4>{t("shepherdMainPage.breedsButtonText")}</h4> 
                 </button>
                 <button className={styles.button} style={{ backgroundColor: selectedButton === 3 ? 'rgb(238, 238, 238)' : 'white' }} onClick={() => handleButtonClick(3)}>
-                    <h4>Feeds</h4> 
+                    <h4>{t("shepherdMainPage.feedsButtonText")}</h4> 
                 </button>
             </div>
             <div className={styles.content}>

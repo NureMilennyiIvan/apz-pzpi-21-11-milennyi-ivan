@@ -22,7 +22,7 @@ const Router = () => {
    useEffect(() => {
        const result = getAuthUserFromLocalStorage("user");
        if (result.Id != null && user.Id == null){
-           setUser(new AuthUser(result.Id, result.Role));
+          setUser(new AuthUser(result.Id, result.Role));
        }
    }, [user])
 

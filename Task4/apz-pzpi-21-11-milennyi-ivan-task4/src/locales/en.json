@@ -15,5 +15,123 @@
         "errorPasswordHeader": "Provide password",
         "usernamePlaceholder": "Enter username",
         "passwordPlaceholder": "Enter password"
+    },
+    "shepherdMainPage":{
+      "sheepButtonText": "Sheep",
+      "breedsButtonText": "Breeds",
+      "feedsButtonText": "Feeds"
+    },
+    "sheepList":{
+      "sheepHeader": "Sheep",
+      "breedHeader": "Breed",
+      "sexHeader": "Sex",
+      "femaleText": "Female",
+      "maleText": "Male",
+      "lastFeedingDateHeader": "Last feeding date",
+      "lastShearingDateHeader": "Last shearing date",
+      "notFoundHeader": "There is no information about sheep"
+    },
+    "breedsList":{
+      "feedHeader": "Feed",
+      "sheepCountHeader": "Number of sheep",
+      "infoHeader": "Information",
+      "notFoundHeader": "There is no information about breeds"
+    },
+    "feedsList":{
+      "amountHeader": "Amount",
+      "amountUnitsHeader": "kg",
+      "caloriesHeader": "Calories",
+      "caloriesUnitsHeader": "kcal",
+      "fatsHeader": "Fats",
+      "proteinsHeader": "Proteins",
+      "carbohydratesHeader": "Carbohydrates",
+      "breedHeader": "Breed",
+      "notAssignedHeader": "Not assigned",
+      "sheepCountHeader": "Number of sheep",
+      "notFoundHeader": "There is no information about feeds"
+    },
+    "sheepMainPage": {
+      "sheepDetailsHeader": "Sheep details",
+      "feedingLogsHeader": "Feeding logs",
+      "shearingLogsHeader": "Shearing logs"
+    },
+    "sheepDetailsList":{
+      "sheepHeader": "Sheep",
+      "breedHeader": "Breed",
+      "ageHeader": "Age",
+      "ageUnitsHeader": "days",
+      "sexHeader": "Sex",
+      "femaleText": "Female",
+      "maleText": "Male",
+      "temperatureHeader": "Temperature",
+      "noDataHeader": "No data",
+      "temperatureStatusHeader1": "The temperature is normal",
+      "temperatureStatusHeader2": "The temperature is abnormal",
+      "temperatureStatusHeader3": "There is no temperature scanner",
+      "weightHeader": "Weight",
+      "weightUnitsHeader": "kg",
+      "feedHeader": "Feed",
+      "availableFeedHeader": "Available feed",
+      "requiredFeedHeader": "Required amount of feed",
+      "lastFeedingHeader": "Last feeding",
+      "feedButtonText": "Mark feeding",
+      "feedingStatusHeader1": "Not enough feed",
+      "feedingStatusHeader2": "Feeding is not required",
+      "lastShearingHeader": "Last shearing",
+      "shearingInputPlaceholder": "Enter the amount of wool sheared (kg)",
+      "shearButtonText": "Mark shearing",
+      "shearingStatusHeader": "Shearing is not required",
+      "serverErrorHeader": "Something went wrong. Try again",
+      "shearingErrorHeader": "Amount must be number and more than 0",
+      "breedInfoHeader": "Information about breed",
+      "notFoundHeader": "There is no information about sheep"
+    },
+    "feedingLogsList": {
+      "logHeader": "Log",
+      "sheepHeader": "Sheep",
+      "performerHeader": "Performer",
+      "noDataHeader": "No data",
+      "feedAmountHeader": "Consumed feed",
+      "feedAmountUnitsHeader": "kg",
+      "dateHeader": "Date",
+      "notFoundHeader": "There is no information about feeding logs"
+    },
+    "shearingLogsList": {
+      "logHeader": "Log",
+      "sheepHeader": "Sheep",
+      "performerHeader": "Performer",
+      "noDataHeader": "No data",
+      "feedAmountHeader": "Received wool",
+      "feedAmountUnitsHeader": "kg",
+      "dateHeader": "Date",
+      "notFoundHeader": "There is no information about shearing logs"
+    },
+    "storekeeperMainPage":{
+      "feedBreedHeader": "Breed",
+      "feedAmountHeader": "Amount",
+      "feedAmountUnitsHeader": "kg",
+      "feedSheepCountHeader": "Number of sheep",
+      "feedAddSupplyButtonText": "Add supply",
+      "notFoundHeader": "There is no information about feeds"
+    },
+    "feedPage":{
+      "suppliesHeader": "Supplies",
+      "consumptionsHeader": "Consumptions"
+    },
+    "feedSuppliesList": {
+      "supplyHeader": "Supply",
+      "performerHeader": "Performer",
+      "noDataHeader": "No data",
+      "feedAmountHeader": "Received feed",
+      "feedAmountUnitsHeader": "kg",
+      "dateHeader": "Date",
+      "notFoundHeader": "There is no information about feed supplies"
+    },
+    "createFeedSupplyForm":{
+      "supplyAmountLabel": "Feed amount in supply",
+      "supplyButtonText": "Mark supply",
+      "inputPlaceholder": "Enter the amount of recieved feed (kg)",
+      "inputErrorHeader": "Amount must be number and more than 0",
+      "serverErrorHeader": "Something went wrong. Try again"
     }
 }

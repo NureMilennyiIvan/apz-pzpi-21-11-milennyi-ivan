@@ -35,15 +35,15 @@ export const StorekeeperMainPage: React.FC<IUserProps> = () =>{
                         <h2 className={styles.feedName}>{feed.name}</h2>
                     </div>
                     <div className={styles.cardBody}>
-                        <p><strong>Порода:</strong> {feed.breedName}</p>
-                        <p><strong>Кількість:</strong> {feed.amount}</p>
-                        <p><strong>Кількість овець:</strong> {feed.sheepCount}</p>
+                        <p><strong>{t("storekeeperMainPage.feedBreedHeader")}:</strong> {feed.breedName}</p>
+                        <p><strong>{t("storekeeperMainPage.feedAmountHeader")}:</strong> {feed.amount} {t("storekeeperMainPage.feedAmountUnitsHeader")}</p>
+                        <p><strong>{t("storekeeperMainPage.feedSheepCountHeader")}:</strong> {feed.sheepCount}</p>
                     </div>
-                    <button className={styles.button} onClick={(e) => { e.stopPropagation(); navigate("create/feed-supply/" + feed.id)}}>Додати корм</button>
+                    <button className={styles.button} onClick={(e) => { e.stopPropagation(); navigate("create/feed-supply/" + feed.id)}}>{t("storekeeperMainPage.feedAddSupplyButtonText")}</button>
                 </div>
             </div>
           )))  : (
-            <p>Немає даних про корм</p>
+            <p>{t("storekeeperMainPage.notFoundHeader")}</p>
         )}
         </div>
         </div> 

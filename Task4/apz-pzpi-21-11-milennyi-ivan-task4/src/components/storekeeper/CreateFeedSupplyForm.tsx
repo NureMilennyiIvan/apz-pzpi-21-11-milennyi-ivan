@@ -19,7 +19,7 @@ export const CreateFeedSupplyForm: React.FC<IUserProps> = ({user}) => {
 
     const createFeedSupply = async () => {
         if (amount.length == 0 || !(/^(0|[1-9]\d*)$/.test(amount))) {
-            setErrorAmount("gjhgj");
+            setErrorAmount("inputErrorHeader");
             return;
         }
         setErrorAmount('');
@@ -29,7 +29,7 @@ export const CreateFeedSupplyForm: React.FC<IUserProps> = ({user}) => {
             navigate(-1);
         } catch (error) {
             console.log(error);
-            setErrorAmount(t(""));
+            setErrorAmount("serverErrorHeader");
         }
     };
 
@@ -38,15 +38,15 @@ export const CreateFeedSupplyForm: React.FC<IUserProps> = ({user}) => {
             <div className={styles.form}>
                 <div>
                     <div className={styles.label}>
-                        <label >{t("createFeedSupplyForm.amountLabel")}</label>
+                        <label >{t("createFeedSupplyForm.supplyAmountLabel")}</label>
                     </div>
-                    <input className={styles.input} type="text" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Enter amount" />
+                    <input className={styles.input} type="text" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={t("createFeedSupplyForm.inputPlaceholder")} />
                     <div className={styles.error}>
-                        {errorAmount && <span>{errorAmount}</span>}
+                        {errorAmount && <span>{t(errorAmount)}</span>}
                     </div>
                 </div>
                 <div>
-                    <button className={styles.button} onClick={createFeedSupply}>{t("createFeedSupplyForm.submitButton")}</button>
+                    <button className={styles.button} onClick={createFeedSupply}>{t("createFeedSupplyForm.supplyButtonText")}</button>
                 </div>
             </div>
         </div>

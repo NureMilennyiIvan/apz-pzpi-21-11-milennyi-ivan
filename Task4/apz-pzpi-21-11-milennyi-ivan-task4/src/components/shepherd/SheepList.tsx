@@ -34,18 +34,18 @@ export const SheepList: React.FC<ISheepList> = ({id}) => {
                 sheepVMList.map((sheep) => (
                     <div key={sheep.id} className={styles.card} onClick={() => navigate("sheep/" + sheep.id)}>
                         <div className={styles.cardHeader}>
-                            <h2 className={styles.sheepId}>Вівця #{sheep.id}</h2>
+                            <h2 className={styles.sheepId}>{t("sheepList.sheepHeader")} #{sheep.id}</h2>
                         </div>
                         <div className={styles.cardBody}>
-                            <p><strong>Порода:</strong> {sheep.breed}</p>
-                            <p><strong>Стать:</strong> {sheep.sex ? 'Самець' : 'Самка'}</p>
-                            <p><strong>Останнє годування:</strong> {sheep.lastFeedingDate}</p>
-                            <p><strong>Останнє стрижка:</strong> {sheep.lastShearingDate}</p>
+                            <p><strong>{t("sheepList.breedHeader")}:</strong> {sheep.breed}</p>
+                            <p><strong>{t("sheepList.sexHeader")}:</strong> {t(sheep.sex ? 'sheepList.maleText' : 'sheepList.femaleText')}</p>
+                            <p><strong>{t("sheepList.lastFeedingDateHeader")}:</strong> {sheep.lastFeedingDate}</p>
+                            <p><strong>{t("sheepList.lastShearingDateHeader")}:</strong> {sheep.lastShearingDate}</p>
                         </div>
                     </div>
                 ))
             ) : (
-                <p>Немає даних про овець</p>
+                <p>{t("sheepList.notFoundHeader")}</p>
             )}
         </div>
     );
