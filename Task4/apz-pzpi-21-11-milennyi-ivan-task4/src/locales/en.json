@@ -133,5 +133,88 @@
       "inputPlaceholder": "Enter the amount of recieved feed (kg)",
       "inputErrorHeader": "Amount must be number and more than 0",
       "serverErrorHeader": "Something went wrong. Try again"
+    },
+    "adminMainPage": {
+      "shepeherdsHeader": "Shepherds",
+      "storekeepersHeader": "Storekeepers",
+      "sheepHeader": "Sheep",
+      "temperatureScannersHeader": "Temperature scanners",
+      "breedsHeader": "Breeds",
+      "feedsHeader": "Feeds",
+      "feedingLogsHeader": "Feeding logs",
+      "shearingLogsHeader": "Shearing logs",
+      "feedSuppliesHeader": "Feed supplies"
+    },
+    "gridBase":{
+      "addButtonText": "Add",
+      "editButtonText": "Edit",
+      "deleteButtonText": "Delete",
+      "idHeader": "Id",
+      "chooseHeader": "Choosed"
+    },
+    "breedsGrid":{
+      "nameHeader": "Name",
+      "feedIdHeader": "Feed id",
+      "infoHeader": "Information",
+      "notFoundHeader": "There is no information about breeds"
+    },
+    "feedingLogsGrid":{
+      "amountHeader": "Amount",
+      "feedIdHeader": "Feed id",
+      "sheepIdHeader": "Sheep id",
+      "shepherdIdHeader": "Shepherd id",
+      "timestampHeader": "Timestamp",
+      "notFoundHeader": "There is no information about feeding logs"
+    },
+    "feedsGrid":{
+      "nameHeader": "Name",
+      "amountHeader": "Amount",
+      "caloriesHeader": "Calories",
+      "proteinHeader": "Protein",
+      "carbohydratesHeader": "Carbohydrates",
+      "fatHeader": "Fat",
+      "notFoundHeader": "There is no information about feeds"
+    },
+    "feedSuppliesGrid":{
+      "amountHeader": "Amount",
+      "feedIdHeader": "Feed id",
+      "storekeeperIdHeader": "Storekeeper id",
+      "timestampHeader": "Timestamp",
+      "notFoundHeader": "There is no information about feed supplies"
+    },
+    "shearingLogsGrid":{
+      "woolAmountHeader": "Wool amount",
+      "sheepIdHeader": "Sheep id",
+      "shepherdIdHeader": "Shepherd id",
+      "timestampHeader": "Timestamp",
+      "notFoundHeader": "There is no information about shearing logs"
+    },
+    "sheepGrid":{
+      "breedIdHeader": "Breed id",
+      "shepherdIdHeader": "Shepherd id",
+      "sexHeader": "Sex",
+      "birthDateHeader": "Birth date",
+      "weightHeader": "Weight",
+      "temperatureScannerIdHeader": "Temperature scanner id",
+      "notFoundHeader": "There is no information about sheep"
+    },
+    "shepherdsGrid":{
+      "usernameHeader": "Username",
+      "passwordHeader": "Password",
+      "nameHeader": "Name",
+      "surnameHeader": "Surname",
+      "notFoundHeader": "There is no information about shepherds"
+    },
+    "storkeepersGrid":{
+      "usernameHeader": "Username",
+      "passwordHeader": "Password",
+      "nameHeader": "Name",
+      "surnameHeader": "Surname",
+      "notFoundHeader": "There is no information about storkeepers"
+    },
+    "temeperatureScannersGrid":{
+      "passwordHeader": "Password",
+      "temperatureHeader": "Temperature",
+      "notFoundHeader": "There is no information about temperature scanners"
     }
 }

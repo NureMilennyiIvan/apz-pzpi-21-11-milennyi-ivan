@@ -23,7 +23,7 @@ const App: React.FC<IUserProps> = ({user, setUser}) => {
           <StorekeeperMainPage user={user} setUser={setUser}/>
         )}
         {user.Role === UserRole.Admin && (  
-          <AdminMainPage user={user} setUser={setUser}/>
+          <AdminMainPage/>
         )}        
       </div>
   )
