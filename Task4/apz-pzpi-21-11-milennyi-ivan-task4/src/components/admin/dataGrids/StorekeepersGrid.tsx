@@ -30,8 +30,12 @@ export const StorekeepersGrid = () =>{
     const handleRowSelection = (storekeeper: Storekeeper) => {
         setSelectedStorekeeper(storekeeper);
     };
+    
+    const createStorekeeper = () => {
+        navigate("/storekeeper/create");
+    }
     const editStorekeeper = (id: number) => {
-        //navigate("edit/city/" + (selectedCity?.Id as number));
+        navigate("/storekeeper/edit/" + id);
     }
     const deleteStorekeeper = async (id: number) => {
         try{
@@ -84,12 +88,12 @@ export const StorekeepersGrid = () =>{
                 </tbody>
             </table>
             <div className={styles.actionButtonsContainer}>
-                <button className={styles.actionButton} onClick={() => navigate("/shepherd/create")}>
+                <button className={styles.actionButton} onClick={() => createStorekeeper()}>
                     {t("gridBase.addButtonText")}
                 </button>
                 <button 
                     className={`${styles.actionButton} ${selectedStorekeeper?.id ? '' : styles.disabledButton}`}
-                    onClick={() => selectedStorekeeper ? editStorekeeper : undefined}
+                    onClick={() => selectedStorekeeper ? editStorekeeper(selectedStorekeeper.id!) : undefined}
                     style={{ cursor: selectedStorekeeper ? 'pointer' : 'default' }}>
                     {t("gridBase.editButtonText")}
                 </button>

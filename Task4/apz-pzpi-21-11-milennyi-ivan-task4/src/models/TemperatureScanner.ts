@@ -5,7 +5,7 @@ export class TemperatureScanner {
 
     constructor(id: number | null, temperature: number, password: string) {
         this.id = id;
-        this.temperature = temperature / 10;
+        this.temperature = temperature;
         this.password = password;
     }
 }

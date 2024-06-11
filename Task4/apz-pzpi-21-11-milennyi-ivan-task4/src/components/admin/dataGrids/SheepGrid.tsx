@@ -30,8 +30,11 @@ export const SheepGrid = () =>{
     const handleRowSelection = (sheep: Sheep) => {
         setSelectedSheep(sheep);
     };
+    const createSheep = () => {
+        navigate("/sheep/create")
+    };
     const editSheep = (id: number) => {
-        //navigate("edit/city/" + (selectedCity?.Id as number));
+        navigate("/sheep/edit/" + id);
     }
     const deleteSheep = async (id: number) => {
         try{
@@ -88,12 +91,12 @@ export const SheepGrid = () =>{
                 </tbody>
             </table>
             <div className={styles.actionButtonsContainer}>
-                <button className={styles.actionButton} onClick={() => navigate("/shepherd/create")}>
+                <button className={styles.actionButton} onClick={() => createSheep()}>
                     {t("gridBase.addButtonText")}
                 </button>
                 <button 
                     className={`${styles.actionButton} ${selectedSheep?.id ? '' : styles.disabledButton}`}
-                    onClick={() => selectedSheep ? editSheep : undefined}
+                    onClick={() => selectedSheep ? editSheep(selectedSheep.id!) : undefined}
                     style={{ cursor: selectedSheep ? 'pointer' : 'default' }}>
                     {t("gridBase.editButtonText")}
                 </button>

@@ -30,8 +30,11 @@ export const ShepehrdsGrid = () =>{
     const handleRowSelection = (shepherd: Shepherd) => {
       setSelectedShepherd(shepherd);
     };
+    const createShepherd = () => {
+        navigate("/shepherd/create");
+    }
     const editShepherd = (id: number) => {
-        //navigate("edit/city/" + (selectedCity?.Id as number));
+        navigate("/shepherd/edit/" + id);
     }
     const deleteShepherd = async (id: number) => {
         try{
@@ -84,12 +87,12 @@ export const ShepehrdsGrid = () =>{
                 </tbody>
             </table>
             <div className={styles.actionButtonsContainer}>
-                <button className={styles.actionButton} onClick={() => navigate("/shepherd/create")}>
+                <button className={styles.actionButton} onClick={() => createShepherd()}>
                     {t("gridBase.addButtonText")}
                 </button>
                 <button 
                     className={`${styles.actionButton} ${selectedShepherd?.id ? '' : styles.disabledButton}`}
-                    onClick={() => selectedShepherd ? editShepherd : undefined}
+                    onClick={() => selectedShepherd ? editShepherd(selectedShepherd.id!) : undefined}
                     style={{ cursor: selectedShepherd ? 'pointer' : 'default' }}>
                     {t("gridBase.editButtonText")}
                 </button>

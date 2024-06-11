@@ -30,8 +30,11 @@ export const TemperatureScannersGrid = () =>{
     const handleRowSelection = (temperatureScanner: TemperatureScanner) => {
         setSelectedTemperatureScanner(temperatureScanner);
     };
+    const createTemperatureScanner = () => {
+        navigate("/temperature-scanner/create");
+    }
     const editTemperatureScanner = (id: number) => {
-        //navigate("edit/city/" + (selectedCity?.Id as number));
+        navigate("/temperature-scanner/edit/" + id);
     }
     const deleteTemperatureScanner = async (id: number) => {
         try{
@@ -80,12 +83,12 @@ export const TemperatureScannersGrid = () =>{
                 </tbody>
             </table>
             <div className={styles.actionButtonsContainer}>
-                <button className={styles.actionButton} onClick={() => navigate("/shepherd/create")}>
+                <button className={styles.actionButton} onClick={() => createTemperatureScanner()}>
                     {t("gridBase.addButtonText")}
                 </button>
                 <button 
                     className={`${styles.actionButton} ${selectedTemperatureScanner?.id ? '' : styles.disabledButton}`}
-                    onClick={() => selectedTemperatureScanner ? editTemperatureScanner : undefined}
+                    onClick={() => selectedTemperatureScanner ? editTemperatureScanner(selectedTemperatureScanner.id!) : undefined}
                     style={{ cursor: selectedTemperatureScanner ? 'pointer' : 'default' }}>
                     {t("gridBase.editButtonText")}
                 </button>

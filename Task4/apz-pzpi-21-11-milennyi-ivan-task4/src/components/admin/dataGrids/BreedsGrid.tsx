@@ -30,8 +30,11 @@ export const BreedsGrid = () =>{
     const handleRowSelection = (breed: Breed) => {
         setSelectedBreed(breed);
     };
+    const createBreed = () =>{
+        navigate("/breed/create");
+    }
     const editBreed = (id: number) => {
-        //navigate("edit/city/" + (selectedCity?.Id as number));
+        navigate("/breed/edit/" + id);
     }
     const deleteBreed = async (id: number) => {
         try{
@@ -82,12 +85,12 @@ export const BreedsGrid = () =>{
                 </tbody>
             </table>
             <div className={styles.actionButtonsContainer}>
-                <button className={styles.actionButton} onClick={() => navigate("/shepherd/create")}>
+                <button className={styles.actionButton} onClick={() => createBreed()}>
                     {t("gridBase.addButtonText")}
                 </button>
                 <button 
                     className={`${styles.actionButton} ${selectedBreed?.id ? '' : styles.disabledButton}`}
-                    onClick={() => selectedBreed ? editBreed : undefined}
+                    onClick={() => selectedBreed ? editBreed(selectedBreed.id!) : undefined}
                     style={{ cursor: selectedBreed ? 'pointer' : 'default' }}>
                     {t("cityGrid.editButtonText")}
                 </button>

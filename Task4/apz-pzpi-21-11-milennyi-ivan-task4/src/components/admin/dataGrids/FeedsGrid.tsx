@@ -29,8 +29,11 @@ export const FeedsGrid = () =>{
     const handleRowSelection = (feed: Feed) => {
         setSelectedFeed(feed);
     };
+    const createFeed = () => {
+        navigate("/feed/create");
+    }
     const editFeed = (id: number) => {
-        //navigate("edit/city/" + (selectedCity?.Id as number));
+        navigate("/feed/edit/" + id);
     }
     const deleteFeed = async (id: number) => {
         try{
@@ -87,12 +90,12 @@ export const FeedsGrid = () =>{
                 </tbody>
             </table>
             <div className={styles.actionButtonsContainer}>
-                <button className={styles.actionButton} onClick={() => navigate("/shepherd/create")}>
+                <button className={styles.actionButton} onClick={() => createFeed()}>
                     {t("gridBase.addButtonText")}
                 </button>
                 <button 
                     className={`${styles.actionButton} ${selectedFeed?.id ? '' : styles.disabledButton}`}
-                    onClick={() => selectedFeed ? editFeed : undefined}
+                    onClick={() => selectedFeed ? editFeed(selectedFeed.id!) : undefined}
                     style={{ cursor: selectedFeed ? 'pointer' : 'default' }}>
                     {t("gridBase.editButtonText")}
                 </button>

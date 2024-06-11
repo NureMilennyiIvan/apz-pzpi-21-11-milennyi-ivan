@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ShepehrdsGrid } from "./dataGrids/ShepherdsGrid";
 import { StorekeepersGrid } from "./dataGrids/StorekeepersGrid";
 import { SheepGrid } from "./dataGrids/SheepGrid";
-import { TemperatureScannersGrid } from "./dataGrids/TemepratureScanners";
+import { TemperatureScannersGrid } from "./dataGrids/TemepratureScannersGrid";
 import { BreedsGrid } from "./dataGrids/BreedsGrid";
 import { FeedsGrid } from "./dataGrids/FeedsGrid";
 import { FeedingLogsGrid } from "./dataGrids/FeedingLogsGrid";

@@ -59,7 +59,7 @@ export const useEffectUser = (dependency: AuthUser, navigate: NavigateFunction) 
     }, [dependency])
 };
 
-export const handleElementChange = (e: React.ChangeEvent<HTMLInputElement>, setChanges: (value: React.SetStateAction<any>) => void) => {
+export const handleElementChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLTextAreaElement>, setChanges: (value: React.SetStateAction<any>) => void) => {
    setChanges(e.target.value);
 };
 

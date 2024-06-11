@@ -9,6 +9,7 @@ import App from './App'
 import { FeedPage } from './components/storekeeper/FeedPage'
 import { SheepMainPage } from './components/shepherd/SheepMainPage'
 import { CreateFeedSupplyForm } from './components/storekeeper/CreateFeedSupplyForm'
+import { AdminBaseForm } from './components/admin/AdminBaseForm'
 
 const Router = () => {
    //const [user, setUser] = useState<AuthUser>(new AuthUser(1, UserRole.Shepherd));
@@ -50,7 +51,21 @@ const Router = () => {
             <Route element={<SheepMainPage user={user} setUser={setUser}/>} path="/sheep/:sheepId"></Route>
             <Route element={<FeedPage user={user} setUser={setUser}/>} path="/feed/:feedId"></Route>
             <Route element={<CreateFeedSupplyForm user={user} setUser={setUser}/>} path="/create/feed-supply/:feedId"></Route>
+
+            <Route path="/shepherd/create" element={<AdminBaseForm user={user} setUser={setUser} entityType="Shepherd" />} />
+            <Route path="/shepherd/edit/:entityId" element={<AdminBaseForm user={user} setUser={setUser} entityType="Shepherd" />} />
+            <Route path="/storekeeper/create" element={<AdminBaseForm user={user} setUser={setUser} entityType="Storekeeper" />} />
+            <Route path="/storekeeper/edit/:entityId" element={<AdminBaseForm user={user} setUser={setUser} entityType="Storekeeper" />} />
+            <Route path="/sheep/create" element={<AdminBaseForm user={user} setUser={setUser} entityType="Sheep" />} />
+            <Route path="/sheep/edit/:entityId" element={<AdminBaseForm user={user} setUser={setUser} entityType="Sheep" />} />
+            <Route path="/feed/create" element={<AdminBaseForm user={user} setUser={setUser} entityType="Feed" />} />
+            <Route path="/feed/edit/:entityId" element={<AdminBaseForm user={user} setUser={setUser} entityType="Feed" />} />
+            <Route path="/breed/create" element={<AdminBaseForm user={user} setUser={setUser} entityType="Breed" />} />
+            <Route path="/breed/edit/:entityId" element={<AdminBaseForm user={user} setUser={setUser} entityType="Breed" />} />
+            <Route path="/temperature-scanner/create" element={<AdminBaseForm user={user} setUser={setUser} entityType="TemperatureScanner" />} />
+            <Route path="/temperature-scanner/edit/:entityId" element={<AdminBaseForm user={user} setUser={setUser} entityType="TemperatureScanner" />} />
             <Route element={<div>Not Found 404</div>} path="*"></Route>
+
           </Routes>
         </div>
 
