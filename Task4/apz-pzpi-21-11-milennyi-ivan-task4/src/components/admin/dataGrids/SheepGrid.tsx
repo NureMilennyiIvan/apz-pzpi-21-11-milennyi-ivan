@@ -33,6 +33,9 @@ export const SheepGrid = () =>{
     const createSheep = () => {
         navigate("/sheep/create")
     };
+    const reassignShepherd = (sheepId: number) =>{
+        navigate(`/sheep/reassign-shepherd/${sheepId}`)
+    }
     const editSheep = (id: number) => {
         navigate("/sheep/edit/" + id);
     }
@@ -99,6 +102,12 @@ export const SheepGrid = () =>{
                     onClick={() => selectedSheep ? editSheep(selectedSheep.id!) : undefined}
                     style={{ cursor: selectedSheep ? 'pointer' : 'default' }}>
                     {t("gridBase.editButtonText")}
+                </button>
+                <button 
+                    className={`${styles.actionButton} ${selectedSheep?.id ? '' : styles.disabledButton}`}
+                    onClick={() => selectedSheep ? reassignShepherd(selectedSheep.id!) : undefined}
+                    style={{ cursor: selectedSheep ? 'pointer' : 'default' }}>
+                    {t("sheepGrid.reassignShepherdButtonText")}
                 </button>
                 <button 
                     className={`${styles.actionButton} ${selectedSheep?.id ? '' : styles.disabledButton}`}

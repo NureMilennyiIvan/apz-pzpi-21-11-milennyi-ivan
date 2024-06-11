@@ -10,6 +10,7 @@ import { FeedPage } from './components/storekeeper/FeedPage'
 import { SheepMainPage } from './components/shepherd/SheepMainPage'
 import { CreateFeedSupplyForm } from './components/storekeeper/CreateFeedSupplyForm'
 import { AdminBaseForm } from './components/admin/AdminBaseForm'
+import { ReassignShepherdForm } from './components/admin/ReassignShepherdForm'
 
 const Router = () => {
    //const [user, setUser] = useState<AuthUser>(new AuthUser(1, UserRole.Shepherd));
@@ -58,6 +59,7 @@ const Router = () => {
             <Route path="/storekeeper/edit/:entityId" element={<AdminBaseForm user={user} setUser={setUser} entityType="Storekeeper" />} />
             <Route path="/sheep/create" element={<AdminBaseForm user={user} setUser={setUser} entityType="Sheep" />} />
             <Route path="/sheep/edit/:entityId" element={<AdminBaseForm user={user} setUser={setUser} entityType="Sheep" />} />
+            <Route path="/sheep/reassign-shepherd/:sheepId" element={<ReassignShepherdForm user={user} setUser={setUser}/>} />
             <Route path="/feed/create" element={<AdminBaseForm user={user} setUser={setUser} entityType="Feed" />} />
             <Route path="/feed/edit/:entityId" element={<AdminBaseForm user={user} setUser={setUser} entityType="Feed" />} />
             <Route path="/breed/create" element={<AdminBaseForm user={user} setUser={setUser} entityType="Breed" />} />

@@ -53,6 +53,7 @@ use crate::endpoints::*;
         shepherd_endpoints::shepherd_authorize,
         shepherd_endpoints::shepherd_get_all,
         shepherd_endpoints::shepherd_get_by_id,
+        shepherd_endpoints::shepherd_get_all_vms,
         storekeeper_endpoints::storekeeper_create,
         storekeeper_endpoints::storekeeper_update,
         storekeeper_endpoints::storekeeper_delete,

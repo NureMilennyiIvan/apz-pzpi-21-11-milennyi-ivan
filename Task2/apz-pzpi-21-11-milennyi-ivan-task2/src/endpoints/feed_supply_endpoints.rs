@@ -2,7 +2,7 @@ use std::sync::Arc;
 use actix_web::{delete, get, post, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
-use crate::db::services::{FeedingLogService, FeedSupplyService};
+use crate::db::services::FeedSupplyService;
 use crate::db::traits::{FeedSupplyManage, Service};
 use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
 use crate::json_structs::PathId;

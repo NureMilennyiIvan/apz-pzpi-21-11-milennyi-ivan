@@ -3,8 +3,8 @@ use actix_web::{delete, get, HttpResponse, post, put, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
-use crate::db::services::ShepherdService;
-use crate::db::traits::{AuthService, Service};
+use crate::db::services::{BreedService, ShepherdService};
+use crate::db::traits::{AuthService, Service, ShepherdManage};
 use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
 use crate::json_structs::{AuthorizeJson, PathId};
 use crate::models::Shepherd;
@@ -33,7 +33,17 @@ async fn shepherd_get_by_id(shepherd_service: Data<Arc<ShepherdService<Pool<MySq
     let result = shepherd_service.get_by_id(params.id).await;
     send_service_result(result)
 }
-
+#[utoipa::path(responses(
+    (status = 200, description = "Shepherd get all vms"),
+    (status = 400, description = "Validation error or bad request"),
+    (status = 500, description = "Internal server error")
+))]
+// Ендпойнт для отримання всіх ViewModel пастухів
+#[get("/shepherd-vms")]
+async fn shepherd_get_all_vms(shepherd_service: Data<Arc<ShepherdService<Pool<MySql>>>>) -> impl Responder {
+    let result = shepherd_service.get_all_vms().await;
+    send_service_result(result)
+}
 #[utoipa::path(responses(
     (status = 200, description = "Shepherd authorize"),
     (status = 400, description = "Validation error or bad request"),

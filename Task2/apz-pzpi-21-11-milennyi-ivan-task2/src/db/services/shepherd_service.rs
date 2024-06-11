@@ -154,4 +154,18 @@ impl AuthService<Pool<MySql>> for ShepherdService<Pool<MySql>> {
 #[async_trait]
 impl ShepherdManage<Pool<MySql>> for ShepherdService<Pool<MySql>>{
 
+    // Функція для отримання всіх ViewModel пастухів
+    async fn get_all_vms(&self) -> Result<Vec<Self::ViewModel>, Self::Error> {
+        query_as::<_, ShepherdVM>(
+            r#"
+            SELECT
+            s.id,
+            s.name,
+            s.surname
+            FROM Shepherds s
+            "#
+        )
+            .fetch_all(&*self.pool).await
+            .map_err(|error| ServiceError::DatabaseError(error))
+    }
 }

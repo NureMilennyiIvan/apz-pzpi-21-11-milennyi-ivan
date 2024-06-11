@@ -195,6 +195,7 @@
       "birthDateHeader": "Дата народження",
       "weightHeader": "Вага",
       "temperatureScannerIdHeader": "Id сканера температури",
+      "reassignShepherdButtonText": "Перепризначити вівчара",
       "notFoundHeader": "Інформація про овець відсутня"
   },
   "shepherdsGrid": {
@@ -263,5 +264,11 @@
     },
     "editButtonText": "Редагувати",
     "createButtonText": "Створити"
+  },
+  "reassignShepherdForm": {
+    "sheepHeader": "Вівця #",
+    "shepherdIdHeader": "Id вівчара",
+    "dontAssignOption": "Не призначати",
+    "assignTextButton": "Призначити"
   }
 }

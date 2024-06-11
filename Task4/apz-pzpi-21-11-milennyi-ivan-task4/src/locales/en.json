@@ -196,6 +196,7 @@
       "birthDateHeader": "Birth date",
       "weightHeader": "Weight",
       "temperatureScannerIdHeader": "Temperature scanner Id",
+      "reassignShepherdButtonText": "Reassign shepherd",
       "notFoundHeader": "There is no information about sheep"
     },
     "shepherdsGrid":{
@@ -264,5 +265,11 @@
       },
       "editButtonText": "Edit",
       "createButtonText": "Create"
+    },
+    "reassignShepherdForm": {
+      "sheepHeader": "Sheep #",
+      "shepherdIdHeader": "Shepherd Id",
+      "dontAssignOption": "Do not assign",
+      "assignTextButton": "Assign"
     }
 }

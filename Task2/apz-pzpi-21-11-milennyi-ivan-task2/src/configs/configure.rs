@@ -84,7 +84,8 @@ pub(crate) fn shepherd_configure(cfg: &mut ServiceConfig) {
         .service(shepherd_update)
         .service(shepherd_authorize)
         .service(shepherd_get_all)
-        .service(shepherd_get_by_id);
+        .service(shepherd_get_by_id)
+        .service(shepherd_get_all_vms);
 }
 
 // Конфігурація сервісів для комірників
