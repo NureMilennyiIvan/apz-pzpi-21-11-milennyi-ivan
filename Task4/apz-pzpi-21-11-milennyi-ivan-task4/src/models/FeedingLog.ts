@@ -10,7 +10,7 @@ export class FeedingLog {
         this.id = id;
         this.sheep_id = sheepId;
         this.shepherd_id = shepherdId;
-        this.timestamp = timestamp;
+        this.timestamp = Math.floor(timestamp / 1000);
         this.feed_id = feedId;
         this.amount = amount;
     }

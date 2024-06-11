@@ -132,6 +132,7 @@ impl FeedSupplyManage<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
             s.surname AS storekeeper_surname
             FROM FeedSupplies fs
             LEFT JOIN Storekeepers s ON fs.storekeeper_id = s.id
+            ORDER BY fs.timestamp DESC
             "#
         )
             .fetch_all(&*self.pool).await
@@ -150,6 +151,7 @@ impl FeedSupplyManage<Pool<MySql>> for FeedSupplyService<Pool<MySql>> {
             FROM FeedSupplies fs
             LEFT JOIN Storekeepers s ON fs.storekeeper_id = s.id
             WHERE fs.feed_id = ?
+            ORDER BY fs.timestamp DESC
             "#
         )
             .bind(id)

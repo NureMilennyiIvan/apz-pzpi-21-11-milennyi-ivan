@@ -112,6 +112,7 @@ impl ShearingLogManage<Pool<MySql>> for ShearingLogService<Pool<MySql>> {
             FROM ShearingLogs sl
             LEFT JOIN Shepherds sh ON sl.shepherd_id = sh.id
             WHERE sl.sheep_id = ?
+            ORDER BY sl.timestamp DESC
             "#
         )
             .bind(id)

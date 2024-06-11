@@ -27,8 +27,6 @@ export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({user, sheepId}) =
     useEffect(() => {
         const fetchSheepDetails = async () => {
             try {
-                console.log( `SD ${user.Role}`);
-                console.log(sheepId);
                 const data = await sheepService.getDetailsById(sheepId);
                 setErrorMessage('');
                 setWoolAmount('');

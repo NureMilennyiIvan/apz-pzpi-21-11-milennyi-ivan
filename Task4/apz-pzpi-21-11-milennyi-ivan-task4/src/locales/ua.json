@@ -215,5 +215,53 @@
       "passwordHeader": "Пароль",
       "temperatureHeader": "Температура",
       "notFoundHeader": "Інформація про сканери температури відсутня"
+  },
+  "adminBaseForm": {
+    "validationErrors": {
+      "employeeUsernameRequired": "Ім'я користувача працівника обов'язкове і повинно містити щонайменше 5 символів.",
+      "employeePasswordRequired": "Пароль працівника обов'язковий і повинен містити щонайменше 8 символів.",
+      "employeeNameRequired": "Ім'я працівника обов'язкове.",
+      "employeeSurnameRequired": "Прізвище працівника обов'язкове.",
+      "birthDateRequired": "Дата народження обов'язкова.",
+      "breedIdRequired": "Ідентифікатор породи обов'язковий і повинен бути числом.",
+      "weightRequired": "Вага обов'язкова і повинна бути числом.",
+      "sexRequired": "Стать обов'язкова і повинна бути логічним значенням.",
+      "feedNameRequired": "Назва корму обов'язкова і повинна містити щонайменше 5 символів.",
+      "amountRequired": "Кількість обов'язкова і повинна бути числом.",
+      "caloriesRequired": "Калорії обов'язкові і повинні бути числом.",
+      "fatRequired": "Жири обов'язкові і повинні бути числом.",
+      "proteinRequired": "Білки обов'язкові і повинні бути числом.",
+      "carbohydratesRequired": "Вуглеводи обов'язкові і повинні бути числом.",
+      "breedNameRequired": "Назва породи обов'язкова і повинна містити щонайменше 5 символів.",
+      "feedIdRequired": "Ідентифікатор корму обов'язковий і повинен бути числом.",
+      "infoRequired": "Інформація обов'язкова і повинна містити щонайменше 10 символів.",
+      "temperatureRequired": "Температура обов'язкова і повинна бути числом.",
+      "passwordRequired": "Пароль обов'язковий і повинен містити щонайменше 8 символів."
+    },
+    "headers": {
+      "employeeUsername": "Ім'я користувача",
+      "employeePassword": "Пароль",
+      "employeeName": "Ім'я",
+      "employeeSurname": "Прізвище",
+      "sheepBirthDate": "Дата народження",
+      "sheepBreedId": "Ідентифікатор породи",
+      "sheepWeight": "Вага",
+      "sheepSex": "Стать",
+      "maleText": "Самець",
+      "femaleText": "Самка",
+      "feedName": "Назва",
+      "feedAmount": "Кількість",
+      "feedCalories": "Калорії",
+      "feedFat": "Жири",
+      "feedProtein": "Білки",
+      "feedCarbohydrates": "Вуглеводи",
+      "breedName": "Назва",
+      "breedFeedId": "Ідентифікатор корму",
+      "breedInfoHeader": "Інформація",
+      "temperatureScannerTemperature": "Температура",
+      "temperatureScannerPassword": "Пароль"
+    },
+    "editButtonText": "Редагувати",
+    "createButtonText": "Створити"
   }
 }

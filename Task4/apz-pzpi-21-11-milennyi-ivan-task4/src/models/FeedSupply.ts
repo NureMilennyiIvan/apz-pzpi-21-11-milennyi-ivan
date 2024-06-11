@@ -9,7 +9,7 @@ export class FeedSupply {
         this.id = id;
         this.storekeeper_id = storekeeperId;
         this.amount = amount;
-        this.timestamp = timestamp;
+        this.timestamp = Math.floor(timestamp / 1000);
         this.feed_id = feedId;
     }
 }

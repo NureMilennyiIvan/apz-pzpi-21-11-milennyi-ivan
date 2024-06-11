@@ -92,13 +92,13 @@ export const BreedsGrid = () =>{
                     className={`${styles.actionButton} ${selectedBreed?.id ? '' : styles.disabledButton}`}
                     onClick={() => selectedBreed ? editBreed(selectedBreed.id!) : undefined}
                     style={{ cursor: selectedBreed ? 'pointer' : 'default' }}>
-                    {t("cityGrid.editButtonText")}
+                    {t("gridBase.editButtonText")}
                 </button>
                 <button 
                     className={`${styles.actionButton} ${selectedBreed?.id ? '' : styles.disabledButton}`}
                     onClick={() => selectedBreed ? deleteBreed(selectedBreed.id!) : undefined}
                     style={{ cursor: selectedBreed ? 'pointer' : 'default' }}>
-                    {t("cityGrid.deleteButtonText")}
+                    {t("gridBase.deleteButtonText")}
                 </button>
             </div>
         </div>

@@ -131,6 +131,7 @@ impl FeedingLogManage<Pool<MySql>> for FeedingLogService<Pool<MySql>> {
             FROM FeedingLogs fl
             LEFT JOIN Shepherds sh ON fl.shepherd_id = sh.id
             WHERE fl.sheep_id = ?
+            ORDER BY fl.timestamp DESC
             "#
         )
             .bind(id)
@@ -152,6 +153,7 @@ impl FeedingLogManage<Pool<MySql>> for FeedingLogService<Pool<MySql>> {
             FROM FeedingLogs fl
             LEFT JOIN Shepherds sh ON fl.shepherd_id = sh.id
             WHERE fl.feed_id = ?
+            ORDER BY fl.timestamp DESC
             "#
         )
             .bind(id)

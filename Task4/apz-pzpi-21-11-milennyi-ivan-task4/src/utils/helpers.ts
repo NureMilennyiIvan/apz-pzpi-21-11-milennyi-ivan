@@ -4,7 +4,7 @@ import { UserRole } from "./UserRole";
 import { useEffect } from "react";
 
 export const timestampToDate = (timestamp: number): string =>{
-    let date = new Date(timestamp);
+    let date = new Date(timestamp * 1000);
     let hours = date.getHours().toString().padStart(2, '0');
     let minutes = date.getMinutes().toString().padStart(2, '0');
     let day = date.getDate();
@@ -67,7 +67,7 @@ export const timeInDays = (timestamp: number | null): number => {
   if (timestamp == null){
     return Infinity;
   }
-  const difference = (new Date().getTime() - timestamp);
+  const difference = (new Date().getTime() - timestamp * 1000);
   const days = difference / 1000 / 3600 / 24;
   return Math.floor(days);
 }

@@ -154,15 +154,15 @@
     },
     "breedsGrid":{
       "nameHeader": "Name",
-      "feedIdHeader": "Feed id",
+      "feedIdHeader": "Feed Id",
       "infoHeader": "Information",
       "notFoundHeader": "There is no information about breeds"
     },
     "feedingLogsGrid":{
       "amountHeader": "Amount",
-      "feedIdHeader": "Feed id",
-      "sheepIdHeader": "Sheep id",
-      "shepherdIdHeader": "Shepherd id",
+      "feedIdHeader": "Feed Id",
+      "sheepIdHeader": "Sheep Id",
+      "shepherdIdHeader": "Shepherd Id",
       "timestampHeader": "Timestamp",
       "notFoundHeader": "There is no information about feeding logs"
     },
@@ -177,25 +177,25 @@
     },
     "feedSuppliesGrid":{
       "amountHeader": "Amount",
-      "feedIdHeader": "Feed id",
-      "storekeeperIdHeader": "Storekeeper id",
+      "feedIdHeader": "Feed Id",
+      "storekeeperIdHeader": "Storekeeper Id",
       "timestampHeader": "Timestamp",
       "notFoundHeader": "There is no information about feed supplies"
     },
     "shearingLogsGrid":{
       "woolAmountHeader": "Wool amount",
-      "sheepIdHeader": "Sheep id",
-      "shepherdIdHeader": "Shepherd id",
+      "sheepIdHeader": "Sheep Id",
+      "shepherdIdHeader": "Shepherd Id",
       "timestampHeader": "Timestamp",
       "notFoundHeader": "There is no information about shearing logs"
     },
     "sheepGrid":{
-      "breedIdHeader": "Breed id",
-      "shepherdIdHeader": "Shepherd id",
+      "breedIdHeader": "Breed Id",
+      "shepherdIdHeader": "Shepherd Id",
       "sexHeader": "Sex",
       "birthDateHeader": "Birth date",
       "weightHeader": "Weight",
-      "temperatureScannerIdHeader": "Temperature scanner id",
+      "temperatureScannerIdHeader": "Temperature scanner Id",
       "notFoundHeader": "There is no information about sheep"
     },
     "shepherdsGrid":{
@@ -216,5 +216,53 @@
       "passwordHeader": "Password",
       "temperatureHeader": "Temperature",
       "notFoundHeader": "There is no information about temperature scanners"
+    },
+    "adminBaseForm":{
+      "validationErrors": {
+        "employeeUsernameRequired": "Employee username is required and must be at least 5 characters long.",
+        "employeePasswordRequired": "Employee password is required and must be at least 8 characters long.",
+        "employeeNameRequired": "Employee name is required.",
+        "employeeSurnameRequired": "Employee surname is required.",
+        "birthDateRequired": "Birth date is required.",
+        "breedIdRequired": "Breed ID is required and must be a number.",
+        "weightRequired": "Weight is required and must be a number.",
+        "sexRequired": "Sex is required and must be a boolean value.",
+        "feedNameRequired": "Feed name is required and must be at least 5 characters long.",
+        "amountRequired": "Amount is required and must be a number.",
+        "caloriesRequired": "Calories are required and must be a number.",
+        "fatRequired": "Fat is required and must be a number.",
+        "proteinRequired": "Protein is required and must be a number.",
+        "carbohydratesRequired": "Carbohydrates are required and must be a number.",
+        "breedNameRequired": "Breed name is required and must be at least 5 characters long.",
+        "feedIdRequired": "Feed ID is required and must be a number.",
+        "infoRequired": "Info is required and must be at least 10 characters long.",
+        "temperatureRequired": "Temperature is required and must be a number.",
+        "passwordRequired": "Password is required and must be at least 8 characters long."
+      },
+      "headers":{
+        "employeeUsername": "Username",
+        "employeePassword": "Password",
+        "employeeName": "Name",
+        "employeeSurname": "Surname",
+        "sheepBirthDate": "Birth Date",
+        "sheepBreedId": "Breed Id",
+        "sheepWeight": "Weight",
+        "sheepSex": "Sex",
+        "maleText": "Male",
+        "femaleText": "Female",
+        "feedName": "Name",
+        "feedAmount": "Amount",
+        "feedCalories": "Calories",
+        "feedFat": "Fat",
+        "feedProtein": "Protein",
+        "feedCarbohydrates": "Carbohydrates",
+        "breedName": "Name",
+        "breedFeedId": "Feed Id",
+        "breedInfoHeader": "Information",
+        "temperatureScannerTemperature": "Temperature",
+        "temperatureScannerPassword": "Password"
+      },
+      "editButtonText": "Edit",
+      "createButtonText": "Create"
     }
 }
