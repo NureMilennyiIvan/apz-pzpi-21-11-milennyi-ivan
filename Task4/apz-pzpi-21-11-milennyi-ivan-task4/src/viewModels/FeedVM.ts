@@ -13,7 +13,6 @@ export class FeedVM {
         this.id = id;
         this.amount = amount / 1000;
         this.name = name;
-        //Format later
         this.calories = calories;
         this.fat = fat;
         this.protein = protein;

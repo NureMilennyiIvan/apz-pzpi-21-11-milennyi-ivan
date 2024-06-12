@@ -19,6 +19,17 @@ async fn temperature_scanner_get_all(temperature_scanner_service: Data<Arc<Tempe
     let result = temperature_scanner_service.get_all().await;
     send_service_result(result)
 }
+#[utoipa::path(responses(
+    (status = 200, description = "Temperature scanner get all unassigned ids"),
+    (status = 400, description = "Validation error or bad request"),
+    (status = 500, description = "Internal server error")
+))]
+// Ендпойнт для отримання всіх айди не зайнятих сканерів
+#[get("/temperature-scanner-all-unassigned-ids")]
+async fn temperature_scanner_get_all_unassigned_scanners_ids(temperature_scanner_service: Data<Arc<TemperatureScannerService<Pool<MySql>>>>) -> impl Responder {
+    let result = temperature_scanner_service.get_all_unassigned_scanners_ids().await;
+    send_service_result(result)
+}
 
 #[utoipa::path(params(PathId), responses(
     (status = 200, description = "Temperature scanner get by id"),

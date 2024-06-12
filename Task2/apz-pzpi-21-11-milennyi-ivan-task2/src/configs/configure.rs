@@ -110,5 +110,6 @@ pub(crate) fn temperature_scanner_configure(cfg: &mut ServiceConfig) {
         .service(temperature_scanner_update_temperature)
         .service(temperature_scanner_authenticate)
         .service(temperature_scanner_get_all)
-        .service(temperature_scanner_get_by_id);
+        .service(temperature_scanner_get_by_id)
+        .service(temperature_scanner_get_all_unassigned_scanners_ids);
 }

@@ -36,6 +36,9 @@ export const SheepGrid = () =>{
     const reassignShepherd = (sheepId: number) =>{
         navigate(`/sheep/reassign-shepherd/${sheepId}`)
     }
+    const reassignTemperatureScanner = (sheepId: number) =>{
+        navigate(`/sheep/reassign-temperature-scanner/${sheepId}`)
+    }
     const editSheep = (id: number) => {
         navigate("/sheep/edit/" + id);
     }
@@ -108,6 +111,12 @@ export const SheepGrid = () =>{
                     onClick={() => selectedSheep ? reassignShepherd(selectedSheep.id!) : undefined}
                     style={{ cursor: selectedSheep ? 'pointer' : 'default' }}>
                     {t("sheepGrid.reassignShepherdButtonText")}
+                </button>
+                <button 
+                    className={`${styles.actionButton} ${selectedSheep?.id ? '' : styles.disabledButton}`}
+                    onClick={() => selectedSheep ? reassignTemperatureScanner(selectedSheep.id!) : undefined}
+                    style={{ cursor: selectedSheep ? 'pointer' : 'default' }}>
+                    {t("sheepGrid.reassignTemperatureScannerButtonText")}
                 </button>
                 <button 
                     className={`${styles.actionButton} ${selectedSheep?.id ? '' : styles.disabledButton}`}

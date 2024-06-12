@@ -61,6 +61,7 @@ use crate::endpoints::*;
         storekeeper_endpoints::storekeeper_get_all,
         storekeeper_endpoints::storekeeper_get_by_id,
         temperature_scanner_endpoints::temperature_scanner_get_all,
+        temperature_scanner_endpoints::temperature_scanner_get_all_unassigned_scanners_ids,
         temperature_scanner_endpoints::temperature_scanner_get_by_id,
         temperature_scanner_endpoints::temperature_scanner_authenticate,
         temperature_scanner_endpoints::temperature_scanner_create,

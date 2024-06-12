@@ -1,6 +1,6 @@
 use std::sync::Arc;
 use async_trait::async_trait;
-use sqlx::{MySql, Pool, query, query_as};
+use sqlx::{MySql, Pool, query, query_as, Row};
 use crate::db::service_error::ServiceError;
 use crate::db::traits::{Service, TemperatureScannerManage};
 use crate::models::TemperatureScanner;
@@ -119,6 +119,20 @@ impl Service<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
 
 #[async_trait]
 impl TemperatureScannerManage<Pool<MySql>> for TemperatureScannerService<Pool<MySql>> {
+    async fn get_all_unassigned_scanners_ids(&self) -> Result<Vec<u64>, Self::Error> {
+        query(
+            r#"
+            SELECT ts.id
+            FROM TemperatureScanners ts
+            WHERE (SELECT COUNT(*) FROM Sheep WHERE temperature_scanner_id = ts.id) = 0
+            "#
+        )
+        .fetch_all(&*self.pool).await
+            .map(|rows| {
+                rows.into_iter().map(|row| row.get::<u64, _>("id")).collect::<Vec<u64>>()
+            }).map_err(|error| ServiceError::DatabaseError(error))
+    }
+
     // Функція для аутентифікації сканера температури за ідентифікатором та хешем пароля
     async fn authenticate(&self, id: u64, hash_password: String) -> Result<bool, Self::Error> {
         query_as::<_, Self::Model>(

@@ -4,12 +4,14 @@ import { API_URL } from "../../utils/config";
 import { ITemperatureScannerService } from "../interfaces/ITemperatureScannerService";
 
 export class TemperatureScannerService implements ITemperatureScannerService{
+
     private static TEMPERATURE_SCANNER_URLS = {
         GET_ALL: `${API_URL}/temperature-scanner`,
         GET_BY_ID: (id: number) => `${API_URL}/temperature-scanner/${id}`,
         CREATE: `${API_URL}/temperature-scanner/create`,
         DELETE: (id: number) => `${API_URL}/temperature-scanner/delete/${id}`,
-        UPDATE: `${API_URL}/temperature-scanner/update`
+        UPDATE: `${API_URL}/temperature-scanner/update`,
+        GET_All_UNASSIGNED_SCANNERS_IDS: `${API_URL}/temperature-scanner-all-unassigned-ids`
     }
     async create(item: TemperatureScanner): Promise<TemperatureScanner> {
         const response = await axios.post<TemperatureScanner>(TemperatureScannerService.TEMPERATURE_SCANNER_URLS.CREATE, item);
@@ -30,5 +32,8 @@ export class TemperatureScannerService implements ITemperatureScannerService{
         const response = await axios.get<TemperatureScanner | null>(TemperatureScannerService.TEMPERATURE_SCANNER_URLS.GET_BY_ID(id));
         return response.data;
     }
-
+    async getAllUnassignedScannersIds(): Promise<number[]> {
+        const response = await axios.get<number[]>(TemperatureScannerService.TEMPERATURE_SCANNER_URLS.GET_All_UNASSIGNED_SCANNERS_IDS);
+        return response.data;
+    }
 }

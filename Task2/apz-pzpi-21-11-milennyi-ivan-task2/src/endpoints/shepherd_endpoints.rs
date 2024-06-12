@@ -3,7 +3,7 @@ use actix_web::{delete, get, HttpResponse, post, put, Responder};
 use actix_web::web::{Data, Json, Path};
 use sqlx::{MySql, Pool};
 use crate::db::service_error::ServiceError;
-use crate::db::services::{BreedService, ShepherdService};
+use crate::db::services::ShepherdService;
 use crate::db::traits::{AuthService, Service, ShepherdManage};
 use crate::endpoints::utils::{send_service_message, send_service_result, validate_json_body};
 use crate::json_structs::{AuthorizeJson, PathId};

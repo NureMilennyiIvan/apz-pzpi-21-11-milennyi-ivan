@@ -197,6 +197,7 @@
       "weightHeader": "Weight",
       "temperatureScannerIdHeader": "Temperature scanner Id",
       "reassignShepherdButtonText": "Reassign shepherd",
+      "reassignTemperatureScannerButtonText": "Reassign scanner",
       "notFoundHeader": "There is no information about sheep"
     },
     "shepherdsGrid":{
@@ -266,9 +267,11 @@
       "editButtonText": "Edit",
       "createButtonText": "Create"
     },
-    "reassignShepherdForm": {
+    "reassignFormForSheep": {
       "sheepHeader": "Sheep #",
-      "shepherdIdHeader": "Shepherd Id",
+      "shepherdsHeader": "Shepherds",
+      "temperatureScannersHeader": "Temperature scanners",
+      "scannerHeader": "Scanner #",
       "dontAssignOption": "Do not assign",
       "assignTextButton": "Assign"
     }
