@@ -1,12 +1,13 @@
 import { timestampToDate } from "../utils/helpers";
 
+// Клас для відображення інформації про вівцю
 export class SheepVM {
-    id: number;
-    breed: string;
-    sex: boolean;
-    birthDate: number;
-    lastFeedingDate: string | null;
-    lastShearingDate: string | null;
+    id: number; // Ідентифікатор вівці
+    breed: string; // Порода вівці
+    sex: boolean; // Стать вівці (true - самець, false - самка)
+    birthDate: number; // Дата народження вівці
+    lastFeedingDate: string | null; // Дата останнього годування
+    lastShearingDate: string | null; // Дата останньої стрижки
 
     constructor(id: number, breed: string, sex: boolean, birthDate: number, lastFeedingTimestamp: number | null, lastShearingTimestamp: number | null) {
         this.id = id;

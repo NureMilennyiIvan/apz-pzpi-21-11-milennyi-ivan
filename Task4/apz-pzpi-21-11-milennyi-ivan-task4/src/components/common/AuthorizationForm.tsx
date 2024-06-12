@@ -9,64 +9,74 @@ import { AuthUser } from "../../utils/AuthUser";
 import styles from "../../assets/css/AuthorizationForm.module.css";
 import { checkAdmin } from "../admin/check-admin";
 
+
+// Компонент форми авторизації
 const AuthorizationForm: React.FC<IUserProps> = ({ setUser }) => {
     const shepherdService = new ShepherdService();
     const storekeeperService = new StorekeeperService();
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [role, setRole] = useState<UserRole>(UserRole.Shepherd);
+    const [username, setUsername] = useState(''); // Стан для зберігання введеного користувачем
+    const [password, setPassword] = useState(''); // Стан для зберігання введеного пароля
+    const [role, setRole] = useState<UserRole>(UserRole.Shepherd); // Стан для зберігання вибраної ролі
 
-    const [errorUsername, setErrorUsername] = useState('');
-    const [errorPassword, setErrorPassword] = useState('');
+    const [errorUsername, setErrorUsername] = useState(''); // Стан для зберігання помилок введення користувача
+    const [errorPassword, setErrorPassword] = useState(''); // Стан для зберігання помилок введення пароля
 
-    const {t} = useTranslation();
+    const { t } = useTranslation(); // Використання i18n для багатомовності
 
-    const signIn = async () =>{
+    // Функція для входу користувача
+    const signIn = async () => {
+        // Перевірка введеного імені користувача
         if (username.length < 1) {
             setErrorUsername("authorizationForm.errorUsernameHeader1");
             return;
         } else {
             setErrorUsername('');
         }
+
+        // Перевірка введеного пароля
         if (password.length < 1) {
             setErrorPassword("authorizationForm.errorPasswordHeader");
             return;
         } else {
             setErrorPassword('');
         }
+
+        // Хешування пароля
         const hashedPassword = await hashPassword(password);
-        if (checkAdmin(username, hashedPassword)){
+
+        // Перевірка на адміністратора
+        if (checkAdmin(username, hashedPassword)) {
             let user = new AuthUser(-1, UserRole.Admin);
             saveAuthUserToLocalStorage("user", user);
             setUser(user);
-        }
-        else if (role === UserRole.Shepherd){
-            try{
+        } 
+        // Авторизація пастуха
+        else if (role === UserRole.Shepherd) {
+            try {
                 const authorizedShepherd = await shepherdService.authorize(username, hashedPassword);
-                if (authorizedShepherd){
+                if (authorizedShepherd) {
                     let user = new AuthUser(authorizedShepherd.id, UserRole.Shepherd);
                     saveAuthUserToLocalStorage("user", user);
                     setUser(user);
                     return;
                 }
                 throw new Error();
-            }
-            catch (error){
+            } catch (error) {
                 setErrorUsername("authorizationForm.errorUsernameHeader2");
             }
-        }
-        else if (role === UserRole.Storekeeper){
-            try{
+        } 
+        // Авторизація комірника
+        else if (role === UserRole.Storekeeper) {
+            try {
                 const authorizedStorekeeper = await storekeeperService.authorize(username, hashedPassword);
-                if (authorizedStorekeeper){
+                if (authorizedStorekeeper) {
                     let user = new AuthUser(authorizedStorekeeper.id, UserRole.Storekeeper);
                     saveAuthUserToLocalStorage("user", user);
                     setUser(user);
                     return;
                 }
                 throw new Error();
-            }
-            catch (error){
+            } catch (error) {
                 setErrorUsername("authorizationForm.errorUsernameHeader2");
             }
         }

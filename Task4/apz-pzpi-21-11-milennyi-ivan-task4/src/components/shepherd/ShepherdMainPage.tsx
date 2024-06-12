@@ -6,22 +6,24 @@ import { BreedsList } from "./BreedsList";
 import { FeedsList } from "./FeedsList";
 import styles from '../../assets/css/ShepherdMainPage.module.css';
 
-export const ShepherdMainPage: React.FC<IUserProps> = ({user}) => {
-    const {t} = useTranslation();
-    const [selectedButton, setSelectedButton] = useState<number>(1);
-    const [content, setContent] = useState<JSX.Element>(<SheepList id={user.Id!}/>);
+// Компонент головної сторінки пастуха
+export const ShepherdMainPage: React.FC<IUserProps> = ({ user }) => {
+    const { t } = useTranslation(); // Використання i18n для багатомовності
+    const [selectedButton, setSelectedButton] = useState<number>(1); // Стан для зберігання вибраної кнопки
+    const [content, setContent] = useState<JSX.Element>(<SheepList id={user.Id!} />); // Стан для зберігання вибраного контенту
 
+    // Обробка натискання кнопки
     const handleButtonClick = (buttonIndex: number) => {
         setSelectedButton(buttonIndex);
-        switch(buttonIndex) {
+        switch (buttonIndex) {
             case 1:
-                setContent(<SheepList id={user.Id!}/>);
+                setContent(<SheepList id={user.Id!} />);
                 break;
             case 2:
-                setContent(<BreedsList/>);
+                setContent(<BreedsList />);
                 break;
             case 3:
-                setContent(<FeedsList/>);
+                setContent(<FeedsList />);
                 break;
             default:
                 break;

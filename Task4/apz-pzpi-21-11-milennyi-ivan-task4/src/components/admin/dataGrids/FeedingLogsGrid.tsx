@@ -4,38 +4,42 @@ import { useTranslation } from "react-i18next";
 import { FeedingLogService } from "../../../api/services/FeedingLogService";
 import { FeedingLog } from "../../../models/FeedingLog";
 
-export const FeedingLogsGrid = () =>{
+// Компонент для відображення таблиці з записами годування
+export const FeedingLogsGrid = () => {
     const feedingLogService = new FeedingLogService();
-    const [selectedFeedingLog, setSelectedFeedingLog] = useState<FeedingLog | null>(null);
-    const [feedingLogs, setFeedingLogs] = useState<FeedingLog[]>([]);
-    const [trigger, setTrigger] = useState<boolean>(true);
+    const [selectedFeedingLog, setSelectedFeedingLog] = useState<FeedingLog | null>(null); // Стан для зберігання вибраного запису годування
+    const [feedingLogs, setFeedingLogs] = useState<FeedingLog[]>([]); // Стан для зберігання списку записів годування
+    const [trigger, setTrigger] = useState<boolean>(true); // Стан для тригеру оновлення даних
 
-    const {t} = useTranslation();
-    
+    const { t } = useTranslation(); // Використання i18n для багатомовності
+
+    // Використання useEffect для завантаження списку записів годування при першому рендері та при зміні тригеру
     useEffect(() => {
-        const fetchFeedingLogs= async () => {
-          try {
-            const data = await feedingLogService.getAll();
-            setFeedingLogs(data);
-          } catch (error) {
-            alert(error);
-            setFeedingLogs([]);
-          }
+        const fetchFeedingLogs = async () => {
+            try {
+                // Отримання даних записів годування від сервісу FeedingLogService
+                const data = await feedingLogService.getAll();
+                setFeedingLogs(data); // Оновлення стану списку записів годування
+            } catch (error) {
+                alert(error);
+                setFeedingLogs([]); // Очищення стану списку записів годування у разі помилки
+            }
         };
         fetchFeedingLogs();
-    }, [trigger]);
+    }, [trigger]); // Виконання ефекту при зміні тригеру
 
+    // Функція для обробки вибору рядка таблиці
     const handleRowSelection = (feedingLog: FeedingLog) => {
         setSelectedFeedingLog(feedingLog);
     };
 
+    // Функція для видалення вибраного запису годування
     const deleteFeedingLog = async (id: number) => {
-        try{
+        try {
             await feedingLogService.delete(id);
-            setSelectedFeedingLog(null);
-            setTrigger(!trigger);
-        }
-        catch(error){
+            setSelectedFeedingLog(null); // Очистити вибір після видалення
+            setTrigger(!trigger); // Оновити дані
+        } catch (error) {
             console.log(error);
             alert("Error");
         }

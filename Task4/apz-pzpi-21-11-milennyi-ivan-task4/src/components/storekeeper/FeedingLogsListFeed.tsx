@@ -4,29 +4,33 @@ import { FeedingLogVM } from "../../viewModels/FeedingLogVM";
 import styles from "../../assets/css/FeedingLogsList.module.css";
 import { useTranslation } from "react-i18next";
 
-interface IFeedingLogsListFeed{
-    feedId: number;
+// Інтерфейс для пропсів компоненту FeedingLogsListFeed
+interface IFeedingLogsListFeed {
+    feedId: number; // Ідентифікатор корму
 }
 
-export const FeedingLogsListFeed: React.FC<IFeedingLogsListFeed> =({feedId}) =>{
+// Компонент для відображення списку записів годування для окремого корму
+export const FeedingLogsListFeed: React.FC<IFeedingLogsListFeed> = ({ feedId }) => {
     const feedingLogService = new FeedingLogService();
-    const [feedingLogsVMList, setFeedingLogsVMList] = useState<FeedingLogVM[]>([]);
-    
-    const {t} = useTranslation();
+    const [feedingLogsVMList, setFeedingLogsVMList] = useState<FeedingLogVM[]>([]); // Стан для зберігання списку записів годування
+    const { t } = useTranslation(); // Використання i18n для багатомовності
 
+    // Використання useEffect для завантаження списку записів годування при першому рендері
     useEffect(() => {
-        const fetchFeedSupplies = async () =>{
-            try{
+        const fetchFeedSupplies = async () => {
+            try {
+                // Отримання даних записів годування від сервісу FeedingLogService
                 const data = await feedingLogService.getAllVMsByFeedId(feedId);
-                setFeedingLogsVMList(data);
-            }
-            catch (error){
+                setFeedingLogsVMList(data); // Оновлення стану списку записів годування
+            } catch (error) {
+                // Обробка помилки, якщо дані не вдалося отримати
                 alert(error);
-                setFeedingLogsVMList([]);
+                setFeedingLogsVMList([]); // Очищення стану списку записів годування у разі помилки
             }
         }
         fetchFeedSupplies();
-    }, []);
+    }, []); // Виконання ефекту лише при першому рендері
+    
     return (
         <div className={styles.list}>
             {feedingLogsVMList.length > 0 ? (feedingLogsVMList.map((feedingLog) => (

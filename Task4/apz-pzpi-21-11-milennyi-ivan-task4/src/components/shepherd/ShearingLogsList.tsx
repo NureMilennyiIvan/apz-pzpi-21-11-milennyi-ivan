@@ -3,25 +3,28 @@ import { ShearingLogService } from "../../api/services/ShearingLogService";
 import { ShearingLogVM } from "../../viewModels/ShearingLogVM";
 import styles from "../../assets/css/ShearingLogsList.module.css";
 import { useTranslation } from "react-i18next";
-interface IShearingLogsList{
-    sheepId: number;
+// Інтерфейс для пропсів компоненту ShearingLogsList
+interface IShearingLogsList {
+    sheepId: number; // Ідентифікатор вівці
 }
 
-export const ShearingLogsList: React.FC<IShearingLogsList> =({sheepId}) =>{
+// Компонент для відображення списку записів стрижки для окремої вівці
+export const ShearingLogsList: React.FC<IShearingLogsList> = ({ sheepId }) => {
     const shearingLogService = new ShearingLogService();
-    const [shearingLogsVMList, setShearingLogsVMList] = useState<ShearingLogVM[]>([]);
-    
-    const {t} = useTranslation();
+    const [shearingLogsVMList, setShearingLogsVMList] = useState<ShearingLogVM[]>([]); // Стан для зберігання списку записів стрижки
+    const { t } = useTranslation(); // Використання i18n для багатомовності
 
+    // Використання useEffect для завантаження списку записів стрижки при першому рендері
     useEffect(() => {
-        const fetchFeedSupplies = async () =>{
-            try{
+        const fetchFeedSupplies = async () => {
+            try {
+                // Отримання даних записів стрижки від сервісу ShearingLogService
                 const data = await shearingLogService.getAllVMsBySheepId(sheepId);
-                setShearingLogsVMList(data);
-            }
-            catch (error){
+                setShearingLogsVMList(data); // Оновлення стану списку записів стрижки
+            } catch (error) {
+                // Обробка помилки, якщо дані не вдалося отримати
                 alert(error);
-                setShearingLogsVMList([]);
+                setShearingLogsVMList([]); // Очищення стану списку записів стрижки у разі помилки
             }
         }
         fetchFeedSupplies();

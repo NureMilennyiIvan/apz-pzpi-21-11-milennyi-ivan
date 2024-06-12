@@ -4,11 +4,13 @@ import { BreedVM } from "../../viewModels/BreedVM";
 import styles from '../../assets/css/BreedList.module.css';
 import { useTranslation } from "react-i18next";
 
-export const BreedsList = () => {
+// Компонент для відображення списку порід
+export const BreedsList: React.FC = () => {
     const breedService = new BreedService();
-    const [breedsVMList, setBreedsVMList] = useState<BreedVM[]>([]);
-    const {t} = useTranslation();
-    
+    const [breedsVMList, setBreedsVMList] = useState<BreedVM[]>([]); // Стан для зберігання списку порід
+    const { t } = useTranslation(); // Використання i18n для багатомовності
+
+    // Використання useEffect для завантаження списку порід при першому рендері
     useEffect(() => {
         const fetchBreeds = async () => {
             try {

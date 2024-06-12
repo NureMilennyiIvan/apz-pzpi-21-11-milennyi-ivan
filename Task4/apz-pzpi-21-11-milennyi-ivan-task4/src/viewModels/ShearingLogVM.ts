@@ -1,12 +1,13 @@
 import { timestampToDate } from "../utils/helpers";
 
+// Клас для відображення записів стрижки
 export class ShearingLogVM {
-    id: number;
-    date: string;
-    woolAmount: number;
-    shepherdName: string | null;
-    shepherdSurname: string | null;
-    sheepId: number;
+    id: number; // Ідентифікатор запису стрижки
+    date: string; // Дата стрижки
+    woolAmount: number; // Кількість вовни в кг
+    shepherdName: string | null; // Ім'я пастуха
+    shepherdSurname: string | null; // Прізвище пастуха
+    sheepId: number; // Ідентифікатор вівці
 
     constructor(id: number, timestamp: number, woolAmount: number, sheepId: number, shepherdName: string | null, shepherdSurname: string | null) {
         this.id = id;

@@ -3,29 +3,31 @@ import { FeedingLogService } from "../../api/services/FeedingLogService";
 import { FeedingLogVM } from "../../viewModels/FeedingLogVM";
 import styles from "../../assets/css/FeedingLogsList.module.css";
 import { useTranslation } from "react-i18next";
-interface IFeedingLogsListSheep{
+// Інтерфейс для пропсів компоненту FeedingLogsListSheep
+interface IFeedingLogsListSheep {
     sheepId: number;
 }
 
-export const FeedingLogsListSheep: React.FC<IFeedingLogsListSheep> =({sheepId}) =>{
+// Компонент для відображення списку записів годування для окремої вівці
+export const FeedingLogsListSheep: React.FC<IFeedingLogsListSheep> = ({ sheepId }) => {
     const feedingLogService = new FeedingLogService();
-    const [feedingLogsVMList, setFeedingLogsVMList] = useState<FeedingLogVM[]>([]);
-    
-    const {t} = useTranslation();
+    const [feedingLogsVMList, setFeedingLogsVMList] = useState<FeedingLogVM[]>([]); // Стан для зберігання списку записів годування
+    const { t } = useTranslation(); // Використання i18n для багатомовності
 
+    // Використання useEffect для завантаження списку записів годування при першому рендері
     useEffect(() => {
-        const fetchFeedSupplies = async () =>{
-            try{
+        const fetchFeedSupplies = async () => {
+            try {
                 const data = await feedingLogService.getAllVMsBySheepId(sheepId);
                 setFeedingLogsVMList(data);
-            }
-            catch (error){
+            } catch (error) {
                 alert(error);
                 setFeedingLogsVMList([]);
             }
         }
         fetchFeedSupplies();
     }, []);
+    
     return (
         <div className={styles.list}>
             {feedingLogsVMList.length > 0 ? (feedingLogsVMList.map((feedingLog) => (

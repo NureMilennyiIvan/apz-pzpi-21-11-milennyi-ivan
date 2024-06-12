@@ -7,26 +7,29 @@ import { FeedSupply } from "../../models/FeedSupply";
 import { FeedSupplyService } from "../../api/services/FeedSupplyService";
 import styles from '../../assets/css/CreateFeedSupplyForm.module.css';
 
-export const CreateFeedSupplyForm: React.FC<IUserProps> = ({user}) => {
-    const [amount, setAmount] = useState<string>('');
-    const [errorAmount, setErrorAmount] = useState<string>('');
-    const {feedId} = useParams();
+// Компонент для форми створення постачання корму
+export const CreateFeedSupplyForm: React.FC<IUserProps> = ({ user }) => {
+    const [amount, setAmount] = useState<string>(''); // Стан для зберігання кількості постачання
+    const [errorAmount, setErrorAmount] = useState<string>(''); // Стан для зберігання повідомлення про помилки
+    const { feedId } = useParams(); // Отримання ідентифікатора корму з параметрів URL
     const feedSupplyService = new FeedSupplyService();
 
     const navigate = useNavigate();
-    const {t} = useTranslation();
-    useEffectUser(user, navigate);
+    const { t } = useTranslation(); // Використання i18n для багатомовності
+    useEffectUser(user, navigate); // Використання хука для перевірки користувача та навігації
 
+    // Функція для створення постачання корму
     const createFeedSupply = async () => {
-        if (amount.length == 0 || !(/^(0|[1-9]\d*)$/.test(amount))) {
+        if (amount.length === 0 || !(/^(0|[1-9]\d*)$/.test(amount))) {
             setErrorAmount("inputErrorHeader");
             return;
         }
         setErrorAmount('');
         try {
+            // Створення нового об'єкта FeedSupply
             const feedSupply = new FeedSupply(null, user.Id!, parseInt(amount) * 1000, new Date().getTime(), parseInt(feedId!));
-            await feedSupplyService.create(feedSupply);
-            navigate(-1);
+            await feedSupplyService.create(feedSupply); // Виклик сервісу для створення постачання
+            navigate(-1); // Повернення до попередньої сторінки після успішного створення
         } catch (error) {
             console.log(error);
             setErrorAmount("serverErrorHeader");

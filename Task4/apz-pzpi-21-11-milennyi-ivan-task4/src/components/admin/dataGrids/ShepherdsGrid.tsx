@@ -5,44 +5,53 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import styles from "../../../assets/css/GridComponent.module.css"
 
-export const ShepehrdsGrid = () =>{
+// Компонент для відображення таблиці з пастухами
+export const ShepehrdsGrid = () => {
     const shepherdService = new ShepherdService();
-    const [selectedShepherd, setSelectedShepherd] = useState<Shepherd | null>(null);
-    const [shepherds, setShepherds] = useState<Shepherd[]>([]);
-    const [trigger, setTrigger] = useState<boolean>(true);
+    const [selectedShepherd, setSelectedShepherd] = useState<Shepherd | null>(null); // Стан для зберігання вибраного пастуха
+    const [shepherds, setShepherds] = useState<Shepherd[]>([]); // Стан для зберігання списку пастухів
+    const [trigger, setTrigger] = useState<boolean>(true); // Стан для тригеру оновлення даних
 
-    const {t} = useTranslation();
+    const { t } = useTranslation(); // Використання i18n для багатомовності
     const navigate = useNavigate();
-    
+
+    // Використання useEffect для завантаження списку пастухів при першому рендері та при зміні тригеру
     useEffect(() => {
         const fetchShepherds = async () => {
-          try {
-            const data = await shepherdService.getAll();
-            setShepherds(data);
-          } catch (error) {
-            alert(error);
-            setShepherds([]);
-          }
+            try {
+                // Отримання даних пастухів від сервісу ShepherdService
+                const data = await shepherdService.getAll();
+                setShepherds(data); // Оновлення стану списку пастухів
+            } catch (error) {
+                alert(error);
+                setShepherds([]); // Очищення стану списку пастухів у разі помилки
+            }
         };
         fetchShepherds();
-    }, [trigger]);
+    }, [trigger]); // Виконання ефекту при зміні тригеру
 
+    // Функція для обробки вибору рядка таблиці
     const handleRowSelection = (shepherd: Shepherd) => {
-      setSelectedShepherd(shepherd);
+        setSelectedShepherd(shepherd);
     };
+
+    // Функція для переходу на сторінку створення нового пастуха
     const createShepherd = () => {
         navigate("/shepherd/create");
     }
+
+    // Функція для переходу на сторінку редагування вибраного пастуха
     const editShepherd = (id: number) => {
         navigate("/shepherd/edit/" + id);
     }
+
+    // Функція для видалення вибраного пастуха
     const deleteShepherd = async (id: number) => {
-        try{
+        try {
             await shepherdService.delete(id);
-            setSelectedShepherd(null);
-            setTrigger(!trigger);
-        }
-        catch(error){
+            setSelectedShepherd(null); // Очистити вибір після видалення
+            setTrigger(!trigger); // Оновити дані
+        } catch (error) {
             console.log(error);
             alert("Error");
         }

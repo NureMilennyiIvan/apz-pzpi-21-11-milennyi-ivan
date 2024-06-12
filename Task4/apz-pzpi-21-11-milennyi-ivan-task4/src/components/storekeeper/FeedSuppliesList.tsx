@@ -4,30 +4,33 @@ import { FeedSupplyVM } from "../../viewModels/FeedSupplyVM";
 import styles from "../../assets/css/FeedSuppliesList.module.css";
 import { useTranslation } from "react-i18next";
 
-interface IFeedSuppliesList{
-    feedId: number;
+// Інтерфейс для пропсів компоненту FeedSuppliesList
+interface IFeedSuppliesList {
+    feedId: number; // Ідентифікатор корму
 }
 
-
-export const FeedSuppliesList: React.FC<IFeedSuppliesList> =({feedId}) =>{
+// Компонент для відображення списку постачань для окремого корму
+export const FeedSuppliesList: React.FC<IFeedSuppliesList> = ({ feedId }) => {
     const feedSupplyService = new FeedSupplyService();
-    const [feedSuppliesVMList, setFeedSuppliesVMList] = useState<FeedSupplyVM[]>([]);
-    
-    const {t} = useTranslation();
+    const [feedSuppliesVMList, setFeedSuppliesVMList] = useState<FeedSupplyVM[]>([]); // Стан для зберігання списку постачань
+    const { t } = useTranslation(); // Використання i18n для багатомовності
 
+    // Використання useEffect для завантаження списку постачань при першому рендері
     useEffect(() => {
-        const fetchFeedSupplies = async () =>{
-            try{
+        const fetchFeedSupplies = async () => {
+            try {
+                // Отримання даних постачань від сервісу FeedSupplyService
                 const data = await feedSupplyService.getAllVMsByFeedId(feedId);
-                setFeedSuppliesVMList(data);
-            }
-            catch (error){
+                setFeedSuppliesVMList(data); // Оновлення стану списку постачань
+            } catch (error) {
+                // Обробка помилки, якщо дані не вдалося отримати
                 alert(error);
                 setFeedSuppliesVMList([]);
             }
         }
         fetchFeedSupplies();
     }, []);
+    
     return (
         <div className={styles.list}>
             {feedSuppliesVMList.length > 0 ? (feedSuppliesVMList.map((feedSupply) => (

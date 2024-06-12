@@ -1,12 +1,13 @@
 import { timestampToDate } from "../utils/helpers";
 
+// Клас для відображення записів годування
 export class FeedingLogVM {
-    id: number;
-    date: string;
-    amount: number;
-    shepherdName: string | null;
-    shepherdSurname: string | null;
-    sheepId: number;
+    id: number; // Ідентифікатор запису годування
+    date: string; // Дата годування
+    amount: number; // Кількість корму в кг
+    shepherdName: string | null; // Ім'я пастуха
+    shepherdSurname: string | null; // Прізвище пастуха
+    sheepId: number; // Ідентифікатор вівці
 
     constructor(id: number, timestamp: number, amount: number, sheepId: number, shepherdName: string | null, shepherdSurname: string | null) {
         this.id = id;

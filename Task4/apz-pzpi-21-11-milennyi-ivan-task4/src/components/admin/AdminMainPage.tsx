@@ -10,11 +10,14 @@ import { FeedsGrid } from "./dataGrids/FeedsGrid";
 import { FeedingLogsGrid } from "./dataGrids/FeedingLogsGrid";
 import { ShearingLogsGrid } from "./dataGrids/ShearingLogsGrid";
 import { FeedSuppliesGrid } from "./dataGrids/FeedSuppliesLogs";
-export const AdminMainPage = () =>{
-    const {t} = useTranslation();
-    const [selectedButton, setSelectedButton] = useState<number>(1);
-    const [content, setContent] = useState<JSX.Element>(<ShepehrdsGrid/>);
 
+// Компонент головної сторінки адміністратора
+export const AdminMainPage = () => {
+    const { t } = useTranslation();
+    const [selectedButton, setSelectedButton] = useState<number>(1); // Стан для зберігання вибраної кнопки
+    const [content, setContent] = useState<JSX.Element>(<ShepehrdsGrid />); // Стан для зберігання вибраного контенту
+
+    // Функція для обробки натискання кнопки
     const handleButtonClick = (buttonIndex: number) => {
         setSelectedButton(buttonIndex);
         switch(buttonIndex) {

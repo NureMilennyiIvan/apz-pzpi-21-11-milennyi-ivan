@@ -8,24 +8,28 @@ import { IUserProps } from "../properties/IUserProps";
 import { useEffectUser } from "../../utils/helpers";
 import { TemperatureScannerService } from "../../api/services/TemperatureScannerService";
 
+// Інтерфейс для пропсів компоненту, що розширює IUserProps і додає entityType
 interface FormProps extends IUserProps {
   entityType: "Shepherd" | "TemperatureScanner";
 }
 
+// Компонент для форми переназначення вівці на пастуха або сканер температури
 export const ReassignFormForSheep: React.FC<FormProps> = ({user, entityType}) => {
-  const [entitiesList, setEntitiesList] = useState<any[]>([]);
-  const [selectedEntityId, setSelectedEntityId] = useState<number | null>(null);
-  const sheepId = parseInt(useParams().sheepId!);
-  const navigate = useNavigate();
-  const { t } = useTranslation();
+  const [entitiesList, setEntitiesList] = useState<any[]>([]); // Стан для списку сутностей
+  const [selectedEntityId, setSelectedEntityId] = useState<number | null>(null); // Стан для вибраної сутності
+  const sheepId = parseInt(useParams().sheepId!); // Отримання ID вівці з URL параметрів
+  const navigate = useNavigate(); // Використання useNavigate для навігації
+  const { t } = useTranslation(); // Використання i18n для багатомовності
 
   const services = {
     Shepherd: new ShepherdService(),
     TemperatureScanner: new TemperatureScannerService(),
   };
 
+  // Перевірка авторизації користувача
   useEffectUser(user, navigate);
 
+  // Функція для отримання списку сутностей залежно від entityType
   const getEntitiesPromise = (): Promise<any> => {
     switch (entityType) {
       case "Shepherd":
@@ -34,23 +38,27 @@ export const ReassignFormForSheep: React.FC<FormProps> = ({user, entityType}) =>
         return services.TemperatureScanner.getAllUnassignedScannersIds();
     }
   }
+
+  // Використання useEffect для завантаження списку сутностей при першому рендері
   useEffect(() => {
     const fetchShepherds = async () => {
       try {
         const data = await getEntitiesPromise();
-        setEntitiesList(data);
+        setEntitiesList(data); // Оновлення стану списку сутностей
       } catch (error) {
         console.error(error);
-        setEntitiesList([]);
+        setEntitiesList([]); // Очищення стану списку сутностей у разі помилки
       }
     };
 
     fetchShepherds();
   }, []);
 
+  // Обробник події для відправки форми
   const handleSubmit = async () => {
     const sheepService = new SheepService();
     try {
+      // Виконання дії переназначення залежно від entityType
       switch (entityType) {
         case "Shepherd":
           await sheepService.changeShepherd(sheepId, selectedEntityId);
@@ -59,12 +67,13 @@ export const ReassignFormForSheep: React.FC<FormProps> = ({user, entityType}) =>
           await sheepService.changeTemperatureScanner(sheepId, selectedEntityId);
           break;
       }
-      navigate(-1);
+      navigate(-1); // Повернення на попередню сторінку після успішного переназначення
     } catch (error) {
       console.error(error);
     }
   };
 
+  // Функція для рендерингу полів форми залежно від entityType
   const renderFormFields = () => {
     switch (entityType) {
       case "Shepherd":

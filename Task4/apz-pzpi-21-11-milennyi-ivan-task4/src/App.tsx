@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffectUser } from './utils/helpers';
 import { IUserProps } from './components/properties/IUserProps';
 import { UserRole } from './utils/UserRole';
-import AuthorizationForm from './components/common/AuthorixationForm';
+import AuthorizationForm from './components/common/AuthorizationForm';
 import { ShepherdMainPage } from './components/shepherd/ShepherdMainPage';
 import { StorekeeperMainPage } from './components/storekeeper/StorekeeperMainPage';
 import { AdminMainPage } from './components/admin/AdminMainPage';

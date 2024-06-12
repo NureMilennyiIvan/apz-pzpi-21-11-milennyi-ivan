@@ -4,42 +4,47 @@ import { useTranslation } from "react-i18next";
 import { FeedSupplyService } from "../../../api/services/FeedSupplyService";
 import { FeedSupply } from "../../../models/FeedSupply";
 
-export const FeedSuppliesGrid = () =>{
+// Компонент для відображення таблиці з постачаннями корму
+export const FeedSuppliesGrid = () => {
     const feedSupplyService = new FeedSupplyService();
-    const [selectedFeedSupply, setSelectedFeedSupply] = useState<FeedSupply | null>(null);
-    const [feedSupplies, setFeedSupplies] = useState<FeedSupply[]>([]);
-    const [trigger, setTrigger] = useState<boolean>(true);
+    const [selectedFeedSupply, setSelectedFeedSupply] = useState<FeedSupply | null>(null); // Стан для зберігання вибраного постачання корму
+    const [feedSupplies, setFeedSupplies] = useState<FeedSupply[]>([]); // Стан для зберігання списку постачань корму
+    const [trigger, setTrigger] = useState<boolean>(true); // Стан для тригеру оновлення даних
 
-    const {t} = useTranslation();
-    
+    const { t } = useTranslation(); // Використання i18n для багатомовності
+
+    // Використання useEffect для завантаження списку постачань корму при першому рендері та при зміні тригеру
     useEffect(() => {
-        const fetchFeedSupplies= async () => {
-          try {
-            const data = await feedSupplyService.getAll();
-            setFeedSupplies(data);
-          } catch (error) {
-            alert(error);
-            setFeedSupplies([]);
-          }
+        const fetchFeedSupplies = async () => {
+            try {
+                // Отримання даних постачань від сервісу FeedSupplyService
+                const data = await feedSupplyService.getAll();
+                setFeedSupplies(data); // Оновлення стану списку постачань
+            } catch (error) {
+                alert(error);
+                setFeedSupplies([]); // Очищення стану списку постачань у разі помилки
+            }
         };
         fetchFeedSupplies();
-    }, [trigger]);
+    }, [trigger]); // Виконання ефекту при зміні тригеру
 
+    // Функція для обробки вибору рядка таблиці
     const handleRowSelection = (feedSupply: FeedSupply) => {
         setSelectedFeedSupply(feedSupply);
     };
 
+    // Функція для видалення вибраного постачання корму
     const deleteFeedSupply = async (id: number) => {
-        try{
+        try {
             await feedSupplyService.delete(id);
-            setSelectedFeedSupply(null);
-            setTrigger(!trigger);
-        }
-        catch(error){
+            setSelectedFeedSupply(null); // Очистити вибір після видалення
+            setTrigger(!trigger); // Оновити дані
+        } catch (error) {
             console.log(error);
             alert("Error");
         }
     }
+
   
     return (
         <div className={styles.container}>

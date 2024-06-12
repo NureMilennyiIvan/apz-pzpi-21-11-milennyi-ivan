@@ -1,13 +1,14 @@
+// Клас для відображення інформації про корм
 export class FeedVM {
-    id: number;
-    amount: number;
-    name: string;
-    calories: number;
-    fat: number;
-    protein: number;
-    carbohydrates: number;
-    breedName: string | null;
-    sheepCount: number;
+    id: number; // Ідентифікатор корму
+    amount: number; // Кількість корму в кг
+    name: string; // Назва корму
+    calories: number; // Кількість калорій
+    fat: number; // Кількість жиру
+    protein: number; // Кількість білків
+    carbohydrates: number; // Кількість вуглеводів
+    breedName: string | null; // Назва породи, для якої призначений корм
+    sheepCount: number; // Кількість овець, які споживають цей корм
 
     constructor(id: number, amount: number, name: string, calories: number, fat: number, protein: number, carbohydrates: number, breedName: string | null, sheepCount: number) {
         this.id = id;

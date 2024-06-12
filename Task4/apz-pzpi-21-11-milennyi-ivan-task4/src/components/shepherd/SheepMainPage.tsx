@@ -8,31 +8,34 @@ import { FeedingLogsListSheep } from "./FeedingLogsListSheep";
 import { ShearingLogsList } from "./ShearingLogsList";
 import styles from '../../assets/css/SheepMainPage.module.css';
 
-export const SheepMainPage: React.FC<IUserProps> = ({user}) => {
-    const sheepId = parseInt(useParams().sheepId!);
-    const [selectedButton, setSelectedButton] = useState<number>(1);
-    const [content, setContent] = useState<JSX.Element>(<SheepDetailsPage user={user} sheepId={sheepId} />);
+// Компонент головної сторінки для окремої вівці
+export const SheepMainPage: React.FC<IUserProps> = ({ user }) => {
+    const sheepId = parseInt(useParams().sheepId!); // Отримання ідентифікатора вівці з параметрів URL
+    const [selectedButton, setSelectedButton] = useState<number>(1); // Стан для зберігання вибраної кнопки
+    const [content, setContent] = useState<JSX.Element>(<SheepDetailsPage user={user} sheepId={sheepId} />); // Стан для зберігання вибраного контенту
 
-    const {t} = useTranslation();
+    const { t } = useTranslation(); // Використання i18n для багатомовності
     const navigate = useNavigate();
-    useEffectUser(user, navigate);
+    useEffectUser(user, navigate); // Використання хука для перевірки користувача та навігації
 
+    // Обробка натискання кнопки
     const handleButtonClick = (buttonIndex: number) => {
         setSelectedButton(buttonIndex);
-        switch(buttonIndex) {
+        switch (buttonIndex) {
             case 1:
                 setContent(<SheepDetailsPage user={user} sheepId={sheepId} />);
                 break;
             case 2:
-                setContent(<FeedingLogsListSheep sheepId={sheepId}/>);
+                setContent(<FeedingLogsListSheep sheepId={sheepId} />);
                 break;
             case 3:
-                setContent(<ShearingLogsList sheepId={sheepId}/>);
+                setContent(<ShearingLogsList sheepId={sheepId} />);
                 break;
             default:
                 break;
         }
     }
+
     
     return (
         <div className={styles.container}>

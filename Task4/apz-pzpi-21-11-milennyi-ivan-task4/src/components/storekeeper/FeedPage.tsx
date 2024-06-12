@@ -7,22 +7,24 @@ import { FeedingLogsListFeed } from "./FeedingLogsListFeed";
 import { FeedSuppliesList } from "./FeedSuppliesList";
 import styles from "../../assets/css/FeedPage.module.css";
 
-export const FeedPage: React.FC<IUserProps> = ({user}) =>{
-    const [selectedButton, setSelectedButton] = useState<number>(1);
-    const { feedId } = useParams();
-    const [content, setContent] = useState<JSX.Element>(<FeedSuppliesList feedId={parseInt(feedId!)}/>);
-    const {t} = useTranslation();
+// Компонент для сторінки корму
+export const FeedPage: React.FC<IUserProps> = ({ user }) => {
+    const [selectedButton, setSelectedButton] = useState<number>(1); // Стан для зберігання вибраної кнопки
+    const { feedId } = useParams(); // Отримання ідентифікатора корму з параметрів URL
+    const [content, setContent] = useState<JSX.Element>(<FeedSuppliesList feedId={parseInt(feedId!)} />); // Стан для зберігання вибраного контенту
+    const { t } = useTranslation(); // Використання i18n для багатомовності
     const navigate = useNavigate();
-    useEffectUser(user, navigate);
-    
+    useEffectUser(user, navigate); // Використання хука для перевірки користувача та навігації
+
+    // Функція для обробки натискання кнопки
     const handleButtonClick = (buttonIndex: number) => {
         setSelectedButton(buttonIndex);
-        switch(buttonIndex) {
+        switch (buttonIndex) {
             case 1:
-                setContent(<FeedSuppliesList feedId={parseInt(feedId!)}/>);
+                setContent(<FeedSuppliesList feedId={parseInt(feedId!)} />);
                 break;
             case 2:
-                setContent(<FeedingLogsListFeed feedId={parseInt(feedId!)}/>);
+                setContent(<FeedingLogsListFeed feedId={parseInt(feedId!)} />);
                 break;
             default:
                 break;

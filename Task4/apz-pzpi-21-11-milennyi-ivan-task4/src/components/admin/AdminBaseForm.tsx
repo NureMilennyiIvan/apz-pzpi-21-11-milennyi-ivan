@@ -10,15 +10,18 @@ import { FeedService } from "../../api/services/FeedService";
 import { BreedService } from "../../api/services/BreedService";
 import { TemperatureScannerService } from "../../api/services/TemperatureScannerService";
 import { IUserProps } from "../properties/IUserProps";
+
+// Інтерфейс для пропсів компоненту, що розширює IUserProps і додає entityType
 interface FormProps extends IUserProps {
   entityType: "Shepherd" | "Storekeeper" | "Sheep" | "Feed" | "Breed" | "TemperatureScanner";
 }
 
+// Компонент для базової форми адміністратора
 export const AdminBaseForm: React.FC<FormProps> = ({ user, entityType }) => {
   const { entityId } = useParams();
   const [formData, setFormData] = useState<any>({});
   const [errors, setErrors] = useState<any>({});
-  const [trigger, setTrigger] = useState(true);
+  const [trigger, _setTrigger] = useState(true);
   const navigate = useNavigate();
   const { t } = useTranslation();
   useEffectUser(user, navigate);
@@ -32,6 +35,7 @@ export const AdminBaseForm: React.FC<FormProps> = ({ user, entityType }) => {
     TemperatureScanner: new TemperatureScannerService(),
   };
 
+   // Використання useEffect для завантаження даних при першому рендері
   useEffect(() => {
     const fetchData = async () => {
       if (entityId) {
@@ -58,6 +62,7 @@ export const AdminBaseForm: React.FC<FormProps> = ({ user, entityType }) => {
     fetchData();
   }, [trigger, entityId]);
 
+    // Обробник події для відправки форми
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validateForm(formData);
@@ -72,7 +77,6 @@ export const AdminBaseForm: React.FC<FormProps> = ({ user, entityType }) => {
       switch (entityType) {
         case "Shepherd":
         case "Storekeeper":
-        case "TemperatureScanner":
           item.password = await hashPassword(item.password);
           break;
         case "Sheep":
@@ -94,6 +98,7 @@ export const AdminBaseForm: React.FC<FormProps> = ({ user, entityType }) => {
     }
   };
 
+    // Валідація форми залежно від entityType
   const validateForm = (data: any): any => {
     const errors: any = {};
 
@@ -173,7 +178,7 @@ export const AdminBaseForm: React.FC<FormProps> = ({ user, entityType }) => {
     return errors;
 };
 
-
+  // Функція для рендерингу полів форми залежно від entityType
   const renderFormFields = () => {
     switch (entityType) {
       case "Shepherd":

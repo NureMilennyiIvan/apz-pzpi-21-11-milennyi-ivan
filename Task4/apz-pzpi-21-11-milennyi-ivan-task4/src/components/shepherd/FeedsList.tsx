@@ -4,11 +4,14 @@ import { FeedVM } from "../../viewModels/FeedVM";
 import styles from '../../assets/css/FeedsList.module.css';
 import { useTranslation } from "react-i18next";
 
-export const FeedsList = () => {
+
+// Компонент для відображення списку кормів
+export const FeedsList: React.FC = () => {
     const feedService = new FeedService();
-    const [feedsVMList, setFeedsVMList] = useState<FeedVM[]>([]);
-    const {t} = useTranslation();
-    
+    const [feedsVMList, setFeedsVMList] = useState<FeedVM[]>([]); // Стан для зберігання списку кормів
+    const { t } = useTranslation(); // Використання i18n для багатомовності
+
+    // Використання useEffect для завантаження списку кормів при першому рендері
     useEffect(() => {
         const fetchFeeds = async () => {
             try {

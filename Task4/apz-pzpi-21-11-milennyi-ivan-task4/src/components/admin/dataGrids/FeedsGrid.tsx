@@ -4,44 +4,54 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Feed } from "../../../models/Feed";
 import { FeedService } from "../../../api/services/FeedService";
-export const FeedsGrid = () =>{
-    const feedService = new FeedService();
-    const [selectedFeed, setSelectedFeed] = useState<Feed | null>(null);
-    const [feeds, setFeeds] = useState<Feed[]>([]);
-    const [trigger, setTrigger] = useState<boolean>(true);
 
-    const {t} = useTranslation();
+// Компонент для відображення таблиці з кормами
+export const FeedsGrid = () => {
+    const feedService = new FeedService();
+    const [selectedFeed, setSelectedFeed] = useState<Feed | null>(null); // Стан для зберігання вибраного корму
+    const [feeds, setFeeds] = useState<Feed[]>([]); // Стан для зберігання списку кормів
+    const [trigger, setTrigger] = useState<boolean>(true); // Стан для тригеру оновлення даних
+
+    const { t } = useTranslation(); // Використання i18n для багатомовності
     const navigate = useNavigate();
-    
+
+    // Використання useEffect для завантаження списку кормів при першому рендері та при зміні тригеру
     useEffect(() => {
         const fetchFeeds = async () => {
-          try {
-            const data = await feedService.getAll();
-            setFeeds(data);
-          } catch (error) {
-            alert(error);
-            setFeeds([]);
-          }
+            try {
+                // Отримання даних кормів від сервісу FeedService
+                const data = await feedService.getAll();
+                setFeeds(data); // Оновлення стану списку кормів
+            } catch (error) {
+                alert(error);
+                setFeeds([]); // Очищення стану списку кормів у разі помилки
+            }
         };
         fetchFeeds();
-    }, [trigger]);
+    }, [trigger]); // Виконання ефекту при зміні тригеру
 
+    // Функція для обробки вибору рядка таблиці
     const handleRowSelection = (feed: Feed) => {
         setSelectedFeed(feed);
     };
+
+    // Функція для переходу на сторінку створення нового корму
     const createFeed = () => {
         navigate("/feed/create");
     }
+
+    // Функція для переходу на сторінку редагування вибраного корму
     const editFeed = (id: number) => {
         navigate("/feed/edit/" + id);
     }
+
+    // Функція для видалення вибраного корму
     const deleteFeed = async (id: number) => {
-        try{
+        try {
             await feedService.delete(id);
-            setSelectedFeed(null);
-            setTrigger(!trigger);
-        }
-        catch(error){
+            setSelectedFeed(null); // Очистити вибір після видалення
+            setTrigger(!trigger); // Оновити дані
+        } catch (error) {
             console.log(error);
             alert("Error");
         }

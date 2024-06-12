@@ -5,16 +5,20 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from '../../assets/css/SheepList.module.css';
 
+
+// Інтерфейс для пропсів компоненту SheepList
 interface ISheepList {
     id: number;
 }
 
-export const SheepList: React.FC<ISheepList> = ({id}) => {
+// Компонент для відображення списку овець
+export const SheepList: React.FC<ISheepList> = ({ id }) => {
     const sheepService = new SheepService();
-    const [sheepVMList, setSheepVMList] = useState<SheepVM[]>([]);
+    const [sheepVMList, setSheepVMList] = useState<SheepVM[]>([]); // Стан для зберігання списку овець
     const navigate = useNavigate();
-    const {t} = useTranslation();
-    
+    const { t } = useTranslation();
+
+    // Використання useEffect для завантаження списку овець при першому рендері
     useEffect(() => {
         const fetchSheep = async () => {
             try {

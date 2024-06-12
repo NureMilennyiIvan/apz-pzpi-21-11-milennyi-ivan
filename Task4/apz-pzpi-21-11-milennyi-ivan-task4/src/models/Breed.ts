@@ -1,8 +1,9 @@
+// Клас, що представляє породу
 export class Breed {
-    id: number | null;
-    name: string;
-    feed_id: number;
-    info: string;
+    id: number | null; // Ідентифікатор породи
+    name: string; // Назва породи
+    feed_id: number; // Ідентифікатор корму, що використовується для породи
+    info: string; // Додаткова інформація про породу
 
     constructor(id: number | null, name: string, feedId: number, info: string) {
         this.id = id;

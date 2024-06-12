@@ -6,21 +6,24 @@ import { useTranslation } from "react-i18next";
 import styles from "../../assets/css/StorekeeperMainPage.module.css";
 import { IUserProps } from "../properties/IUserProps";
 
-export const StorekeeperMainPage: React.FC<IUserProps> = () =>{
+// Компонент головної сторінки комірника
+export const StorekeeperMainPage: React.FC<IUserProps> = () => {
     const feedService = new FeedService();
-    const [feedsVMList, setFeedsVMList] = useState<FeedVM[]>([]);
+    const [feedsVMList, setFeedsVMList] = useState<FeedVM[]>([]); // Стан для зберігання списку кормів
     const navigate = useNavigate();
-    const {t} = useTranslation();
-    
+    const { t } = useTranslation(); // Використання i18n для багатомовності
+
+    // Використання useEffect для завантаження списку кормів при першому рендері
     useEffect(() => {
-        const fetchFeeds = async () =>{
-            try{
+        const fetchFeeds = async () => {
+            try {
+                // Отримання даних кормів від сервісу FeedService
                 const data = await feedService.getAllVMs();
-                setFeedsVMList(data);
-            }
-            catch (error){
+                setFeedsVMList(data); // Оновлення стану списку кормів
+            } catch (error) {
+                // Обробка помилки, якщо дані не вдалося отримати
                 alert(error);
-                setFeedsVMList([]);
+                setFeedsVMList([]); // Очищення стану списку кормів у разі помилки
             }
         }
         fetchFeeds();

@@ -5,54 +5,67 @@ import styles from "../../../assets/css/GridComponent.module.css";
 import { SheepService } from "../../../api/services/SheepService";
 import { Sheep } from "../../../models/Sheep";
 
-export const SheepGrid = () =>{
+// Компонент для відображення таблиці з вівцями
+export const SheepGrid = () => {
     const sheepService = new SheepService();
-    const [selectedSheep, setSelectedSheep] = useState<Sheep | null>(null);
-    const [sheep, setSheep] = useState<Sheep[]>([]);
-    const [trigger, setTrigger] = useState<boolean>(true);
+    const [selectedSheep, setSelectedSheep] = useState<Sheep | null>(null); // Стан для зберігання вибраної вівці
+    const [sheep, setSheep] = useState<Sheep[]>([]); // Стан для зберігання списку овець
+    const [trigger, setTrigger] = useState<boolean>(true); // Стан для тригеру оновлення даних
 
-    const {t} = useTranslation();
+    const { t } = useTranslation(); // Використання i18n для багатомовності
     const navigate = useNavigate();
-    
-    useEffect(() => {
-        const fetchShepherds = async () => {
-          try {
-            const data = await sheepService.getAll();
-            setSheep(data);
-          } catch (error) {
-            alert(error);
-            setSheep([]);
-          }
-        };
-        fetchShepherds();
-    }, [trigger]);
 
+    // Використання useEffect для завантаження списку овець при першому рендері та при зміні тригеру
+    useEffect(() => {
+        const fetchSheep = async () => {
+            try {
+                // Отримання даних овець від сервісу SheepService
+                const data = await sheepService.getAll();
+                setSheep(data); // Оновлення стану списку овець
+            } catch (error) {
+                alert(error);
+                setSheep([]); // Очищення стану списку овець у разі помилки
+            }
+        };
+        fetchSheep();
+    }, [trigger]); // Виконання ефекту при зміні тригеру
+
+    // Функція для обробки вибору рядка таблиці
     const handleRowSelection = (sheep: Sheep) => {
         setSelectedSheep(sheep);
     };
+
+    // Функція для переходу на сторінку створення нової вівці
     const createSheep = () => {
-        navigate("/sheep/create")
+        navigate("/sheep/create");
     };
-    const reassignShepherd = (sheepId: number) =>{
-        navigate(`/sheep/reassign-shepherd/${sheepId}`)
-    }
-    const reassignTemperatureScanner = (sheepId: number) =>{
-        navigate(`/sheep/reassign-temperature-scanner/${sheepId}`)
-    }
+
+    // Функція для переходу на сторінку перепризначення пастуха для вибраної вівці
+    const reassignShepherd = (sheepId: number) => {
+        navigate(`/sheep/reassign-shepherd/${sheepId}`);
+    };
+
+    // Функція для переходу на сторінку перепризначення сканера температури для вибраної вівці
+    const reassignTemperatureScanner = (sheepId: number) => {
+        navigate(`/sheep/reassign-temperature-scanner/${sheepId}`);
+    };
+
+    // Функція для переходу на сторінку редагування вибраної вівці
     const editSheep = (id: number) => {
         navigate("/sheep/edit/" + id);
-    }
+    };
+
+    // Функція для видалення вибраної вівці
     const deleteSheep = async (id: number) => {
-        try{
+        try {
             await sheepService.delete(id);
-            setSelectedSheep(null);
-            setTrigger(!trigger);
-        }
-        catch(error){
+            setSelectedSheep(null); // Очистити вибір після видалення
+            setTrigger(!trigger); // Оновити дані
+        } catch (error) {
             console.log(error);
             alert("Error");
         }
-    }
+    };
   
     return (
         <div className={styles.container}>

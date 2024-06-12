@@ -9,21 +9,24 @@ import { ShearingLogService } from "../../api/services/ShearingLogService";
 import styles from '../../assets/css/SheepDetailsPage.module.css';
 import { AuthUser } from "../../utils/AuthUser";
 
+// Інтерфейс для пропсів компоненту SheepDetailsPage
 interface ISheepDetailsPage {
-    user:   AuthUser;
+    user: AuthUser;
     sheepId: number;
 }
 
-export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({user, sheepId}) => {
+// Компонент для відображення деталей окремої вівці
+export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({ user, sheepId }) => {
     const sheepService = new SheepService();
     const feedingLogService = new FeedingLogService();
     const shearingLogService = new ShearingLogService();
-    const [sheepDetails, setSheepDetails] = useState<SheepDetailsVM | null>();
-    const [trigger, setTrigger] = useState<boolean>(true);
-    const [woolAmount, setWoolAmount] = useState<string>('');
-    const [errorMessage, setErrorMessage] = useState<string>('');
-    const {t} = useTranslation();
+    const [sheepDetails, setSheepDetails] = useState<SheepDetailsVM | null>(null); // Стан для зберігання деталей вівці
+    const [trigger, setTrigger] = useState<boolean>(true); // Стан для тригера повторного завантаження деталей
+    const [woolAmount, setWoolAmount] = useState<string>(''); // Стан для введення кількості вовни
+    const [errorMessage, setErrorMessage] = useState<string>(''); // Стан для зберігання повідомлень про помилки
+    const { t } = useTranslation(); // Використання i18n для багатомовності
 
+    // Використання useEffect для завантаження деталей вівці при першому рендері і зміні тригера
     useEffect(() => {
         const fetchSheepDetails = async () => {
             try {
@@ -39,6 +42,7 @@ export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({user, sheepId}) =
         fetchSheepDetails();
     }, [trigger]);
 
+    // Функція для створення запису годування
     const createFeedingLog = async (details: SheepDetailsVM) => {
         try {
             const feedingLog = new FeedingLog(null, sheepId, user.Id!, new Date().getTime(), details.feedId, Math.floor(details.requiredFeedAmount * 1000));
@@ -50,8 +54,9 @@ export const SheepDetailsPage: React.FC<ISheepDetailsPage> = ({user, sheepId}) =
         }
     }
 
+    // Функція для створення запису стрижки
     const createShearingLog = async () => {
-        if (woolAmount.length == 0 || !(/^(0|[1-9]\d*)$/.test(woolAmount))) {
+        if (woolAmount.length === 0 || !(/^(0|[1-9]\d*)$/.test(woolAmount))) {
             setErrorMessage("sheepDetailsList.shearingErrorHeader");
             return;
         }

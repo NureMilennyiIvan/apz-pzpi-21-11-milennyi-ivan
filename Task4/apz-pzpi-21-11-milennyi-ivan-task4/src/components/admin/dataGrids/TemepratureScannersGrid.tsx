@@ -5,42 +5,52 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import styles from "../../../assets/css/GridComponent.module.css"
 
+// Компонент для відображення таблиці з температурними сканерами
 export const TemperatureScannersGrid = () =>{
     const temperatureScannerService = new TemperatureScannerService();
-    const [selectedTemperatureScanner, setSelectedTemperatureScanner] = useState<TemperatureScanner | null>(null);
-    const [temperatureScanners, setTemperatureScanners] = useState<TemperatureScanner[]>([]);
-    const [trigger, setTrigger] = useState<boolean>(true);
+    const [selectedTemperatureScanner, setSelectedTemperatureScanner] = useState<TemperatureScanner | null>(null); // Стан для зберігання вибраного сканера
+    const [temperatureScanners, setTemperatureScanners] = useState<TemperatureScanner[]>([]); // Стан для зберігання списку сканерів
+    const [trigger, setTrigger] = useState<boolean>(true); // Стан для тригеру оновлення даних
 
-    const {t} = useTranslation();
-    const navigate = useNavigate();
+    const {t} = useTranslation(); // Використання i18n для багатомовності
+    const navigate = useNavigate(); // Використання useNavigate для навігації
     
+    // Використання useEffect для завантаження списку сканерів при першому рендері та при зміні тригеру
     useEffect(() => {
         const fetchTemperatureScanners = async () => {
-          try {
-            const data = await temperatureScannerService.getAll();
-            setTemperatureScanners(data);
-          } catch (error) {
-            alert(error);
-            setTemperatureScanners([]);
-          }
+            try {
+                // Отримання даних сканерів від сервісу TemperatureScannerService
+                const data = await temperatureScannerService.getAll();
+                setTemperatureScanners(data); // Оновлення стану списку сканерів
+            } catch (error) {
+                alert(error);
+                setTemperatureScanners([]); // Очищення стану списку сканерів у разі помилки
+            }
         };
         fetchTemperatureScanners();
-    }, [trigger]);
+    }, [trigger]); // Виконання ефекту при зміні тригеру
 
+    // Функція для обробки вибору рядка таблиці
     const handleRowSelection = (temperatureScanner: TemperatureScanner) => {
         setSelectedTemperatureScanner(temperatureScanner);
     };
+
+    // Функція для переходу на сторінку створення нового сканера
     const createTemperatureScanner = () => {
         navigate("/temperature-scanner/create");
     }
+
+    // Функція для переходу на сторінку редагування вибраного сканера
     const editTemperatureScanner = (id: number) => {
         navigate("/temperature-scanner/edit/" + id);
     }
+
+    // Функція для видалення вибраного сканера
     const deleteTemperatureScanner = async (id: number) => {
         try{
             await temperatureScannerService.delete(id);
-            setSelectedTemperatureScanner(null);
-            setTrigger(!trigger);
+            setSelectedTemperatureScanner(null); // Очистити вибір після видалення
+            setTrigger(!trigger); // Оновити дані
         }
         catch(error){
             console.log(error);

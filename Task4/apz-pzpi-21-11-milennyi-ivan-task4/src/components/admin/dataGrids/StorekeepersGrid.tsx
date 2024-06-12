@@ -5,43 +5,53 @@ import styles from "../../../assets/css/GridComponent.module.css"
 import { StorekeeperService } from "../../../api/services/StorekeeperService";
 import { Storekeeper } from "../../../models/Storekeeper";
 
+
+// Компонент для відображення таблиці зі зберігачами
 export const StorekeepersGrid = () =>{
     const storekeeperService = new StorekeeperService();
-    const [selectedStorekeeper, setSelectedStorekeeper] = useState<Storekeeper | null>(null);
-    const [storekeepers, setStorekeepers] = useState<Storekeeper[]>([]);
-    const [trigger, setTrigger] = useState<boolean>(true);
+    const [selectedStorekeeper, setSelectedStorekeeper] = useState<Storekeeper | null>(null); // Стан для зберігання вибраного зберігача
+    const [storekeepers, setStorekeepers] = useState<Storekeeper[]>([]); // Стан для зберігання списку зберігачів
+    const [trigger, setTrigger] = useState<boolean>(true); // Стан для тригеру оновлення даних
 
-    const {t} = useTranslation();
-    const navigate = useNavigate();
+    const {t} = useTranslation(); // Використання i18n для багатомовності
+    const navigate = useNavigate(); // Використання useNavigate для навігації
     
+    // Використання useEffect для завантаження списку зберігачів при першому рендері та при зміні тригеру
     useEffect(() => {
         const fetchStorekeepers = async () => {
-          try {
-            const data = await storekeeperService.getAll();
-            setStorekeepers(data);
-          } catch (error) {
-            alert(error);
-            setStorekeepers([]);
-          }
+            try {
+                // Отримання даних зберігачів від сервісу StorekeeperService
+                const data = await storekeeperService.getAll();
+                setStorekeepers(data); // Оновлення стану списку зберігачів
+            } catch (error) {
+                alert(error);
+                setStorekeepers([]); // Очищення стану списку зберігачів у разі помилки
+            }
         };
         fetchStorekeepers();
-    }, [trigger]);
+    }, [trigger]); // Виконання ефекту при зміні тригеру
 
+    // Функція для обробки вибору рядка таблиці
     const handleRowSelection = (storekeeper: Storekeeper) => {
         setSelectedStorekeeper(storekeeper);
     };
     
+    // Функція для переходу на сторінку створення нового зберігача
     const createStorekeeper = () => {
         navigate("/storekeeper/create");
     }
+
+    // Функція для переходу на сторінку редагування вибраного зберігача
     const editStorekeeper = (id: number) => {
         navigate("/storekeeper/edit/" + id);
     }
+
+    // Функція для видалення вибраного зберігача
     const deleteStorekeeper = async (id: number) => {
         try{
             await storekeeperService.delete(id);
-            setSelectedStorekeeper(null);
-            setTrigger(!trigger);
+            setSelectedStorekeeper(null); // Очистити вибір після видалення
+            setTrigger(!trigger); // Оновити дані
         }
         catch(error){
             console.log(error);
