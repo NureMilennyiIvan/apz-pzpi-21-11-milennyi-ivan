@@ -47,6 +47,6 @@ export class SheepDetailsVM {
         this.lastShearingDate = (lastShearingTimestamp != null) ? timestampToDate(lastShearingTimestamp) : null;
         this.temperature = (temperature != null) ? temperature / 10 : null;
         this.isFeed = (timeInDays(lastFeedingTimestamp) > 0) ? true : false;
-        this.isShear = (timeInDays(lastShearingTimestamp) > 0) ? true : false;
+        this.isShear = (timeInDays(lastShearingTimestamp) >= 30) ? true : false;
     }
 }

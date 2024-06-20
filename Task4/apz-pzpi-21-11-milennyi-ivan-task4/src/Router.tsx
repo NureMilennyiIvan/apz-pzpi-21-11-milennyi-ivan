@@ -12,7 +12,7 @@ import { CreateFeedSupplyForm } from './components/storekeeper/CreateFeedSupplyF
 import { AdminBaseForm } from './components/admin/AdminBaseForm'
 import { ReassignFormForSheep} from './components/admin/ReassignFormForSheep'
 
-const Router = () => {
+export const Router = () => {
   // Стан для зберігання авторизованого користувача
   const [user, setUser] = useState<AuthUser>(new AuthUser(null, UserRole.Unauthorized));
 
@@ -81,7 +81,4 @@ const Router = () => {
       </footer>
     </div>
   )
-}
-
-
-export default Router;
+};
