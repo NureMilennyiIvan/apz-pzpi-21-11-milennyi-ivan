@@ -32,6 +32,7 @@ export class SheepService implements ISheepService<SheepDetailsVM> {
 
     // Метод для оновлення існуючої вівці
     async update(item: Sheep): Promise<Sheep> {
+        console.log(item)
         const response = await axios.put<Sheep>(SheepService.SHEEP_URLS.UPDATE, item);
         return response.data;
     }
